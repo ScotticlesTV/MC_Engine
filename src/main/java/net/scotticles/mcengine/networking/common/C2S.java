@@ -20,7 +20,6 @@ public class C2S {
     }
 
     public static void registerServerRecievers() {
-        // Server sendRegionsDataPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(sendRegionsDataPayload.ID, (payload, context) -> {
             // 1. Unpack incoming dataset from the client editor
             java.util.Set<RegionData> updatedRegions = payload.regions();

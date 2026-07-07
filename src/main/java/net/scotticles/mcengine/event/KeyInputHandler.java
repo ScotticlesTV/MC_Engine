@@ -9,40 +9,32 @@ import net.scotticles.mcengine.networking.editor.payloads.RequestEditorUIPermsPa
 import org.lwjgl.glfw.GLFW;
 
 public class KeyInputHandler {
+    // Key Category
     public static final String KEY_CATEGORY_MCENGINE = "key.category.mc-engine";
 
     // Key Binding Names
     public static final String TOGGLE_ENGINE_UI = "key.mc-engine.toggle-engine-ui_key";
 
-
-    //Key Bindings
+    // Key Bindings
     public static KeyBinding toggleEngineUIKey;
-
-
-
-
 
     public static void registerKeyInputs() {
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
 
             if (toggleEngineUIKey.wasPressed()) {
-//                UIManager.showEngineUI = !UIManager.showEngineUI;
+                // Send a packet to ask the server if you can open the UI
                 ClientPlayNetworking.send(new RequestEditorUIPermsPayload());
             }
-
         });
     }
 
     public static void registerKeybinds() {
-
-
         // Toggle Engine UI Key
         toggleEngineUIKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 TOGGLE_ENGINE_UI,
                 InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_O,
                 KEY_CATEGORY_MCENGINE));
         registerKeyInputs();
-
     }
 }

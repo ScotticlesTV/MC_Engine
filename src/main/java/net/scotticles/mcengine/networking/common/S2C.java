@@ -18,7 +18,6 @@ public class S2C {
     }
 
     public static void registerClientReceivers() {
-        // Handle Server -> Client Packets
         ClientPlayNetworking.registerGlobalReceiver(sendRegionsDataPayload.ID, (payload, context) -> {
             java.util.Set<RegionData> synchronizedSet = payload.regions();
 

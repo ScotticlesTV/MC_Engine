@@ -41,11 +41,11 @@ public class EngineNavBarUI {
                 ImGui.beginDisabled();
                 ImGui.menuItem("Profiles");
                 ImGui.endDisabled();
-//                ImGui.beginDisabled();
+                ImGui.beginDisabled();
                 if (ImGui.menuItem("Light Editor")) {
                     UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
                 }
-//                ImGui.endDisabled();
+                ImGui.endDisabled();
                 ImGui.endMenu();
             }
             if (ImGui.beginMenu("Audio")) {

@@ -1,5 +1,7 @@
 package net.scotticles.mcengine.regions.regiondatasaving;
 
+import imgui.type.ImInt;
+import imgui.type.ImString;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -20,6 +22,14 @@ public class RegionData {
     public boolean regionEnabled;
     public List<String> regionEnterCommands;
     public List<String> regionExitCommands;
+
+    public ImString imRegionName = new ImString("", 256);
+    public ImInt imRegionX = new ImInt(0);
+    public ImInt imRegionY = new ImInt(0);
+    public ImInt imRegionZ = new ImInt(0);
+    public ImInt imRegionRadius = new ImInt(20);
+
+
 
     // Codecs For Region Enter, Exit, And UUID Sets
     private static final PacketCodec<RegistryByteBuf, List<String>> STRING_LIST_CODEC =
@@ -71,6 +81,11 @@ public class RegionData {
         this.regionExitCommands = new ArrayList<>(regionExitCommands);
         this.playersInside = playersInside;
         this.regionEnabled = regionEnabled;
+        this.imRegionName.set(regionName);
+        this.imRegionX.set(regionX);
+        this.imRegionY.set(regionY);
+        this.imRegionZ.set(regionZ);
+        this.imRegionRadius.set(regionRadius);
     }
 
     public RegionData toRegionsData() {
