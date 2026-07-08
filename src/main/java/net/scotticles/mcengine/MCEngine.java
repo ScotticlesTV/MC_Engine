@@ -2,8 +2,14 @@ package net.scotticles.mcengine;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
+import net.scotticles.mcengine.networking.gamerules.SyncGamerulesEditorPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.settings.MCEngineConfig;
 import org.slf4j.Logger;
@@ -33,6 +39,23 @@ public class MCEngine implements ModInitializer {
 
 		//Register Server Side Packet Recievers
 		C2S.registerServerRecievers();
+
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+			// Get Joined Player
+			ServerPlayerEntity player = handler.player;
+
+			//Sync Gamerules
+			GameRules gameRules = server.getGameRules();
+
+			ServerPlayNetworking.send(player, new SyncGamerulesEditorPayload(
+					gameRules.get(GameRules.DO_DAYLIGHT_CYCLE).get(),
+					gameRules.get(GameRules.DO_WEATHER_CYCLE).get(),
+					gameRules.get(GameRules.SEND_COMMAND_FEEDBACK).get()));
+
+
+			//Sync Regions
+			ServerPlayNetworking.send(player, new SyncRegionsDataPayload(RegionsManager.activeRegions));
+		});
 
 		LOGGER.info("Hello MC Engine users!");
 	}
