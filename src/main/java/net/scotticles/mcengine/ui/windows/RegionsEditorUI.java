@@ -2,13 +2,12 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import imgui.type.ImInt;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Vec3d;
-import net.scotticles.mcengine.networking.regions.payloads.sendRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
 import net.scotticles.mcengine.ui.UIManager;
@@ -39,7 +38,8 @@ public class RegionsEditorUI {
                         RegionsManager.addRegion(uuid, "Region",
                                 (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
                                 20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true);
-                        shouldSyncNetwork = true; // Trigger Sync
+                        // Trigger Sync
+                        shouldSyncNetwork = true;
                     }
                 }
 
@@ -317,7 +317,7 @@ public class RegionsEditorUI {
             }
             if (ImGui.beginTabItem("Mass Region Editing")) {
                 if (ImGui.button("Remove All Regions")) {
-                    RegionsManager.activeRegions.clear();
+                    RegionsManager.clearRegions();
                     shouldSyncNetwork = true;
                 }
                 if (ImGui.button("Enable All Regions")) {
@@ -339,7 +339,7 @@ public class RegionsEditorUI {
 
             // Server/Network syncing: Send the client's up to date set of regions to the server
             if (shouldSyncNetwork) {
-                ClientPlayNetworking.send(new sendRegionsDataPayload(new HashSet<>(RegionsManager.activeRegions)));
+                ClientPlayNetworking.send(new SyncRegionsDataPayload(new HashSet<>(RegionsManager.activeRegions)));
             }
         }
     }

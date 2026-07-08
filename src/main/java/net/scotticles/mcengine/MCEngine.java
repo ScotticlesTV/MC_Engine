@@ -2,19 +2,9 @@ package net.scotticles.mcengine;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
-import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
-import net.scotticles.mcengine.networking.editor.payloads.RequestEditorUIPermsPayload;
-import net.scotticles.mcengine.networking.regions.payloads.sendRegionsDataPayload;
-import net.scotticles.mcengine.regions.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
 import net.scotticles.mcengine.settings.MCEngineConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

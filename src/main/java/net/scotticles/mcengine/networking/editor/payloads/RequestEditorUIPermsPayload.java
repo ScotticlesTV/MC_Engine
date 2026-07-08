@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public record RequestEditorUIPermsPayload() implements CustomPayload {
     public static final CustomPayload.Id<RequestEditorUIPermsPayload> TYPE =
-            new CustomPayload.Id<>(Identifier.of("mc_engine", "request_editor_ui_perms_payload"));
+            new CustomPayload.Id<>(Identifier.of("mc_engine", "request_editor_ui_perms_packet"));
 
     public static final PacketCodec<RegistryByteBuf, RequestEditorUIPermsPayload> CODEC =
             PacketCodec.unit(new RequestEditorUIPermsPayload());
