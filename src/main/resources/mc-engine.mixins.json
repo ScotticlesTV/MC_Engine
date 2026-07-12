@@ -4,12 +4,6 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 	],
-	"client": [
-
-	],
-	"server": [
-		"GameRulesMixin"
-	],
 	"injectors": {
 		"defaultRequire": 1
 	},
