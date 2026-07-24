@@ -11,7 +11,7 @@ import java.util.*;
 
 public class RegionData {
 
-    //Add a region UUID so names can be duplicates and to prevent the bug of attributes/data swapping when the name is the same?
+    // Region Data Variables
     public UUID regionUuid;
     public String regionName;
     public int regionX;
@@ -23,6 +23,8 @@ public class RegionData {
     public List<String> regionEnterCommands;
     public List<String> regionExitCommands;
 
+
+    // Imgui Region Data Variables (Client Only For UI)
     public ImString imRegionName = new ImString("", 256);
     public ImInt imRegionX = new ImInt(0);
     public ImInt imRegionY = new ImInt(0);

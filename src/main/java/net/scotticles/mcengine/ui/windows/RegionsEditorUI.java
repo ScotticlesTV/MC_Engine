@@ -2,6 +2,7 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -10,6 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.settings.MCEngineConfig;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.ArrayList;
@@ -316,10 +318,6 @@ public class RegionsEditorUI {
                 ImGui.endTabItem();
             }
             if (ImGui.beginTabItem("Mass Region Editing")) {
-                if (ImGui.button("Remove All Regions")) {
-                    RegionsManager.clearRegions();
-                    shouldSyncNetwork = true;
-                }
                 if (ImGui.button("Enable All Regions")) {
                     for (RegionData regionData : RegionsManager.activeRegions) {
                         regionData.regionEnabled = true;
@@ -332,10 +330,15 @@ public class RegionsEditorUI {
                     }
                     shouldSyncNetwork = true;
                 }
+                if (ImGui.button("Delete All Regions")) {
+                    RegionsManager.clearRegions();
+                    shouldSyncNetwork = true;
+                }
                 ImGui.endTabItem();
             }
             ImGui.endTabBar();
             ImGui.end();
+
 
             // Server/Network syncing: Send the client's up to date set of regions to the server
             if (shouldSyncNetwork) {

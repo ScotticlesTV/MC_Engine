@@ -20,9 +20,6 @@
 		],
 		"client": [
 			"net.scotticles.mcengine.MCEngineClient"
-		],
-		"fabric-datagen": [
-			"net.scotticles.mcengine.MCEngineDataGenerator"
 		]
 	},
 	"mixins": [

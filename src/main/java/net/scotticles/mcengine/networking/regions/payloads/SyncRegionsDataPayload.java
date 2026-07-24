@@ -14,7 +14,7 @@ public record SyncRegionsDataPayload(Set<RegionData> regions) implements CustomP
 
     // Define a unique ID for your packet channel
     public static final CustomPayload.Id<SyncRegionsDataPayload> ID =
-            new CustomPayload.Id<>(Identifier.of("mc_engine", "send_regions_data_packet"));
+            new CustomPayload.Id<>(Identifier.of("mc_engine", "sync_regions_data_packet"));
 
     // Define a codex to serialize and deserialize the data
     public static final PacketCodec<RegistryByteBuf, SyncRegionsDataPayload> CODEC = PacketCodec.tuple(

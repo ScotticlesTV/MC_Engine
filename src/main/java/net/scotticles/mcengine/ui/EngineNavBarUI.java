@@ -6,11 +6,11 @@ import imgui.ImGui;
 public class EngineNavBarUI {
 
     public static void showEngineNavBar() {
-
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
             if (ctx == null) {
                 return;
             }
+
             // Menu Bar
             ImGui.beginMainMenuBar();
             if (ImGui.beginMenu("MCEngine")) {
@@ -78,6 +78,18 @@ public class EngineNavBarUI {
                 }
                 ImGui.endMenu();
             }
+
+            ImGui.beginDisabled();
+            if (ImGui.beginMenu("Decals")) {
+                if (ImGui.menuItem("Decals Editor")) {
+                    // Open Decals Editor
+                }
+                ImGui.endMenu();
+            }
+            ImGui.endDisabled();
+
+
+
             ImGui.endMainMenuBar();
         }
     }

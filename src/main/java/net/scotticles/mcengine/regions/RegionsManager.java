@@ -4,6 +4,7 @@ package net.scotticles.mcengine.regions;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,19 +40,19 @@ public class RegionsManager {
         activeRegions.clear();
     }
 
-
-
     //Add A New Region
     public static void addRegion(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled) {
         RegionData regionData = new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, regionEnterCommands, regionExitCommands, playersInside, regionEnabled);
 
         activeRegions.add(regionData);
+//        Needs the Minecraft Server to save
 //        RegionDataManager.save(activeRegions);
     }
 
     //Clear All Existing Regions
     public static void clearRegions() {
         activeRegions.clear();
+//        Needs the Minecraft Server to save
 //        RegionDataManager.save(activeRegions);
     }
 }

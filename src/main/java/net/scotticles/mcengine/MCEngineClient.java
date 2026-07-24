@@ -16,7 +16,7 @@ public class MCEngineClient implements ClientModInitializer {
         UIManager.editorUIInit();
         UIManager.engineUIWorldJoinInit();
 
-        // Register Client Side Packet Recievers
+        // Register Client Side Packet Receivers
         S2C.registerClientReceivers();
     }
 }

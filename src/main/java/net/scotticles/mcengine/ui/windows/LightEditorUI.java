@@ -12,7 +12,7 @@ public class LightEditorUI {
             if (ctx == null) {
                 return;
             }
-            // ImGUI Code
+
             ImGui.begin("Light Editor", UIManager.showLightEditorUI);
             ImGui.textWrapped("Manage world lights.");
 

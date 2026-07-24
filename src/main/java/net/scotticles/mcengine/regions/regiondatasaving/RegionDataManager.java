@@ -1,13 +1,10 @@
-package net.scotticles.mcengine.regions;
+package net.scotticles.mcengine.regions.regiondatasaving;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionsDataSave;
+import net.scotticles.mcengine.regions.RegionsManager;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -21,6 +18,7 @@ public class RegionDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static Path getSaveFile(MinecraftServer server) {
+//        Get Save File From Client (Only Use For Saving Configs Or Data Only The Client needs)
 //        String worldName = "default_world";
 //        if (MinecraftClient.getInstance().getServer() != null) {
 //            worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();

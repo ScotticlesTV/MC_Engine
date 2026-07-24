@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.scotticles.mcengine.networking.editor.payloads.RequestEditorUIPermsPayload;
+import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyInputHandler {
@@ -23,8 +23,8 @@ public class KeyInputHandler {
         ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
 
             if (toggleEngineUIKey.wasPressed()) {
-                // Send a packet to ask the server if you can open the UI
-                ClientPlayNetworking.send(new RequestEditorUIPermsPayload());
+                // Send a packet to ask the server if you have the permissions to open the UI
+                ClientPlayNetworking.send(new CheckEditorUIPermsPayload());
             }
         });
     }
