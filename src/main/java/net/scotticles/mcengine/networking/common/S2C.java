@@ -1,6 +1,5 @@
 package net.scotticles.mcengine.networking.common;
 
-
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -54,6 +53,15 @@ public class S2C {
                 WorldGamerulesUI.doDaylightCycle = payload.doDaylightCycle();
                 WorldGamerulesUI.doWeatherCycle = payload.doWeatherCycle();
                 WorldGamerulesUI.sendCommandFeedback = payload.sendCommandFeedback();
+                WorldGamerulesUI.commandBlockOutput = payload.commandBlockOutput();
+                WorldGamerulesUI.doFireTick = payload.doFireTick();
+                WorldGamerulesUI.doImmediateRespawn = payload.doImmediateRespawn();
+                WorldGamerulesUI.doMobSpawning = payload.doMobSpawning();
+                WorldGamerulesUI.fallDamage = payload.fallDamage();
+                WorldGamerulesUI.keepInventory = payload.keepInventory();
+                WorldGamerulesUI.mobGriefing = payload.mobGriefing();
+                WorldGamerulesUI.naturalRegeneration = payload.naturalRegeneration();
+                WorldGamerulesUI.showDeathMessages = payload.showDeathMessages();
             });
         });
     }
@@ -71,7 +79,18 @@ public class S2C {
             ServerPlayNetworking.send(player, new SyncGamerulesDataPayload(
                     gameRules.get(GameRules.DO_DAYLIGHT_CYCLE).get(),
                     gameRules.get(GameRules.DO_WEATHER_CYCLE).get(),
-                    gameRules.get(GameRules.SEND_COMMAND_FEEDBACK).get()));
+                    gameRules.get(GameRules.SEND_COMMAND_FEEDBACK).get(),
+                    gameRules.get(GameRules.COMMAND_BLOCK_OUTPUT).get(),
+                    gameRules.get(GameRules.DO_FIRE_TICK).get(),
+                    gameRules.get(GameRules.DO_IMMEDIATE_RESPAWN).get(),
+                    gameRules.get(GameRules.DO_MOB_SPAWNING).get(),
+                    gameRules.get(GameRules.FALL_DAMAGE).get(),
+                    gameRules.get(GameRules.KEEP_INVENTORY).get(),
+                    gameRules.get(GameRules.DO_MOB_GRIEFING).get(),
+                    gameRules.get(GameRules.NATURAL_REGENERATION).get(),
+                    gameRules.get(GameRules.SHOW_DEATH_MESSAGES).get()
+            ));
+
 
 
             //Sync Regions

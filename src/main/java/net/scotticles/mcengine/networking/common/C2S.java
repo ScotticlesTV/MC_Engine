@@ -85,13 +85,31 @@ public class C2S {
                 gameRules.get(GameRules.DO_DAYLIGHT_CYCLE).set(payload.doDaylightCycle(), context.server());
                 gameRules.get(GameRules.DO_WEATHER_CYCLE).set(payload.doWeatherCycle(), context.server());
                 gameRules.get(GameRules.SEND_COMMAND_FEEDBACK).set(payload.sendCommandFeedback(), context.server());
+                gameRules.get(GameRules.COMMAND_BLOCK_OUTPUT).set(payload.commandBlockOutput(), context.server());
+                gameRules.get(GameRules.DO_FIRE_TICK).set(payload.doFireTick(), context.server());
+                gameRules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(payload.doImmediateRespawn(), context.server());
+                gameRules.get(GameRules.DO_MOB_SPAWNING).set(payload.doMobSpawning(), context.server());
+                gameRules.get(GameRules.FALL_DAMAGE).set(payload.fallDamage(), context.server());
+                gameRules.get(GameRules.KEEP_INVENTORY).set(payload.keepInventory(), context.server());
+                gameRules.get(GameRules.DO_MOB_GRIEFING).set(payload.mobGriefing(), context.server());
+                gameRules.get(GameRules.NATURAL_REGENERATION).set(payload.naturalRegeneration(), context.server());
+                gameRules.get(GameRules.SHOW_DEATH_MESSAGES).set(payload.showDeathMessages(), context.server());
 
                 // Sync Gamerules To All Editors
                 for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, new SyncGamerulesDataPayload(
                             payload.doDaylightCycle(),
                             payload.doWeatherCycle(),
-                            payload.sendCommandFeedback()
+                            payload.sendCommandFeedback(),
+                            payload.commandBlockOutput(),
+                            payload.doFireTick(),
+                            payload.doImmediateRespawn(),
+                            payload.doMobSpawning(),
+                            payload.fallDamage(),
+                            payload.keepInventory(),
+                            payload.mobGriefing(),
+                            payload.naturalRegeneration(),
+                            payload.showDeathMessages()
                             )
                     );
                 }
