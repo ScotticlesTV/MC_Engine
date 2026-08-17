@@ -37,47 +37,49 @@ public class EngineNavBarUI {
                 }
                 ImGui.endMenu();
             }
-            if (ImGui.beginMenu("Lighting")) {
-                ImGui.beginDisabled();
-                ImGui.menuItem("Profiles");
-                ImGui.endDisabled();
-                ImGui.beginDisabled();
-                if (ImGui.menuItem("Light Editor")) {
-                    UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
-                }
-                ImGui.endDisabled();
-                ImGui.endMenu();
-            }
-            if (ImGui.beginMenu("Audio")) {
-                ImGui.beginDisabled();
-                ImGui.menuItem("Audio Sources");
-                ImGui.endDisabled();
-                ImGui.beginDisabled();
-                ImGui.menuItem("Ambience");
-                ImGui.endDisabled();
-                ImGui.endMenu();
-            }
-            if (ImGui.beginMenu("Events")) {
-                ImGui.beginDisabled();
-                ImGui.menuItem("Event Editor");
-                ImGui.endDisabled();
-                ImGui.endMenu();
-            }
-            if (ImGui.beginMenu("Player(s)")) {
-                ImGui.beginDisabled();
-                ImGui.menuItem("Universal Attributes");
-                ImGui.endDisabled();
-                ImGui.beginDisabled();
-                ImGui.menuItem("Classes");
-                ImGui.endDisabled();
-                ImGui.endMenu();
-            }
             if (ImGui.beginMenu("Regions")) {
                 if (ImGui.menuItem("Regions Editor")) {
                     UIManager.showRegionEditorUI.set(!UIManager.showRegionEditorUI.get());
                 }
                 ImGui.endMenu();
             }
+
+            ImGui.beginDisabled();
+            if (ImGui.beginMenu("Lighting")) {
+                ImGui.menuItem("Light Profiles");
+                ImGui.endDisabled();
+                ImGui.beginDisabled();
+                if (ImGui.menuItem("Light Editor")) {
+                    UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
+                }
+                ImGui.endMenu();
+            }
+            ImGui.endDisabled();
+
+            ImGui.beginDisabled();
+            if (ImGui.beginMenu("Audio")) {
+                ImGui.menuItem("Audio Sources");
+                ImGui.endDisabled();
+                ImGui.beginDisabled();
+                ImGui.menuItem("Ambience");
+                ImGui.endMenu();
+            }
+            ImGui.endDisabled();
+
+            ImGui.beginDisabled();
+            if (ImGui.beginMenu("Sequences")) {
+                ImGui.menuItem("Sequences Editor");
+                ImGui.endMenu();
+            }
+            ImGui.endDisabled();
+
+            ImGui.beginDisabled();
+            if (ImGui.beginMenu("Player(s)")) {
+                ImGui.menuItem("Universal Attributes");
+                ImGui.menuItem("Classes");
+                ImGui.endMenu();
+            }
+            ImGui.endDisabled();
 
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Decals")) {
@@ -87,8 +89,6 @@ public class EngineNavBarUI {
                 ImGui.endMenu();
             }
             ImGui.endDisabled();
-
-
 
             ImGui.endMainMenuBar();
         }

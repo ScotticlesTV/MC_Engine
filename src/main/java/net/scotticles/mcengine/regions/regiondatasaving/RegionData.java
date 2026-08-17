@@ -25,11 +25,11 @@ public class RegionData {
 
 
     // Imgui Region Data Variables (Client Only For UI)
-    public ImString imRegionName = new ImString("", 256);
-    public ImInt imRegionX = new ImInt(0);
-    public ImInt imRegionY = new ImInt(0);
-    public ImInt imRegionZ = new ImInt(0);
-    public ImInt imRegionRadius = new ImInt(20);
+//    public ImString imRegionName = new ImString("", 256);
+//    public ImInt imRegionX = new ImInt(0);
+//    public ImInt imRegionY = new ImInt(0);
+//    public ImInt imRegionZ = new ImInt(0);
+//    public ImInt imRegionRadius = new ImInt(20);
 
 
 
@@ -83,11 +83,11 @@ public class RegionData {
         this.regionExitCommands = new ArrayList<>(regionExitCommands);
         this.playersInside = playersInside;
         this.regionEnabled = regionEnabled;
-        this.imRegionName.set(regionName);
-        this.imRegionX.set(regionX);
-        this.imRegionY.set(regionY);
-        this.imRegionZ.set(regionZ);
-        this.imRegionRadius.set(regionRadius);
+//        this.imRegionName.set(regionName);
+//        this.imRegionX.set(regionX);
+//        this.imRegionY.set(regionY);
+//        this.imRegionZ.set(regionZ);
+//        this.imRegionRadius.set(regionRadius);
     }
 
     public RegionData toRegionsData() {

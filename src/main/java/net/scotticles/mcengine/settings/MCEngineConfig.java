@@ -12,11 +12,11 @@ import java.util.Properties;
 public class MCEngineConfig {
     // Config variables
     public static boolean openNavBarOnWorldJoin = false;
+    public static boolean useCustomUIColors = false;
     public static float uiColorR = 0;
     public static float uiColorG = 0;
     public static float uiColorB = 0;
     public static float uiColorA = 0;
-    public static boolean useCustomUIColors = false;
 
     // Config File Reference Inside Fabric Config File
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + ".properties");
@@ -29,7 +29,7 @@ public class MCEngineConfig {
                 properties.load(in);
 
                 // Assign config values from file and set them to defaults if they don't exist
-
+                openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("openNavBarOnWorldJoin", "false"));
                 useCustomUIColors = Boolean.parseBoolean(properties.getProperty("useCustomUIColors", "false"));
                 uiColorR = Float.parseFloat(properties.getProperty("uiColorR", "0"));
                 uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0"));

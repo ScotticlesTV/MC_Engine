@@ -3,6 +3,7 @@ package net.scotticles.mcengine.ui.windows;
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
+import imgui.type.ImInt;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -19,6 +20,11 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class RegionsEditorUI {
+    static ImString imRegionName = new ImString("Region", 256);
+    static ImInt imRegionX = new ImInt(0);
+    static ImInt imRegionY = new ImInt(0);
+    static ImInt imRegionZ = new ImInt(0);
+    static ImInt imRegionRadius = new ImInt(0);
 
     public static void showRegionsEditorUI() {
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
@@ -49,14 +55,19 @@ public class RegionsEditorUI {
                 RegionData regionToDelete = null;
 
                 for (RegionData regionData : RegionsManager.activeRegions) {
+                    imRegionName.set(regionData.regionName);
+                    imRegionX.set(regionData.regionX);
+                    imRegionY.set(regionData.regionY);
+                    imRegionZ.set(regionData.regionZ);
+                    imRegionRadius.set(regionData.regionRadius);
 
                     if (regionData.regionEnabled) {
                         ImGui.pushID(index);
                         if (ImGui.collapsingHeader(regionData.regionName + "###region_" + regionData.regionUuid)) {
 
                             ImGui.text("Region Name: "); ImGui.sameLine();
-                            if (ImGui.inputText("##Region Name: ", regionData.imRegionName)) {
-                                regionData.regionName = regionData.imRegionName.get();
+                            if (ImGui.inputText("##Region Name: ", imRegionName)) {
+                                regionData.regionName = imRegionName.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
@@ -69,24 +80,24 @@ public class RegionsEditorUI {
                             }
 
                             ImGui.text("Region X: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region X: ", regionData.imRegionX)) {
-                                regionData.regionX = regionData.imRegionX.get();
+                            if (ImGui.inputInt("##Region X: ", imRegionX)) {
+                                regionData.regionX = imRegionX.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
                             }
 
                             ImGui.text("Region Y: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Y: ", regionData.imRegionY)) {
-                                regionData.regionY = regionData.imRegionY.get();
+                            if (ImGui.inputInt("##Region Y: ", imRegionY)) {
+                                regionData.regionY = imRegionY.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
                             }
 
                             ImGui.text("Region Z: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Z: ", regionData.imRegionZ)) {
-                                regionData.regionZ = regionData.imRegionZ.get();
+                            if (ImGui.inputInt("##Region Z: ", imRegionZ)) {
+                                regionData.regionZ = imRegionZ.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
@@ -104,8 +115,8 @@ public class RegionsEditorUI {
                             }
 
                             ImGui.text("Region Radius: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Radius: ", regionData.imRegionRadius)) {
-                                regionData.regionRadius = regionData.imRegionRadius.get();
+                            if (ImGui.inputInt("##Region Radius: ", imRegionRadius)) {
+                                regionData.regionRadius = imRegionRadius.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
@@ -193,13 +204,18 @@ public class RegionsEditorUI {
                 RegionData regionToDelete = null;
 
                 for (RegionData regionData : RegionsManager.activeRegions) {
+                    imRegionName.set(regionData.regionName);
+                    imRegionX.set(regionData.regionX);
+                    imRegionY.set(regionData.regionY);
+                    imRegionZ.set(regionData.regionZ);
+                    imRegionRadius.set(regionData.regionRadius);
                     if (!regionData.regionEnabled) {
                         ImGui.pushID(index);
                         if (ImGui.collapsingHeader(regionData.regionName + "###region_" + index)) {
 
                             ImGui.text("Region Name: "); ImGui.sameLine();
-                            if (ImGui.inputText("##Region Name: ", regionData.imRegionName)) {
-                                regionData.regionName = regionData.imRegionName.get();
+                            if (ImGui.inputText("##Region Name: ", imRegionName)) {
+                                regionData.regionName = imRegionName.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
@@ -212,24 +228,24 @@ public class RegionsEditorUI {
                             }
 
                             ImGui.text("Region X: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region X: ", regionData.imRegionX)) {
-                                regionData.regionX = regionData.imRegionX.get();
+                            if (ImGui.inputInt("##Region X: ", imRegionX)) {
+                                regionData.regionX = imRegionX.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
                             }
 
                             ImGui.text("Region Y: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Y: ", regionData.imRegionY)) {
-                                regionData.regionY = regionData.imRegionY.get();
+                            if (ImGui.inputInt("##Region Y: ", imRegionY)) {
+                                regionData.regionY = imRegionY.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
                             }
 
                             ImGui.text("Region Z: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Z: ", regionData.imRegionZ)) {
-                                regionData.regionZ = regionData.imRegionZ.get();
+                            if (ImGui.inputInt("##Region Z: ", imRegionZ)) {
+                                regionData.regionZ = imRegionZ.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;
@@ -248,8 +264,8 @@ public class RegionsEditorUI {
 
                             // Region Radius
                             ImGui.text("Region Radius: "); ImGui.sameLine();
-                            if (ImGui.inputInt("##Region Radius: ", regionData.imRegionRadius)) {
-                                regionData.regionRadius = regionData.imRegionRadius.get();
+                            if (ImGui.inputInt("##Region Radius: ", imRegionRadius)) {
+                                regionData.regionRadius = imRegionRadius.get();
                             }
                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                 shouldSyncNetwork = true;

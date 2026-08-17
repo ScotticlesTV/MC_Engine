@@ -37,7 +37,7 @@ public class ClientEngineSettingsUI {
                 }
                 ImGui.sameLine();
                 ImGui.textWrapped("Use Custom UI Colors");
-            ImGui.spacing();
+                ImGui.spacing();
                 ImGui.colorEdit4("UI Color", uiColor);
                 if (ImGui.isItemDeactivatedAfterEdit()) {
                     MCEngineConfig.uiColorR = uiColor[0];
