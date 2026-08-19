@@ -38,11 +38,10 @@ public class ClientEngineSettingsUI {
                 ImGui.sameLine();
                 ImGui.textWrapped("Use Custom UI Colors");
                 ImGui.spacing();
-                ImGui.colorEdit4("UI Color", uiColor);
-                if (ImGui.isItemDeactivatedAfterEdit()) {
+                if (ImGui.colorEdit4("UI Color", uiColor)) {
                     MCEngineConfig.uiColorR = uiColor[0];
-                    MCEngineConfig.uiColorB = uiColor[1];
-                    MCEngineConfig.uiColorG = uiColor[2];
+                    MCEngineConfig.uiColorG = uiColor[1];
+                    MCEngineConfig.uiColorB = uiColor[2];
                     MCEngineConfig.uiColorA = uiColor[3];
                     MCEngineConfig.save();
                 }

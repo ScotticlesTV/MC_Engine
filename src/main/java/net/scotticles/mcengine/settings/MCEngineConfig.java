@@ -53,8 +53,8 @@ public class MCEngineConfig {
         properties.setProperty("openNavBarOnWorldJoin", String.valueOf(openNavBarOnWorldJoin));
         properties.setProperty("useCustomUIColors", String.valueOf(useCustomUIColors));
         properties.setProperty("uiColorR", String.valueOf(uiColorR));
-        properties.setProperty("uiColorB", String.valueOf(uiColorG));
-        properties.setProperty("uiColorG", String.valueOf(uiColorB));
+        properties.setProperty("uiColorG", String.valueOf(uiColorG));
+        properties.setProperty("uiColorB", String.valueOf(uiColorB));
         properties.setProperty("uiColorA", String.valueOf(uiColorA));
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
