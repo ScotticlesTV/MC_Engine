@@ -4,17 +4,28 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
+import net.scotticles.mcengine.regions.RegionSoundInstance;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
 import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class S2C {
+    private static final Map<String, RegionSoundInstance> ACTIVE_SOUNDS = new HashMap<>();
 
     // Register Channels For Packets To Travel On From Server To Client
     public static void registerPacketChannels() {
@@ -23,6 +34,8 @@ public class S2C {
         PayloadTypeRegistry.playS2C().register(OpenEditorUIPayload.TYPE, OpenEditorUIPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(SyncGamerulesDataPayload.TYPE, SyncGamerulesDataPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(RegionSoundStatePayload.TYPE, RegionSoundStatePayload.CODEC);
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
@@ -62,6 +75,39 @@ public class S2C {
                 WorldGamerulesUI.mobGriefing = payload.mobGriefing();
                 WorldGamerulesUI.naturalRegeneration = payload.naturalRegeneration();
                 WorldGamerulesUI.showDeathMessages = payload.showDeathMessages();
+            });
+        });
+
+        // Looping Sound Packet Reciever
+        ClientPlayNetworking.registerGlobalReceiver(RegionSoundStatePayload.TYPE, (payload, context) -> {
+            context.client().execute(() -> {
+                ClientPlayerEntity player = context.player();
+                String soundID = payload.soundID();
+
+                if (payload.play()) {
+                    if (!ACTIVE_SOUNDS.containsKey(soundID)) {
+//                        SoundEvent event = Registries.SOUND_EVENT.get(Identifier.of(soundID));
+//                        if (event != null) {
+//                            RegionSoundInstance sound = new RegionSoundInstance(player, event, 1.0f);
+//                            MinecraftClient.getInstance().getSoundManager().play(sound);
+//                            ACTIVE_SOUNDS.put(soundID, sound);
+//                        }
+                        Identifier identifer = Identifier.of(soundID);
+
+                        SoundEvent event = SoundEvent.of(identifer);
+
+                        RegionSoundInstance sound = new RegionSoundInstance(player, event, 2.0f);
+                        MinecraftClient.getInstance().getSoundManager().play(sound);
+                        ACTIVE_SOUNDS.put(soundID, sound);
+                    }
+                }
+                else
+                {
+                    RegionSoundInstance sound = ACTIVE_SOUNDS.remove(soundID);
+                    if (sound != null) {
+                        sound.fadeAndStop();
+                    }
+                }
             });
         });
     }

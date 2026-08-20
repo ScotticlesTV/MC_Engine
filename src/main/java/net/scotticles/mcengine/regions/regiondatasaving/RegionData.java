@@ -22,6 +22,7 @@ public class RegionData {
     public boolean regionEnabled;
     public List<String> regionEnterCommands;
     public List<String> regionExitCommands;
+    public String regionSound;
 
 
     // Imgui Region Data Variables (Client Only For UI)
@@ -54,6 +55,7 @@ public class RegionData {
                 STRING_LIST_CODEC.encode(buf, value.regionExitCommands);
                 UUID_SET_CODEC.encode(buf, value.playersInside);
                 buf.writeBoolean(value.regionEnabled);
+                buf.writeString(value.regionSound);
             },
             // Packet Decoder
             (RegistryByteBuf buf) -> {
@@ -67,12 +69,13 @@ public class RegionData {
                 List<String> exitCommands = STRING_LIST_CODEC.decode(buf);
                 Set<UUID> players = UUID_SET_CODEC.decode(buf);
                 boolean enabled = buf.readBoolean();
+                String sound = buf.readString();
 
-                return new RegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled);
+                return new RegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled, sound);
             }
     );
 
-    public RegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled) {
+    public RegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound) {
         this.regionUuid = regionUuid;
         this.regionName = regionName;
         this.regionX = regionX;
@@ -83,14 +86,10 @@ public class RegionData {
         this.regionExitCommands = new ArrayList<>(regionExitCommands);
         this.playersInside = playersInside;
         this.regionEnabled = regionEnabled;
-//        this.imRegionName.set(regionName);
-//        this.imRegionX.set(regionX);
-//        this.imRegionY.set(regionY);
-//        this.imRegionZ.set(regionZ);
-//        this.imRegionRadius.set(regionRadius);
+        this.regionSound = regionSound;
     }
 
     public RegionData toRegionsData() {
-        return new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled);
+        return new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound);
     }
 }

@@ -25,6 +25,7 @@ public class RegionsEditorUI {
     static ImInt imRegionY = new ImInt(0);
     static ImInt imRegionZ = new ImInt(0);
     static ImInt imRegionRadius = new ImInt(0);
+    static ImString imRegionSound = new ImString("", 256);
 
     public static void showRegionsEditorUI() {
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
@@ -45,7 +46,7 @@ public class RegionsEditorUI {
                         UUID uuid = UUID.randomUUID();
                         RegionsManager.addRegion(uuid, "Region",
                                 (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true);
+                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "");
                         // Trigger Sync
                         shouldSyncNetwork = true;
                     }
@@ -60,6 +61,7 @@ public class RegionsEditorUI {
                     imRegionY.set(regionData.regionY);
                     imRegionZ.set(regionData.regionZ);
                     imRegionRadius.set(regionData.regionRadius);
+                    imRegionSound.set(regionData.regionSound);
 
                     if (regionData.regionEnabled) {
                         ImGui.pushID(index);
@@ -112,6 +114,13 @@ public class RegionsEditorUI {
                                     regionData.regionZ = (int) playerPos.getZ();
                                     shouldSyncNetwork = true;
                                 }
+                            }
+                            ImGui.text("Region Sound: "); ImGui.sameLine();
+                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
+                                regionData.regionSound = imRegionSound.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
                             }
 
                             ImGui.text("Region Radius: "); ImGui.sameLine();
@@ -195,7 +204,7 @@ public class RegionsEditorUI {
                         UUID uuid = UUID.randomUUID();
                         RegionsManager.addRegion(uuid,"Region",
                                 (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false);
+                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false, "");
                         shouldSyncNetwork = true; // Trigger Sync
                     }
                 }
@@ -260,6 +269,12 @@ public class RegionsEditorUI {
                                     regionData.regionZ = (int) playerPos.getZ();
                                     shouldSyncNetwork = true;
                                 }
+                            }
+                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
+                                regionData.regionSound = imRegionSound.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
                             }
 
                             // Region Radius

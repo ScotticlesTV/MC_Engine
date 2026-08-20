@@ -45,7 +45,8 @@ public class RegionDataManager {
                     regionData.regionEnterCommands,
                     regionData.regionExitCommands,
                     regionData.playersInside,
-                    regionData.regionEnabled
+                    regionData.regionEnabled,
+                    regionData.regionSound
             ));
         }
 
