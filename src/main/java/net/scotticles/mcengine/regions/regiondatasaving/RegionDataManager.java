@@ -46,7 +46,9 @@ public class RegionDataManager {
                     regionData.regionExitCommands,
                     regionData.playersInside,
                     regionData.regionEnabled,
-                    regionData.regionSound
+                    regionData.regionSound,
+                    regionData.regionSoundVolume,
+                    regionData.regionSoundFadeDuration
             ));
         }
 

@@ -2,12 +2,11 @@ package net.scotticles.mcengine.ui;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import imgui.ImGuiStyle;
 import imgui.flag.ImGuiCol;
 import imgui.type.ImBoolean;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.scotticles.mcengine.settings.MCEngineConfig;
+import net.scotticles.mcengine.settings.MCEngineClientConfig;
 import net.scotticles.mcengine.ui.windows.*;
 
 public class UIManager {
@@ -18,6 +17,7 @@ public class UIManager {
     public static ImBoolean showWorldTimeUI = new ImBoolean(false);
     public static ImBoolean showWorldWeatherUI = new ImBoolean(false);
     public static ImBoolean showWorldGamerulesUI = new ImBoolean(false);
+    public static ImBoolean showWorldMusicUI = new ImBoolean(false);
     public static ImBoolean showRegionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightEditorUI = new ImBoolean(false);
 //    public static ImBoolean showDecalsEditorUI = new ImBoolean(false);
@@ -28,8 +28,8 @@ public class UIManager {
         HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
             try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
                 if (ctx == null) return;
-                if (MCEngineConfig.useCustomUIColors) {
-                    ImGui.getStyle().setColor(ImGuiCol.WindowBg, MCEngineConfig.uiColorR, MCEngineConfig.uiColorG, MCEngineConfig.uiColorB, MCEngineConfig.uiColorA);
+                if (MCEngineClientConfig.useCustomUIColors) {
+                    ImGui.getStyle().setColor(ImGuiCol.WindowBg, MCEngineClientConfig.uiColorR, MCEngineClientConfig.uiColorG, MCEngineClientConfig.uiColorB, MCEngineClientConfig.uiColorA);
                 }
                 else {
                     ImGui.styleColorsDark();
@@ -52,6 +52,9 @@ public class UIManager {
                 if (showWorldGamerulesUI.get()) {
                     WorldGamerulesUI.showWorldGamerulesUI();
                 }
+                if (showWorldMusicUI.get()) {
+                    WorldMusicUI.showWorldWeatherUI();
+                }
                 if (showRegionEditorUI.get()) {
                     RegionsEditorUI.showRegionsEditorUI();
                 }
@@ -64,7 +67,7 @@ public class UIManager {
 
     public static void engineUIWorldJoinInit() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (MCEngineConfig.openNavBarOnWorldJoin) {
+            if (MCEngineClientConfig.openNavBarOnWorldJoin) {
                 UIManager.showEngineUI = true;
             } else {
                 UIManager.showEngineUI = false;

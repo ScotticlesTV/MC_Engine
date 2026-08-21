@@ -86,17 +86,11 @@ public class S2C {
 
                 if (payload.play()) {
                     if (!ACTIVE_SOUNDS.containsKey(soundID)) {
-//                        SoundEvent event = Registries.SOUND_EVENT.get(Identifier.of(soundID));
-//                        if (event != null) {
-//                            RegionSoundInstance sound = new RegionSoundInstance(player, event, 1.0f);
-//                            MinecraftClient.getInstance().getSoundManager().play(sound);
-//                            ACTIVE_SOUNDS.put(soundID, sound);
-//                        }
                         Identifier identifer = Identifier.of(soundID);
 
                         SoundEvent event = SoundEvent.of(identifer);
 
-                        RegionSoundInstance sound = new RegionSoundInstance(player, event, 2.0f);
+                        RegionSoundInstance sound = new RegionSoundInstance(player, event, payload.volume(), payload.fadeDuration());
                         MinecraftClient.getInstance().getSoundManager().play(sound);
                         ACTIVE_SOUNDS.put(soundID, sound);
                     }

@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.settings.MCEngineConfig;
+import net.scotticles.mcengine.settings.MCEngineClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class MCEngine implements ModInitializer {
 		// Proceed with mild caution.
 
 		// Load The Client Side Engine Config
-		MCEngineConfig.load();
+		MCEngineClientConfig.load();
 		RegionsManager.regionsInit();
 
 		// Register Packet Channels

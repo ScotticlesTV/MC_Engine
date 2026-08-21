@@ -35,6 +35,9 @@ public class EngineNavBarUI {
                 if (ImGui.menuItem("Gamerules")) {
                     UIManager.showWorldGamerulesUI.set(!UIManager.showWorldGamerulesUI.get());
                 }
+                if (ImGui.menuItem("Music")) {
+                    UIManager.showWorldMusicUI.set(!UIManager.showWorldMusicUI.get());
+                }
                 ImGui.endMenu();
             }
             if (ImGui.beginMenu("Regions")) {

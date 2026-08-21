@@ -23,14 +23,9 @@ public class RegionData {
     public List<String> regionEnterCommands;
     public List<String> regionExitCommands;
     public String regionSound;
+    public float regionSoundVolume;
+    public float regionSoundFadeDuration;
 
-
-    // Imgui Region Data Variables (Client Only For UI)
-//    public ImString imRegionName = new ImString("", 256);
-//    public ImInt imRegionX = new ImInt(0);
-//    public ImInt imRegionY = new ImInt(0);
-//    public ImInt imRegionZ = new ImInt(0);
-//    public ImInt imRegionRadius = new ImInt(20);
 
 
 
@@ -56,6 +51,8 @@ public class RegionData {
                 UUID_SET_CODEC.encode(buf, value.playersInside);
                 buf.writeBoolean(value.regionEnabled);
                 buf.writeString(value.regionSound);
+                buf.writeFloat(value.regionSoundVolume);
+                buf.writeFloat(value.regionSoundFadeDuration);
             },
             // Packet Decoder
             (RegistryByteBuf buf) -> {
@@ -70,12 +67,14 @@ public class RegionData {
                 Set<UUID> players = UUID_SET_CODEC.decode(buf);
                 boolean enabled = buf.readBoolean();
                 String sound = buf.readString();
+                float soundVolume = buf.readFloat();
+                float soundFadeDuration = buf.readFloat();
 
-                return new RegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled, sound);
+                return new RegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled, sound, soundVolume, soundFadeDuration);
             }
     );
 
-    public RegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound) {
+    public RegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
         this.regionUuid = regionUuid;
         this.regionName = regionName;
         this.regionX = regionX;
@@ -87,9 +86,11 @@ public class RegionData {
         this.playersInside = playersInside;
         this.regionEnabled = regionEnabled;
         this.regionSound = regionSound;
+        this.regionSoundVolume = regionSoundVolume;
+        this.regionSoundFadeDuration = regionSoundFadeDuration;
     }
 
     public RegionData toRegionsData() {
-        return new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound);
+        return new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
     }
 }

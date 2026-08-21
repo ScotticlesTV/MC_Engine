@@ -10,14 +10,13 @@ public class RegionSoundInstance extends MovingSoundInstance {
     private final ClientPlayerEntity player;
     private boolean stopping = false;
     private final float fadeIncrement;
-//    private boolean active = true;
 
-    public RegionSoundInstance(ClientPlayerEntity player, SoundEvent soundEvent, float fadeDurationSeconds) {
+    public RegionSoundInstance(ClientPlayerEntity player, SoundEvent soundEvent, float volume, float fadeDurationSeconds) {
         super(soundEvent, SoundCategory.AMBIENT, Random.create());
         this.player = player;
         this.repeat = true;
         this.repeatDelay = 0;
-        this.volume = 1.0F;
+        this.volume = volume;
         this.pitch = 1.0F;
 
         this.fadeIncrement = 1.0f / (fadeDurationSeconds * 20.0f);

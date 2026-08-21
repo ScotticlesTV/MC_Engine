@@ -2,7 +2,7 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
+import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -12,7 +12,6 @@ import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
-import net.scotticles.mcengine.settings.MCEngineConfig;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.ArrayList;
@@ -26,6 +25,8 @@ public class RegionsEditorUI {
     static ImInt imRegionZ = new ImInt(0);
     static ImInt imRegionRadius = new ImInt(0);
     static ImString imRegionSound = new ImString("", 256);
+    static ImFloat imRegionSoundVolume = new ImFloat(1.0f);
+    static ImFloat imRegionSoundFadeDuration = new ImFloat(2.0f);
 
     public static void showRegionsEditorUI() {
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
@@ -46,7 +47,7 @@ public class RegionsEditorUI {
                         UUID uuid = UUID.randomUUID();
                         RegionsManager.addRegion(uuid, "Region",
                                 (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "");
+                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
                         // Trigger Sync
                         shouldSyncNetwork = true;
                     }
@@ -62,6 +63,8 @@ public class RegionsEditorUI {
                     imRegionZ.set(regionData.regionZ);
                     imRegionRadius.set(regionData.regionRadius);
                     imRegionSound.set(regionData.regionSound);
+                    imRegionSoundVolume.set(regionData.regionSoundVolume);
+                    imRegionSoundFadeDuration.set(regionData.regionSoundFadeDuration);
 
                     if (regionData.regionEnabled) {
                         ImGui.pushID(index);
@@ -115,13 +118,6 @@ public class RegionsEditorUI {
                                     shouldSyncNetwork = true;
                                 }
                             }
-                            ImGui.text("Region Sound: "); ImGui.sameLine();
-                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
-                                regionData.regionSound = imRegionSound.get();
-                            }
-                            if (ImGui.isItemDeactivatedAfterEdit()) {
-                                shouldSyncNetwork = true;
-                            }
 
                             ImGui.text("Region Radius: "); ImGui.sameLine();
                             if (ImGui.inputInt("##Region Radius: ", imRegionRadius)) {
@@ -149,10 +145,12 @@ public class RegionsEditorUI {
                                 }
                                 ImGui.popID();
                             }
+
                             if (ImGui.button("Add Enter Command")) {
                                 regionData.regionEnterCommands.add("");
                                 shouldSyncNetwork = true;
                             }
+
                             // Exit Commands
                             ImGui.text("Region Exit Commands: ");
                             for (int i = 0; i < regionData.regionExitCommands.size(); i++) {
@@ -171,11 +169,35 @@ public class RegionsEditorUI {
                                 }
                                 ImGui.popID();
                             }
+
                             if (ImGui.button("Add Exit Command")) {
                                 regionData.regionExitCommands.add("");
                                 shouldSyncNetwork = true;
                             }
 
+                            ImGui.text("Region Sound: "); ImGui.sameLine();
+                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
+                                regionData.regionSound = imRegionSound.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
+
+                            ImGui.text("Region Sound Volume: "); ImGui.sameLine();
+                            if (ImGui.inputFloat("##Region Sound Volume: ", imRegionSoundVolume)) {
+                                regionData.regionSoundVolume = imRegionSoundVolume.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
+
+                            ImGui.text("Region Sound Fade Duration: "); ImGui.sameLine();
+                            if (ImGui.inputFloat("##Region Sound Fade Duration: ", imRegionSoundFadeDuration)) {
+                                regionData.regionSoundFadeDuration = imRegionSoundFadeDuration.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
 
                             ImGui.separator();
                             if (ImGui.button("Delete Region")) {
@@ -204,7 +226,7 @@ public class RegionsEditorUI {
                         UUID uuid = UUID.randomUUID();
                         RegionsManager.addRegion(uuid,"Region",
                                 (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false, "");
+                                20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false, "", 1, 2);
                         shouldSyncNetwork = true; // Trigger Sync
                     }
                 }
@@ -218,6 +240,9 @@ public class RegionsEditorUI {
                     imRegionY.set(regionData.regionY);
                     imRegionZ.set(regionData.regionZ);
                     imRegionRadius.set(regionData.regionRadius);
+                    imRegionSoundVolume.set(regionData.regionSoundVolume);
+                    imRegionSoundFadeDuration.set(regionData.regionSoundFadeDuration);
+
                     if (!regionData.regionEnabled) {
                         ImGui.pushID(index);
                         if (ImGui.collapsingHeader(regionData.regionName + "###region_" + index)) {
@@ -269,12 +294,6 @@ public class RegionsEditorUI {
                                     regionData.regionZ = (int) playerPos.getZ();
                                     shouldSyncNetwork = true;
                                 }
-                            }
-                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
-                                regionData.regionSound = imRegionSound.get();
-                            }
-                            if (ImGui.isItemDeactivatedAfterEdit()) {
-                                shouldSyncNetwork = true;
                             }
 
                             // Region Radius
@@ -329,6 +348,29 @@ public class RegionsEditorUI {
                                 shouldSyncNetwork = true;
                             }
 
+                            ImGui.text("Region Sound: "); ImGui.sameLine();
+                            if (ImGui.inputText("##RegionSound", imRegionSound)) {
+                                regionData.regionSound = imRegionSound.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
+
+                            ImGui.text("Region Sound Volume: "); ImGui.sameLine();
+                            if (ImGui.inputFloat("##Region Sound Volume: ", imRegionSoundVolume)) {
+                                regionData.regionSoundVolume = imRegionSoundVolume.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
+
+                            ImGui.text("Region Sound Fade Duration: "); ImGui.sameLine();
+                            if (ImGui.inputFloat("##Region Sound Volume: ", imRegionSoundFadeDuration)) {
+                                regionData.regionSoundFadeDuration = imRegionSoundFadeDuration.get();
+                            }
+                            if (ImGui.isItemDeactivatedAfterEdit()) {
+                                shouldSyncNetwork = true;
+                            }
 
                             ImGui.separator();
                             if (ImGui.button("Delete Region")) {

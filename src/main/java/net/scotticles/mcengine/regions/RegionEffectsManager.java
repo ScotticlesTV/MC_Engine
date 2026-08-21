@@ -46,7 +46,7 @@ public class RegionEffectsManager {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
                                     // Send A Packet To Have The Player's Client Play The Sound
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.regionSound, true));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.regionSound, true, region.regionSoundVolume, region.regionSoundFadeDuration));
                                 }
                             }
                         }
@@ -60,7 +60,7 @@ public class RegionEffectsManager {
                                     for (String command : region.regionExitCommands) {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.regionSound, false));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.regionSound, false, region.regionSoundVolume, region.regionSoundFadeDuration));
                                 }
                             }
                         }
