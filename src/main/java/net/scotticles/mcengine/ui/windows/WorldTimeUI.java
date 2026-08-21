@@ -7,9 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
-import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.HashSet;

@@ -1,7 +1,5 @@
 package net.scotticles.mcengine.regions.regiondatasaving;
 
-import imgui.type.ImInt;
-import imgui.type.ImString;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;

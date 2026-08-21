@@ -18,13 +18,6 @@ public class RegionDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static Path getSaveFile(MinecraftServer server) {
-//        Get Save File From Client (Only Use For Saving Configs Or Data Only The Client needs)
-//        String worldName = "default_world";
-//        if (MinecraftClient.getInstance().getServer() != null) {
-//            worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();
-//        }
-//        return FabricLoader.getInstance().getConfigDir().resolve("mcengine/regionsdata_" + worldName + ".json");
-
         // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
         return worldFolder.resolve("mcengine/regions.json");

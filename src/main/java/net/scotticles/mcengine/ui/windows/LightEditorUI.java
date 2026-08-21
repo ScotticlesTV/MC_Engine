@@ -4,8 +4,6 @@ import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
 import net.scotticles.mcengine.ui.UIManager;
 
-import javax.swing.*;
-
 public class LightEditorUI {
     public static void showLightEditorUI() {
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {

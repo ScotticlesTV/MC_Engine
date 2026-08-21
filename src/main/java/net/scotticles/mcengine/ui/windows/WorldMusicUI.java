@@ -2,12 +2,10 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.scotticles.mcengine.networking.weather.payloads.ChangeWeatherPayload;
 import net.scotticles.mcengine.ui.UIManager;
 
 public class WorldMusicUI {

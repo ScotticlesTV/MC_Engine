@@ -1,14 +1,12 @@
 package net.scotticles.mcengine.settings;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.WorldSavePath;
 import net.scotticles.mcengine.MCEngine;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Properties;
 
 public class MCEngineServerSettings {
