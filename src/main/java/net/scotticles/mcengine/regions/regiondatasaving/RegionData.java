@@ -24,9 +24,6 @@ public class RegionData {
     public float regionSoundVolume;
     public float regionSoundFadeDuration;
 
-
-
-
     // Codecs For Region Enter, Exit, And UUID Sets
     private static final PacketCodec<RegistryByteBuf, List<String>> STRING_LIST_CODEC =
             PacketCodecs.collection(ArrayList::new, PacketCodecs.STRING);
