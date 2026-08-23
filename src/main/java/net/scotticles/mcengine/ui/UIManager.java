@@ -20,6 +20,7 @@ public class UIManager {
     public static ImBoolean showWorldMusicUI = new ImBoolean(false);
     public static ImBoolean showRegionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightEditorUI = new ImBoolean(false);
+    public static ImBoolean showInteractionEditorUI = new ImBoolean(false);
 //    public static ImBoolean showDecalsEditorUI = new ImBoolean(false);
 
 
@@ -57,6 +58,9 @@ public class UIManager {
                 }
                 if (showRegionEditorUI.get()) {
                     RegionsEditorUI.showRegionsEditorUI();
+                }
+                if (showInteractionEditorUI.get()) {
+                    InteractionsEditorUI.showInteractionEditorUI();
                 }
                 if (showLightEditorUI.get()) {
                     LightEditorUI.showLightEditorUI();

@@ -37,7 +37,6 @@ public class InteractionData {
                 buf.writeInt(value.interactionY);
                 buf.writeInt(value.interactionZ);
                 STRING_LIST_CODEC.encode(buf, value.interactionCommands);
-
             },
             // Packet Decoder
             (RegistryByteBuf buf) -> {
@@ -63,7 +62,7 @@ public class InteractionData {
         this.interactionCommands = new ArrayList<>(interactionCommands);
     }
 
-    public InteractionData toRegionsData() {
+    public InteractionData toInteractionsData() {
         return new InteractionData(interactionUuid, interactionName, interactionEnabled, interactionX, interactionY, interactionZ, new ArrayList<>(interactionCommands));
     }
 }

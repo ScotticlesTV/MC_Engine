@@ -46,6 +46,12 @@ public class EngineNavBarUI {
                 }
                 ImGui.endMenu();
             }
+            if (ImGui.beginMenu("Interactions")) {
+                if (ImGui.menuItem("Interactions Editor")) {
+                    UIManager.showInteractionEditorUI.set(!UIManager.showInteractionEditorUI.get());
+                }
+                ImGui.endMenu();
+            }
 
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Lighting")) {
