@@ -2,26 +2,20 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import imgui.type.ImString;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.interactions.InteractionsManager;
 import net.scotticles.mcengine.interactions.interactiondatasaving.InteractionData;
-import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
-import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class InteractionsEditorUI {
-    static ImString imInteractionName = new ImString("Region", 256);
+    static ImString imInteractionName = new ImString("Interaction", 256);
     static ImInt imInteractionX = new ImInt(0);
     static ImInt imInteractionY = new ImInt(0);
     static ImInt imInteractionZ = new ImInt(0);
@@ -62,7 +56,7 @@ public class InteractionsEditorUI {
 
                     if (interactionData.interactionEnabled) {
                         ImGui.pushID(index);
-                        if (ImGui.collapsingHeader(interactionData.interactionName + "###region_" + interactionData.interactionUuid)) {
+                        if (ImGui.collapsingHeader(interactionData.interactionName + "###interaction_" + interactionData.interactionUuid)) {
 
                             ImGui.text("Interaction Name: "); ImGui.sameLine();
                             if (ImGui.inputText("##Interaction Name: ", imInteractionName)) {
@@ -102,7 +96,7 @@ public class InteractionsEditorUI {
                                 shouldSyncNetwork = true;
                             }
 
-                            if (ImGui.button("Center Region On Self")) {
+                            if (ImGui.button("Center Interaction On Self")) {
                                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                 if (player != null) {
                                     Vec3d playerPos = player.getPos();
@@ -140,7 +134,7 @@ public class InteractionsEditorUI {
 
                             ImGui.separator();
                             if (ImGui.button("Delete Interaction")) {
-                                interactionToDelete = interactionData; // Save the region data that needs to be deleted to safely delete it outside the loop
+                                interactionToDelete = interactionData; // Save the interaction data that needs to be deleted to safely delete it outside the loop
                             }
                         }
                         ImGui.popID();
@@ -260,7 +254,7 @@ public class InteractionsEditorUI {
 
                             ImGui.separator();
                             if (ImGui.button("Delete Interaction")) {
-                                interactionToDelete = interactionData; // Save the region data that needs to be deleted to safely delete it outside the loop
+                                interactionToDelete = interactionData; // Save the interaction data that needs to be deleted to safely delete it outside the loop
                             }
                         }
                         ImGui.popID();
@@ -298,10 +292,10 @@ public class InteractionsEditorUI {
             ImGui.end();
 
 
-            // Server/Network syncing: Send the client's up to date set of regions to the server
+            // Server/Network syncing: Send the client's up to date set of interactions to the server
             if (shouldSyncNetwork) {
                 // Sync Interactions To Server And Other Players Via A Packet
-                // ClientPlayNetworking.send(new SyncRegionsDataPayload(new HashSet<>(RegionsManager.activeRegions)));
+                // ClientPlayNetworking.send(new SyncInteractionsDataPayload(new HashSet<>(InteractionsManager.activeInteractions)));
             }
         }
     }
