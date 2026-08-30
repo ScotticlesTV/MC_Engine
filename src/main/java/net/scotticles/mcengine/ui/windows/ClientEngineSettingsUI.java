@@ -31,9 +31,9 @@ public class ClientEngineSettingsUI {
             // Or Should Each World Have Its Own Data For Whether Or Not A Window Was Open?
             // If All Worlds/Servers Have A Specific Set That May Require Client JSON Files, But
             // If It's A General Check Then It Can Just Be A Config File.
-            if (ImGui.checkbox("##Reopen windows that were open upon leaving the last world/server..", false)) {
-//                MCEngineClientConfig.openNavBarOnWorldJoin = !MCEngineClientConfig.openNavBarOnWorldJoin;
-//                MCEngineClientConfig.save();
+            if (ImGui.checkbox("##Reopen windows that were open upon leaving the last world/server..", MCEngineClientConfig.reopenWindowsOnWorldJoin)) {
+                MCEngineClientConfig.reopenWindowsOnWorldJoin = !MCEngineClientConfig.reopenWindowsOnWorldJoin;
+                MCEngineClientConfig.save();
             }
             ImGui.sameLine();
             ImGui.textWrapped("Reopen windows that were open upon leaving the last world/server.");
