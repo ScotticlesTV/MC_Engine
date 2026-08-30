@@ -24,6 +24,20 @@ public class ClientEngineSettingsUI {
             ImGui.sameLine();
             ImGui.textWrapped("Automatically open the Engine Nav Bar when joining a world.");
             ImGui.separator();
+            // Reopen Any Engine Windows That Were Open Upon Leaving A World On World Join
+            // All Previously Open Windows Should Open At Their Previous Position And Size
+
+            // Should This Just Be A General Setting For The Windows Open When Leaving *Any* World
+            // Or Should Each World Have Its Own Data For Whether Or Not A Window Was Open?
+            // If All Worlds/Servers Have A Specific Set That May Require Client JSON Files, But
+            // If It's A General Check Then It Can Just Be A Config File.
+            if (ImGui.checkbox("##Reopen windows that were open upon leaving the last world/server..", false)) {
+//                MCEngineClientConfig.openNavBarOnWorldJoin = !MCEngineClientConfig.openNavBarOnWorldJoin;
+//                MCEngineClientConfig.save();
+            }
+            ImGui.sameLine();
+            ImGui.textWrapped("Reopen windows that were open upon leaving the last world/server.");
+            ImGui.separator();
             // UI Colors
             ImGui.textWrapped("Change The Color Of The Engine UI");
             if (ImGui.checkbox("##Use Custom UI Colors", MCEngineClientConfig.useCustomUIColors)) {
