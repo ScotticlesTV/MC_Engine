@@ -1,3 +1,2 @@
-MC Engine: Minecraft As A Game Engine
-________________________________________
+# MC Engine: Minecraft As A Game Engine
 MC Engine is a game engine-like interface that aims to help with the creation of games and experiences within Minecraft. It adds visual interfaces to various vanilla features like gamerules, weather, time, etc… It also adds custom features to facilitate the easier management and making of custom game systems with features like Regions, Interactions, Custom Music, and more.
