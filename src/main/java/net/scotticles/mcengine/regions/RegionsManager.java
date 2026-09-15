@@ -3,7 +3,7 @@ package net.scotticles.mcengine.regions;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class RegionsManager {
 
-    public static final Set<RegionData> activeRegions = new HashSet<>();
+    public static final Set<RadialRegionData> activeRegions = new HashSet<>();
 
     public static void regionsInit() {
         // Load Regions Data On Server Start
@@ -42,9 +42,9 @@ public class RegionsManager {
 
     //Add A New Region
     public static void addRegion(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
-        RegionData regionData = new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, regionEnterCommands, regionExitCommands, playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
+        RadialRegionData radialRegionData = new RadialRegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, regionEnterCommands, regionExitCommands, playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
 
-        activeRegions.add(regionData);
+        activeRegions.add(radialRegionData);
 //        Needs the Minecraft Server to save
 //        RegionDataManager.save(activeRegions);
     }

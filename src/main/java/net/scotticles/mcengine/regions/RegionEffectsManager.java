@@ -6,7 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
 import java.util.Set;
 import java.util.UUID;
@@ -14,14 +14,14 @@ import java.util.UUID;
 public class RegionEffectsManager {
 
     //Initiate Regions Functionality
-    public static void regionEffectsInit(Set<RegionData> regions) {
+    public static void regionEffectsInit(Set<RadialRegionData> regions) {
         ServerTickEvents.END_SERVER_TICK.register((server) -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 // Get The Player's UUID To More Easily Track Them
                 UUID playerUuid = player.getUuid();
 
                 // Loop Through All Regions To Enable Effects For All Of Them
-                for  (RegionData region : regions) {
+                for  (RadialRegionData region : regions) {
 
                     // Confirm That The Player Is In The Overworld
                     // (Can Be Changed Later To Have Regions In Multiple Dimensions)

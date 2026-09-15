@@ -24,24 +24,24 @@ public class RegionDataManager {
     }
 
     // Save Regions To A JSON File
-    public static void save(Set<RegionData> regions, MinecraftServer server) {
+    public static void save(Set<RadialRegionData> regions, MinecraftServer server) {
         RegionsDataSave save = new RegionsDataSave();
 
-        for (RegionData regionData : regions) {
-            save.regionsData.add(new RegionData(
-                    regionData.regionUuid,
-                    regionData.regionName,
-                    regionData.regionX,
-                    regionData.regionY,
-                    regionData.regionZ,
-                    regionData.regionRadius,
-                    regionData.regionEnterCommands,
-                    regionData.regionExitCommands,
-                    regionData.playersInside,
-                    regionData.regionEnabled,
-                    regionData.regionSound,
-                    regionData.regionSoundVolume,
-                    regionData.regionSoundFadeDuration
+        for (RadialRegionData radialRegionData : regions) {
+            save.regionsData.add(new RadialRegionData(
+                    radialRegionData.regionUuid,
+                    radialRegionData.regionName,
+                    radialRegionData.regionX,
+                    radialRegionData.regionY,
+                    radialRegionData.regionZ,
+                    radialRegionData.regionRadius,
+                    radialRegionData.regionEnterCommands,
+                    radialRegionData.regionExitCommands,
+                    radialRegionData.playersInside,
+                    radialRegionData.regionEnabled,
+                    radialRegionData.regionSound,
+                    radialRegionData.regionSoundVolume,
+                    radialRegionData.regionSoundFadeDuration
             ));
         }
 
@@ -59,11 +59,11 @@ public class RegionDataManager {
 
 
     // Load Regions From A JSON File
-    public static Set<RegionData> load(MinecraftServer server) {
+    public static Set<RadialRegionData> load(MinecraftServer server) {
         Path saveFile = getSaveFile(server);
 
 
-        Set<RegionData> regions = new HashSet<>();
+        Set<RadialRegionData> regions = new HashSet<>();
 
         if (!Files.exists(saveFile)) {
             return regions;
@@ -77,9 +77,9 @@ public class RegionDataManager {
                 return regions;
             }
 
-            for (RegionData region : loaded.regionsData) {
-                RegionData regionData = region.toRegionsData();
-                RegionsManager.activeRegions.add (regionData);
+            for (RadialRegionData region : loaded.regionsData) {
+                RadialRegionData radialRegionData = region.toRegionsData();
+                RegionsManager.activeRegions.add (radialRegionData);
             }
         }
         catch (IOException e) {

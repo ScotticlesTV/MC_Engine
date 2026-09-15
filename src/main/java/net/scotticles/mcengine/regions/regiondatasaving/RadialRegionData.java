@@ -7,7 +7,7 @@ import net.minecraft.util.Uuids;
 
 import java.util.*;
 
-public class RegionData {
+public class RadialRegionData {
 
     // Region Data Variables
     public UUID regionUuid;
@@ -32,9 +32,9 @@ public class RegionData {
             PacketCodecs.collection(HashSet::new, Uuids.PACKET_CODEC);
 
     // Packet Code
-    public static final PacketCodec<RegistryByteBuf, RegionData> PACKET_CODEC = PacketCodec.of(
+    public static final PacketCodec<RegistryByteBuf, RadialRegionData> PACKET_CODEC = PacketCodec.of(
             // Packet Encoder: Value comes first, then the buffer (value, buf)
-            (RegionData value, RegistryByteBuf buf) -> {
+            (RadialRegionData value, RegistryByteBuf buf) -> {
                 buf.writeUuid(value.regionUuid);
                 buf.writeString(value.regionName);
                 buf.writeInt(value.regionX);
@@ -65,11 +65,11 @@ public class RegionData {
                 float soundVolume = buf.readFloat();
                 float soundFadeDuration = buf.readFloat();
 
-                return new RegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled, sound, soundVolume, soundFadeDuration);
+                return new RadialRegionData(uuid, name, x, y, z, radius, enterCommands, exitCommands, players, enabled, sound, soundVolume, soundFadeDuration);
             }
     );
 
-    public RegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
+    public RadialRegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
         this.regionUuid = regionUuid;
         this.regionName = regionName;
         this.regionX = regionX;
@@ -85,7 +85,7 @@ public class RegionData {
         this.regionSoundFadeDuration = regionSoundFadeDuration;
     }
 
-    public RegionData toRegionsData() {
-        return new RegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
+    public RadialRegionData toRegionsData() {
+        return new RadialRegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
     }
 }

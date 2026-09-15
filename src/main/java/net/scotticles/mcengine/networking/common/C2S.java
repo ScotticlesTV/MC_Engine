@@ -15,7 +15,7 @@ import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
 import net.scotticles.mcengine.networking.weather.payloads.ChangeWeatherPayload;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
 import java.util.Objects;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(SyncRegionsDataPayload.ID, (payload, context) -> {
 
             // Set The Updated Region Data Acquired From The Client To a Local Variable To Be Reused
-            Set<RegionData> updatedRegions = payload.regions();
+            Set<RadialRegionData> updatedRegions = payload.regions();
 
             context.server().execute(() -> {
                 // Overwrite The Server's Region Data With The Updated Region Data From The Client

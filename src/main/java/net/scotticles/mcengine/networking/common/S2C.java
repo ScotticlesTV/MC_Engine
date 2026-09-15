@@ -16,7 +16,7 @@ import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePaylo
 import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionSoundInstance;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionData;
+import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
@@ -40,7 +40,7 @@ public class S2C {
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
         ClientPlayNetworking.registerGlobalReceiver(SyncRegionsDataPayload.ID, (payload, context) -> {
-            java.util.Set<RegionData> synchronizedSet = payload.regions();
+            java.util.Set<RadialRegionData> synchronizedSet = payload.regions();
 
             context.client().execute(() -> {
                 // Clear The Current Local Regions Set And Replace It With The One From The Server
