@@ -13,9 +13,11 @@ import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
-import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.regions.RegionSoundInstance;
 import net.scotticles.mcengine.regions.RegionsManager;
+import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
@@ -28,7 +30,9 @@ public class S2C {
 
     // Register Channels For Packets To Travel On From Server To Client
     public static void registerPacketChannels() {
-        PayloadTypeRegistry.playS2C().register(SyncRegionsDataPayload.ID, SyncRegionsDataPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SyncRadialRegionsDataPayload.ID, SyncRadialRegionsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncLinearRegionsDataPayload.ID, SyncLinearRegionsDataPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(OpenEditorUIPayload.TYPE, OpenEditorUIPayload.CODEC);
 
@@ -39,13 +43,23 @@ public class S2C {
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
-        ClientPlayNetworking.registerGlobalReceiver(SyncRegionsDataPayload.ID, (payload, context) -> {
-            java.util.Set<RadialRegionData> synchronizedSet = payload.regions();
+        ClientPlayNetworking.registerGlobalReceiver(SyncRadialRegionsDataPayload.ID, (payload, context) -> {
+            java.util.Set<RadialRegionData> synchronizedSet = payload.radialRegions();
 
             context.client().execute(() -> {
                 // Clear The Current Local Regions Set And Replace It With The One From The Server
-                RegionsManager.activeRegions.clear();
-                RegionsManager.activeRegions.addAll(synchronizedSet);
+                RegionsManager.activeRadialRegions.clear();
+                RegionsManager.activeRadialRegions.addAll(synchronizedSet);
+            });
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(SyncLinearRegionsDataPayload.ID, (payload, context) -> {
+            java.util.Set<LinearRegionData> synchronizedSet = payload.linearRegionData();
+
+            context.client().execute(() -> {
+                // Clear The Current Local Regions Set And Replace It With The One From The Server
+                RegionsManager.activeLinearRegions.clear();
+                RegionsManager.activeLinearRegions.addAll(synchronizedSet);
             });
         });
 
@@ -133,7 +147,7 @@ public class S2C {
 
 
             //Sync Regions
-            ServerPlayNetworking.send(player, new SyncRegionsDataPayload(RegionsManager.activeRegions));
+            ServerPlayNetworking.send(player, new SyncRadialRegionsDataPayload(RegionsManager.activeRadialRegions));
         });
     }
 }

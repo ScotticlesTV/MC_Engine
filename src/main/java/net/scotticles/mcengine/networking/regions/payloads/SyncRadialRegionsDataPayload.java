@@ -10,16 +10,16 @@ import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import java.util.HashSet;
 import java.util.Set;
 
-public record SyncRegionsDataPayload(Set<RadialRegionData> regions) implements CustomPayload {
+public record SyncRadialRegionsDataPayload(Set<RadialRegionData> radialRegions) implements CustomPayload {
 
     // Define a unique ID for your packet channel
-    public static final CustomPayload.Id<SyncRegionsDataPayload> ID =
-            new CustomPayload.Id<>(Identifier.of("mc_engine", "sync_regions_data_packet"));
+    public static final CustomPayload.Id<SyncRadialRegionsDataPayload> ID =
+            new CustomPayload.Id<>(Identifier.of("mc_engine", "sync_radial_regions_data_packet"));
 
     // Define a codex to serialize and deserialize the data
-    public static final PacketCodec<RegistryByteBuf, SyncRegionsDataPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.collection(HashSet::new, RadialRegionData.PACKET_CODEC), SyncRegionsDataPayload::regions,
-            SyncRegionsDataPayload::new
+    public static final PacketCodec<RegistryByteBuf, SyncRadialRegionsDataPayload> CODEC = PacketCodec.tuple(
+            PacketCodecs.collection(HashSet::new, RadialRegionData.PACKET_CODEC), SyncRadialRegionsDataPayload::radialRegions,
+            SyncRadialRegionsDataPayload::new
     );
 
     @Override

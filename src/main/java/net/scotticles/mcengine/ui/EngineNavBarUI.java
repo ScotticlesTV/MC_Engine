@@ -2,6 +2,7 @@ package net.scotticles.mcengine.ui;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
+import net.minecraft.util.Util;
 
 public class EngineNavBarUI {
 
@@ -17,11 +18,11 @@ public class EngineNavBarUI {
                 if (ImGui.menuItem("Client Engine Settings")) {
                     UIManager.showClientEngineSettings.set(!UIManager.showClientEngineSettings.get());
                 }
-                ImGui.beginDisabled();
+                ImGui.setItemTooltip("Open the Client Engine settings menu to change the engine UI's functionality and appearance.");
                 if (ImGui.menuItem("Engine Documentation")) {
-
+                    Util.getOperatingSystem().open("https://github.com/ScotticlesTV/MC_Engine/wiki");
                 }
-                ImGui.endDisabled();
+                ImGui.setItemTooltip("Open the MC Engine documentation in your web browser.");
                 ImGui.endMenu();
             }
             ImGui.separator();
@@ -35,9 +36,11 @@ public class EngineNavBarUI {
                 if (ImGui.menuItem("Gamerules")) {
                     UIManager.showWorldGamerulesUI.set(!UIManager.showWorldGamerulesUI.get());
                 }
+                ImGui.beginDisabled();
                 if (ImGui.menuItem("Music")) {
                     UIManager.showWorldMusicUI.set(!UIManager.showWorldMusicUI.get());
                 }
+                ImGui.endDisabled();
                 ImGui.endMenu();
             }
             if (ImGui.beginMenu("Regions")) {
@@ -46,12 +49,14 @@ public class EngineNavBarUI {
                 }
                 ImGui.endMenu();
             }
+            ImGui.beginDisabled();
             if (ImGui.beginMenu("Interactions")) {
                 if (ImGui.menuItem("Interactions Editor")) {
                     UIManager.showInteractionEditorUI.set(!UIManager.showInteractionEditorUI.get());
                 }
                 ImGui.endMenu();
             }
+            ImGui.endDisabled();
 
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Lighting")) {

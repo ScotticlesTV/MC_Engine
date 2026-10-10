@@ -10,9 +10,11 @@ import net.minecraft.world.level.ServerWorldProperties;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
-import net.scotticles.mcengine.networking.regions.payloads.SyncRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
 import net.scotticles.mcengine.networking.weather.payloads.ChangeWeatherPayload;
+import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
@@ -25,7 +27,9 @@ public class C2S {
 
     // Register Channels For Packets To Travel On From Client To Server
     public static void registerPacketChannels() {
-        PayloadTypeRegistry.playC2S().register(SyncRegionsDataPayload.ID, SyncRegionsDataPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SyncRadialRegionsDataPayload.ID, SyncRadialRegionsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(SyncLinearRegionsDataPayload.ID, SyncLinearRegionsDataPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(CheckEditorUIPermsPayload.TYPE, CheckEditorUIPermsPayload.CODEC);
 
@@ -40,22 +44,44 @@ public class C2S {
     // Register Receivers That Handle Actions When The Server Receives A Packet
     public static void registerServerRecievers() {
 
-        // Server SyncRegionsDataPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(SyncRegionsDataPayload.ID, (payload, context) -> {
+        // Server SyncRadialRegionsDataPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SyncRadialRegionsDataPayload.ID, (payload, context) -> {
 
             // Set The Updated Region Data Acquired From The Client To a Local Variable To Be Reused
-            Set<RadialRegionData> updatedRegions = payload.regions();
+            Set<RadialRegionData> updatedRadialRegions = payload.radialRegions();
 
             context.server().execute(() -> {
                 // Overwrite The Server's Region Data With The Updated Region Data From The Client
-                RegionsManager.activeRegions.clear();
-                RegionsManager.activeRegions.addAll(updatedRegions);
+                RegionsManager.activeRadialRegions.clear();
+                RegionsManager.activeRadialRegions.addAll(updatedRadialRegions);
 
                 // Save The Updated Region Data To The Server's File
-                RegionDataManager.save(updatedRegions, context.server());
+                RegionDataManager.save(updatedRadialRegions, RegionsManager.activeLinearRegions, context.server());
 
                 // Sync The Updated Region Data To All Players On The Server
-                SyncRegionsDataPayload syncPayload = new SyncRegionsDataPayload(updatedRegions);
+                SyncRadialRegionsDataPayload syncPayload = new SyncRadialRegionsDataPayload(updatedRadialRegions);
+                for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                    ServerPlayNetworking.send(player, syncPayload);
+                }
+            });
+        });
+
+        // Server SyncLinearRegionsDataPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SyncLinearRegionsDataPayload.ID, (payload, context) -> {
+
+            // Set The Updated Region Data Acquired From The Client To a Local Variable To Be Reused
+            Set<LinearRegionData> updatedLinearRegions = payload.linearRegionData();
+
+            context.server().execute(() -> {
+                // Overwrite The Server's Region Data With The Updated Region Data From The Client
+                RegionsManager.activeLinearRegions.clear();
+                RegionsManager.activeLinearRegions.addAll(updatedLinearRegions);
+
+                // Save The Updated Region Data To The Server's File
+                RegionDataManager.save(RegionsManager.activeRadialRegions, updatedLinearRegions, context.server());
+
+                // Sync The Updated Region Data To All Players On The Server
+                SyncLinearRegionsDataPayload syncPayload = new SyncLinearRegionsDataPayload(updatedLinearRegions);
                 for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }

@@ -31,13 +31,13 @@ public class ClientEngineSettingsUI {
             // Or Should Each World Have Its Own Data For Whether Or Not A Window Was Open?
             // If All Worlds/Servers Have A Specific Set That May Require Client JSON Files, But
             // If It's A General Check Then It Can Just Be A Config File.
-            if (ImGui.checkbox("##Reopen windows that were open upon leaving the last world/server..", MCEngineClientConfig.reopenWindowsOnWorldJoin)) {
-                MCEngineClientConfig.reopenWindowsOnWorldJoin = !MCEngineClientConfig.reopenWindowsOnWorldJoin;
-                MCEngineClientConfig.save();
-            }
-            ImGui.sameLine();
-            ImGui.textWrapped("Reopen windows that were open upon leaving the last world/server.");
-            ImGui.separator();
+//            if (ImGui.checkbox("##Reopen windows that were open upon leaving the last world/server..", MCEngineClientConfig.reopenWindowsOnWorldJoin)) {
+//                MCEngineClientConfig.reopenWindowsOnWorldJoin = !MCEngineClientConfig.reopenWindowsOnWorldJoin;
+//                MCEngineClientConfig.save();
+//            }
+//            ImGui.sameLine();
+//            ImGui.textWrapped("Reopen windows that were open upon leaving the last world/server.");
+//            ImGui.separator();
             // UI Colors
             ImGui.textWrapped("Change The Color Of The Engine UI");
             if (ImGui.checkbox("##Use Custom UI Colors", MCEngineClientConfig.useCustomUIColors)) {

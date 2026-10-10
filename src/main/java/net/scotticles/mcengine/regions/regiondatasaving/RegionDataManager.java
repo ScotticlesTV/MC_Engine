@@ -24,11 +24,11 @@ public class RegionDataManager {
     }
 
     // Save Regions To A JSON File
-    public static void save(Set<RadialRegionData> regions, MinecraftServer server) {
+    public static void save(Set<RadialRegionData> radialRegions, Set<LinearRegionData> linearRegions , MinecraftServer server) {
         RegionsDataSave save = new RegionsDataSave();
 
-        for (RadialRegionData radialRegionData : regions) {
-            save.regionsData.add(new RadialRegionData(
+        for (RadialRegionData radialRegionData : radialRegions) {
+            save.radialRegionsData.add(new RadialRegionData(
                     radialRegionData.regionUuid,
                     radialRegionData.regionName,
                     radialRegionData.regionX,
@@ -42,6 +42,26 @@ public class RegionDataManager {
                     radialRegionData.regionSound,
                     radialRegionData.regionSoundVolume,
                     radialRegionData.regionSoundFadeDuration
+            ));
+        }
+
+        for (LinearRegionData linearRegionData : linearRegions) {
+            save.linearRegionsData.add(new LinearRegionData(
+                    linearRegionData.regionUuid,
+                    linearRegionData.regionName,
+                    linearRegionData.regionX1,
+                    linearRegionData.regionY1,
+                    linearRegionData.regionZ1,
+                    linearRegionData.regionX2,
+                    linearRegionData.regionY2,
+                    linearRegionData.regionZ2,
+                    linearRegionData.regionEnterCommands,
+                    linearRegionData.regionExitCommands,
+                    linearRegionData.playersInside,
+                    linearRegionData.regionEnabled,
+                    linearRegionData.regionSound,
+                    linearRegionData.regionSoundVolume,
+                    linearRegionData.regionSoundFadeDuration
             ));
         }
 
@@ -59,34 +79,59 @@ public class RegionDataManager {
 
 
     // Load Regions From A JSON File
-    public static Set<RadialRegionData> load(MinecraftServer server) {
+    public static Set<RadialRegionData> loadRadialRegions(MinecraftServer server) {
         Path saveFile = getSaveFile(server);
 
-
-        Set<RadialRegionData> regions = new HashSet<>();
+        Set<RadialRegionData> radialRegions = new HashSet<>();
 
         if (!Files.exists(saveFile)) {
-            return regions;
+            return radialRegions;
         }
 
         try (Reader reader = Files.newBufferedReader(saveFile)) {
 
             RegionsDataSave loaded = GSON.fromJson(reader, RegionsDataSave.class);
 
-            if (loaded == null || loaded.regionsData == null) {
-                return regions;
+            if (loaded == null || loaded.radialRegionsData == null) {
+                return radialRegions;
             }
 
-            for (RadialRegionData region : loaded.regionsData) {
+            for (RadialRegionData region : loaded.radialRegionsData) {
                 RadialRegionData radialRegionData = region.toRegionsData();
-                RegionsManager.activeRegions.add (radialRegionData);
+                RegionsManager.activeRadialRegions.add (radialRegionData);
             }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-        return regions;
+        return radialRegions;
+    }
 
+    public static Set<LinearRegionData> loadLinearRegions(MinecraftServer server) {
+        Path saveFile = getSaveFile(server);
+
+        Set<LinearRegionData> linearRegions = new HashSet<>();
+
+        if (!Files.exists(saveFile)) {
+            return linearRegions;
+        }
+
+        try (Reader reader = Files.newBufferedReader(saveFile)) {
+            RegionsDataSave loaded = GSON.fromJson(reader, RegionsDataSave.class);
+
+            if (loaded == null || loaded.linearRegionsData == null) {
+                return linearRegions;
+            }
+
+            for (LinearRegionData region : loaded.linearRegionsData) {
+                LinearRegionData linearRegionData = region.toRegionsData();
+                RegionsManager.activeLinearRegions.add (linearRegionData);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return linearRegions;
     }
 }

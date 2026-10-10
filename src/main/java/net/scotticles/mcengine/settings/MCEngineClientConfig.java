@@ -31,7 +31,7 @@ public class MCEngineClientConfig {
 
                 // Assign config values from file and set them to defaults if they don't exist
                 openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("openNavBarOnWorldJoin", "false"));
-                openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
+//                reopenWindowsOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
                 useCustomUIColors = Boolean.parseBoolean(properties.getProperty("useCustomUIColors", "false"));
                 uiColorR = Float.parseFloat(properties.getProperty("uiColorR", "0"));
                 uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0"));

@@ -24,7 +24,10 @@ public class WorldGamerulesUI {
     public static boolean mobGriefing = false;
     public static boolean naturalRegeneration = false;
     public static boolean showDeathMessages = false;
-//spawnRadius
+
+    // To Add:
+    // spawnRadius
+    // instantRespawn
 
     public static void showWorldGamerulesUI() {
         MinecraftClient client = MinecraftClient.getInstance();
