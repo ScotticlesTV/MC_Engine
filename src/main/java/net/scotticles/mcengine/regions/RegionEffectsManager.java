@@ -15,15 +15,18 @@ import java.util.Set;
 import java.util.UUID;
 
 public class RegionEffectsManager {
-
-    //Initiate Regions Functionality
+    /**
+     * Activate entry and exit commands and sound playing for all region types.
+     * @param radialRegions, the actively tracked set of Radial Region Data objects.
+     * @param linearRegions, the actively tracked set of Linear Region Data objects.
+     */
     public static void regionEffectsInit(Set<RadialRegionData> radialRegions, Set<LinearRegionData> linearRegions) {
         ServerTickEvents.END_SERVER_TICK.register((server) -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 // Get The Player's UUID To More Easily Track Them
                 UUID playerUuid = player.getUuid();
 
-                // Loop Through All Regions To Enable Effects For All Of Them
+                // Loop Through All Radial Regions To Enable Effects For All Of Them
                 for  (RadialRegionData region : radialRegions) {
 
 
@@ -74,6 +77,7 @@ public class RegionEffectsManager {
                     }
                 }
 
+                // Loop Through All Linear Regions To Enable Effects For All Of Them
                 for (LinearRegionData region : linearRegions) {
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 

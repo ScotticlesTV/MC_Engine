@@ -73,6 +73,7 @@ public class RegionsEditorUI {
                         int index = 0;
                         RadialRegionData regionToDelete = null;
 
+                        // Loop Through Each Radial Region Data Object
                         for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
                             imRadialRegionName.set(radialRegionData.regionName);
                             imRadialRegionX.set(radialRegionData.regionX);

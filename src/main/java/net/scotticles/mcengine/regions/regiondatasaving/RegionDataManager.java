@@ -89,8 +89,11 @@ public class RegionDataManager {
         }
     }
 
-
-    // Load Regions From A JSON File
+    /**
+     * Load all Radial Region Data objects from a save file.
+     * @param server, the server used to get the world save file.
+     * @return, the set of Radial Region Data objects
+     */
     public static Set<RadialRegionData> loadRadialRegions(MinecraftServer server) {
         Path saveFile = getSaveFile(server);
 
@@ -120,6 +123,11 @@ public class RegionDataManager {
         return radialRegions;
     }
 
+    /**
+     * Load all Linear Region Data objects from a save file.
+     * @param server, the server used to get the world save file.
+     * @return, the set of Linear Region Data objects
+     */
     public static Set<LinearRegionData> loadLinearRegions(MinecraftServer server) {
         Path saveFile = getSaveFile(server);
 
