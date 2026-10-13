@@ -19,16 +19,15 @@ public class KeyInputHandler {
     public static KeyBinding toggleEngineUIKey;
 
     public static void registerKeyInputs() {
-
         ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
-
+            // Toggle Engine UI Key Effects
             if (toggleEngineUIKey.wasPressed()) {
                 // Send a packet to ask the server if you have the permissions to open the UI
                 ClientPlayNetworking.send(new CheckEditorUIPermsPayload());
             }
         });
     }
-
+    
     public static void registerKeybinds() {
         // Toggle Engine UI Key
         toggleEngineUIKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(

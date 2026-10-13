@@ -17,6 +17,11 @@ import java.util.Set;
 public class RegionDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+    /**
+     * Get the save file to use for the world's region data from the server.
+     * @param server, the server used to get the world save file.
+     * @return The save file as to save/load region data from.
+     */
     private static Path getSaveFile(MinecraftServer server) {
         // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
@@ -24,6 +29,13 @@ public class RegionDataManager {
     }
 
     // Save Regions To A JSON File
+
+    /**
+     * Save all region data to the world's save file.
+     * @param radialRegions, the actively tracked list of radial regions.
+     * @param linearRegions, the actively tracked list of linear regions.
+     * @param server, the server used to get the world save file.
+     */
     public static void save(Set<RadialRegionData> radialRegions, Set<LinearRegionData> linearRegions , MinecraftServer server) {
         RegionsDataSave save = new RegionsDataSave();
 

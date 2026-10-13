@@ -26,6 +26,11 @@ public class RegionEffectsManager {
                 // Loop Through All Regions To Enable Effects For All Of Them
                 for  (RadialRegionData region : radialRegions) {
 
+
+                    // For Condensing This To Less If Statements, Consider:
+                    // Checking Dimension and isInRadius in one if statement
+                    // Using region.regionEnabled as a wrapper/first check
+
                     // Confirm That The Player Is In The Overworld
                     // (Can Be Changed Later To Have Regions In Multiple Dimensions)
                     // (Just Need To Add A "Select Dimension" Checkbox To Each Region)
