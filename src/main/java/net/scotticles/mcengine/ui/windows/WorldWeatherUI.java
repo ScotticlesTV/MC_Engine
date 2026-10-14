@@ -21,7 +21,6 @@ public class WorldWeatherUI {
                 return;
             }
 
-
             // ImGUI Code
             ImGui.begin("World Weather", UIManager.showWorldWeatherUI);
             ImGui.textWrapped("Set the world's weather.");

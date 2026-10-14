@@ -28,6 +28,12 @@ public class WorldGamerulesUI {
     // To Add:
     // spawnRadius
     // instantRespawn
+    // showDeathMessages
+    // showAdvancementMessages
+    // doFireTick
+    // naturalHealthRegeneration
+    // playersSleepingPercentage
+    // respawnRadius
 
     public static void showWorldGamerulesUI() {
         MinecraftClient client = MinecraftClient.getInstance();

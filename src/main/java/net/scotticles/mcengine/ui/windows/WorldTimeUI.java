@@ -20,6 +20,7 @@ public class WorldTimeUI {
             if (ctx == null) {
                 return;
             }
+
             // ImGUI Code
             ImGui.begin("World Time", UIManager.showWorldTimeUI);
             ImGui.textWrapped("Set the world time.");

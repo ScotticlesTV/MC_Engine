@@ -12,7 +12,7 @@ import java.util.Properties;
 public class MCEngineClientConfig {
     // Config variables
     public static boolean openNavBarOnWorldJoin = false;
-    public static boolean reopenWindowsOnWorldJoin = false;
+//    public static boolean reopenWindowsOnWorldJoin = false;
     public static boolean useCustomUIColors = false;
     public static float uiColorR = 0;
     public static float uiColorG = 0;
@@ -53,7 +53,7 @@ public class MCEngineClientConfig {
 
         // Put variables into properties object
         properties.setProperty("openNavBarOnWorldJoin", String.valueOf(openNavBarOnWorldJoin));
-        properties.setProperty("reopenWindowsOnWorldJoin", String.valueOf(reopenWindowsOnWorldJoin));
+//        properties.setProperty("reopenWindowsOnWorldJoin", String.valueOf(reopenWindowsOnWorldJoin));
         properties.setProperty("useCustomUIColors", String.valueOf(useCustomUIColors));
         properties.setProperty("uiColorR", String.valueOf(uiColorR));
         properties.setProperty("uiColorG", String.valueOf(uiColorG));

@@ -13,6 +13,7 @@ public class ClientEngineSettingsUI {
             if (ctx == null) {
                 return;
             }
+
             // ImGUI Code
             ImGui.begin("Client Engine Settings", UIManager.showClientEngineSettings);
             ImGui.textWrapped("Configure MC Engine to your liking.");

@@ -12,6 +12,7 @@ import java.util.Properties;
 public class MCEngineServerSettings {
     // Config variables
     public static boolean playVanillaMusic = true;
+    public static boolean playCustomMusic = false;
 
     // Config File Reference Inside Fabric Config File
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + ".properties");
@@ -25,6 +26,7 @@ public class MCEngineServerSettings {
 
                 // Assign config values from file and set them to defaults if they don't exist
                 playVanillaMusic = Boolean.parseBoolean(properties.getProperty("playVanillaMusic", "true"));
+                playCustomMusic = Boolean.parseBoolean(properties.getProperty("playCustomMusic", "false"));
 
             } catch (IOException | NumberFormatException e) {
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
@@ -41,6 +43,7 @@ public class MCEngineServerSettings {
 
         // Put variables into properties object
         properties.setProperty("playVanillaMusic", String.valueOf(playVanillaMusic));
+        properties.setProperty("playCustomMusic", String.valueOf(playCustomMusic));
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
             properties.store(out, "MC Engine Server Settings");

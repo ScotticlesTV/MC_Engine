@@ -1,5 +1,6 @@
-// TODO(priority:low category:Cleanup @Scott): Rework + Simplify Region Effect Functionality
-// TODO(priority:high category:Bug-Fix @Scott): Fix Reordering Issue With Regions Editor Menu
+// TODO(priority:low category:Cleanup @Scott): Rework + simplify region effect functionality.
+// TODO(priority:high category:Bug-Fix @Scott): Fix reordering issue with regions editor menu.
 // TODO(priority:medium category:Addition @Scott): Add "DELAY" functionality for regions.
 // TODO(priority:low category:Cleanup @Scott): Add Getters and Setters for Region objects.
-// TODO(priority:low category:Safety @Scott): Add a save call when adding or removing regions (including clearing them entirely)
+// TODO(priority:low category:Safety @Scott): Add a save call when adding or removing regions (including clearing them entirely).
+// TODO(priority:low category:Features @Scott): Add additional gamerules to the gamerules menu.

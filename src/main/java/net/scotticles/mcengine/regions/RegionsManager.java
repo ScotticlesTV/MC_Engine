@@ -14,6 +14,7 @@ import java.util.UUID;
 
 public class RegionsManager {
 
+    // Active Region Sets For Tracking
     public static final Set<RadialRegionData> activeRadialRegions = new HashSet<>();
     public static final Set<LinearRegionData> activeLinearRegions = new HashSet<>();
 
