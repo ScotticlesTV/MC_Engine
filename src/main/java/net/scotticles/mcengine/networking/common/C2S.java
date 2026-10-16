@@ -19,6 +19,8 @@ import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,7 +50,7 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(SyncRadialRegionsDataPayload.ID, (payload, context) -> {
 
             // Set The Updated Region Data Acquired From The Client To a Local Variable To Be Reused
-            Set<RadialRegionData> updatedRadialRegions = payload.radialRegions();
+            List<RadialRegionData> updatedRadialRegions = payload.radialRegions();
 
             context.server().execute(() -> {
                 // Overwrite The Server's Region Data With The Updated Region Data From The Client
@@ -70,7 +72,7 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(SyncLinearRegionsDataPayload.ID, (payload, context) -> {
 
             // Set The Updated Region Data Acquired From The Client To a Local Variable To Be Reused
-            Set<LinearRegionData> updatedLinearRegions = payload.linearRegionData();
+            List<LinearRegionData> updatedLinearRegions = payload.linearRegionData();
 
             context.server().execute(() -> {
                 // Overwrite The Server's Region Data With The Updated Region Data From The Client

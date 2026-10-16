@@ -23,6 +23,7 @@ import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class S2C {
@@ -44,7 +45,7 @@ public class S2C {
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
         ClientPlayNetworking.registerGlobalReceiver(SyncRadialRegionsDataPayload.ID, (payload, context) -> {
-            java.util.Set<RadialRegionData> synchronizedSet = payload.radialRegions();
+            java.util.List<RadialRegionData> synchronizedSet = payload.radialRegions();
 
             context.client().execute(() -> {
                 // Clear The Current Local Regions Set And Replace It With The One From The Server
@@ -54,7 +55,7 @@ public class S2C {
         });
 
         ClientPlayNetworking.registerGlobalReceiver(SyncLinearRegionsDataPayload.ID, (payload, context) -> {
-            java.util.Set<LinearRegionData> synchronizedSet = payload.linearRegionData();
+            List<LinearRegionData> synchronizedSet = payload.linearRegionData();
 
             context.client().execute(() -> {
                 // Clear The Current Local Regions Set And Replace It With The One From The Server

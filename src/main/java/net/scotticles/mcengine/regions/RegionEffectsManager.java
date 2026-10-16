@@ -11,6 +11,7 @@ import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePaylo
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class RegionEffectsManager {
      * @param radialRegions, the actively tracked set of Radial Region Data objects.
      * @param linearRegions, the actively tracked set of Linear Region Data objects.
      */
-    public static void regionEffectsInit(Set<RadialRegionData> radialRegions, Set<LinearRegionData> linearRegions) {
+    public static void regionEffectsInit(List<RadialRegionData> radialRegions, List<LinearRegionData> linearRegions) {
         ServerTickEvents.END_SERVER_TICK.register((server) -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 // Get The Player's UUID To More Easily Track Them

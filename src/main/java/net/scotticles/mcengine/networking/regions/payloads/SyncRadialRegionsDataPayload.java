@@ -7,10 +7,12 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public record SyncRadialRegionsDataPayload(Set<RadialRegionData> radialRegions) implements CustomPayload {
+public record SyncRadialRegionsDataPayload(List<RadialRegionData> radialRegions) implements CustomPayload {
 
     // Define a unique ID for your packet channel
     public static final CustomPayload.Id<SyncRadialRegionsDataPayload> ID =
@@ -18,7 +20,7 @@ public record SyncRadialRegionsDataPayload(Set<RadialRegionData> radialRegions) 
 
     // Define a codex to serialize and deserialize the data
     public static final PacketCodec<RegistryByteBuf, SyncRadialRegionsDataPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.collection(HashSet::new, RadialRegionData.PACKET_CODEC), SyncRadialRegionsDataPayload::radialRegions,
+            PacketCodecs.collection(ArrayList::new, RadialRegionData.PACKET_CODEC), SyncRadialRegionsDataPayload::radialRegions,
             SyncRadialRegionsDataPayload::new
     );
 

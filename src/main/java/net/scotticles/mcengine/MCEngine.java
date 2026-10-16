@@ -25,6 +25,7 @@ public class MCEngine implements ModInitializer {
 		// Load The Client Side Engine Config
 		MCEngineClientConfig.load();
 		RegionsManager.regionsInit();
+
 		// Register Packet Channels
 		C2S.registerPacketChannels();
 		S2C.registerPacketChannels();

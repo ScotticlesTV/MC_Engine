@@ -7,16 +7,13 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class RegionsManager {
 
     // Active Region Sets For Tracking
-    public static final Set<RadialRegionData> activeRadialRegions = new HashSet<>();
-    public static final Set<LinearRegionData> activeLinearRegions = new HashSet<>();
+    public static final List<RadialRegionData> activeRadialRegions = new ArrayList<>();
+    public static final List<LinearRegionData> activeLinearRegions = new ArrayList<>();
 
     /**
      * Activate all region functionality.

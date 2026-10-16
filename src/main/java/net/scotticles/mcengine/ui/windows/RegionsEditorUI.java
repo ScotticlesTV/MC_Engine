@@ -875,8 +875,8 @@ public class RegionsEditorUI {
 
             // Server/Network syncing: Send the client's up to date set of regions to the server
             if (shouldSyncNetwork) {
-                ClientPlayNetworking.send(new SyncRadialRegionsDataPayload(new HashSet<>(RegionsManager.activeRadialRegions)));
-                ClientPlayNetworking.send(new SyncLinearRegionsDataPayload(new HashSet<>(RegionsManager.activeLinearRegions)));
+                ClientPlayNetworking.send(new SyncRadialRegionsDataPayload(new ArrayList<>(RegionsManager.activeRadialRegions)));
+                ClientPlayNetworking.send(new SyncLinearRegionsDataPayload(new ArrayList<>(RegionsManager.activeLinearRegions)));
             }
         }
     }

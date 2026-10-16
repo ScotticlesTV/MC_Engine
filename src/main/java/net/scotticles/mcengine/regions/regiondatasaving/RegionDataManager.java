@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RegionDataManager {
@@ -36,7 +37,7 @@ public class RegionDataManager {
      * @param linearRegions, the actively tracked list of linear regions.
      * @param server, the server used to get the world save file.
      */
-    public static void save(Set<RadialRegionData> radialRegions, Set<LinearRegionData> linearRegions , MinecraftServer server) {
+    public static void save(List<RadialRegionData> radialRegions, List<LinearRegionData> linearRegions , MinecraftServer server) {
         RegionsDataSave save = new RegionsDataSave();
 
         for (RadialRegionData radialRegionData : radialRegions) {
