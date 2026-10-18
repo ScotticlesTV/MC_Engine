@@ -130,7 +130,6 @@ public class InteractionsEditorUI {
                                 interactionData.interactionCommands.add("");
                                 shouldSyncNetwork = true;
                             }
-                            
 
                             ImGui.separator();
                             if (ImGui.button("Delete Interaction")) {

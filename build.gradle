@@ -29,6 +29,12 @@ repositories {
 			includeGroup("foundry.imguimc")
 		}
 	}
+
+	// Veil
+	maven {
+		name = 'BlameJared Maven (CrT / Bookshelf)'
+		url = 'https://maven.blamejared.com'
+	}
 }
 
 fabricApi {
@@ -49,6 +55,14 @@ dependencies {
 	// ImGuiMC
 	modImplementation include("foundry.imguimc:imguimc-fabric-${project.minecraft_version}:${project.imguimc_version}")
 
+	// Veil
+	modImplementation("foundry.veil:veil-fabric-${project.minecraft_version}:${project.veil_version}") {
+		exclude group: "maven.modrinth"
+		exclude group: "me.fallenbreath"
+	}
+	include ("foundry.veil:veil-fabric-${project.minecraft_version}:${project.veil_version}") {
+		transitive = false
+	}
 }
 
 processResources {

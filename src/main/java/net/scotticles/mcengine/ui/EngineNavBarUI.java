@@ -49,22 +49,19 @@ public class EngineNavBarUI {
                 }
                 ImGui.endMenu();
             }
+
+            if (ImGui.beginMenu("Lighting")) {
+                ImGui.menuItem("Light Profiles");
+                if (ImGui.menuItem("Light Editor")) {
+                    UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
+                }
+                ImGui.endMenu();
+            }
+
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Interactions")) {
                 if (ImGui.menuItem("Interactions Editor")) {
                     UIManager.showInteractionEditorUI.set(!UIManager.showInteractionEditorUI.get());
-                }
-                ImGui.endMenu();
-            }
-            ImGui.endDisabled();
-
-            ImGui.beginDisabled();
-            if (ImGui.beginMenu("Lighting")) {
-                ImGui.menuItem("Light Profiles");
-                ImGui.endDisabled();
-                ImGui.beginDisabled();
-                if (ImGui.menuItem("Light Editor")) {
-                    UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
                 }
                 ImGui.endMenu();
             }
