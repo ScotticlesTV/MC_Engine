@@ -3,6 +3,7 @@ package net.scotticles.mcengine.regions;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
@@ -55,49 +56,25 @@ public class RegionsManager {
     }
 
     /**
-     * Make a new Radial Region object and add it to the actively tracked list of Radial Regions.
-     * @param regionUuid, the region's UUID.
-     * @param regionName, the region's name.
-     * @param regionX, the region's x-position.
-     * @param regionY, the region's y-position.
-     * @param regionZ, the region's z-position.
-     * @param regionRadius, the region's radius.
-     * @param regionEnterCommands, the region's list of enter commands.
-     * @param regionExitCommands, the region's list of exit commands.
-     * @param playersInside, the list of players currently within the region.
-     * @param regionEnabled, whether or not the region is enabled as a boolean.
-     * @param regionSound, the soundID the region should play when a player enters the region.
-     * @param regionSoundVolume, the volume at which the region sound should play.
-     * @param regionSoundFadeDuration, the time it takes for the region sound to fade when the player exits the region.
+     *Make a new Radial Region object and add it to the actively tracked list of Radial Regions.
+     * @param playerPos, the player's current position.
      */
-    public static void addRadialRegion(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
+    public static void addRadialRegion(Vec3d playerPos) {
         // Make a new radial region data object.
-        RadialRegionData radialRegionData = new RadialRegionData(regionUuid, regionName, regionX, regionY, regionZ, regionRadius, regionEnterCommands, regionExitCommands, playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
+        UUID uuid = UUID.randomUUID();
+        RadialRegionData radialRegionData = new RadialRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), 20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
         // Add the new object to the active radial regions list to track it.
         activeRadialRegions.add(radialRegionData);
     }
 
     /**
      * Make a new Linear Region object and add it to the actively tracked list of Linear Regions.
-     * @param regionUuid, the region's UUID.
-     * @param regionName, the region's name.
-     * @param regionX1, the region's position 1 x-value.
-     * @param regionY1, the region's position 1 y-value.
-     * @param regionZ1, the region's position 1 z-value.
-     * @param regionX2, the region's position 2 x-value.
-     * @param regionY2, the region's position 2 y-value.
-     * @param regionZ2, the region's position 1 z-value.
-     * @param regionEnterCommands, the region's list of enter commands.
-     * @param regionExitCommands, the region's list of exit commands.
-     * @param playersInside, the list of players currently within the region.
-     * @param regionEnabled, whether or not the region is enabled as a boolean.
-     * @param regionSound, the soundID the region should play when a player enters the region.
-     * @param regionSoundVolume, the volume at which the region sound should play.
-     * @param regionSoundFadeDuration, the time it takes for the region sound to fade when the player exits the region.
+     * @param playerPos, the player's current position.
      */
-    public static void addLinearRegion(UUID regionUuid, String regionName, int regionX1, int regionY1, int regionZ1,int regionX2, int regionY2, int regionZ2, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
+    public static void addLinearRegion(Vec3d playerPos) {
         // Make a new linear region data object.
-        LinearRegionData linearRegionData = new LinearRegionData(regionUuid, regionName, regionX1, regionY1, regionZ1, regionX2, regionY2, regionZ2, regionEnterCommands, regionExitCommands, playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
+        UUID uuid = UUID.randomUUID();
+        LinearRegionData linearRegionData = new LinearRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
         // Add the new object to the active linear regions list to track it.
         activeLinearRegions.add(linearRegionData);
     }

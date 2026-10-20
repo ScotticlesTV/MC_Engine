@@ -26,6 +26,7 @@ public class EngineNavBarUI {
                 ImGui.endMenu();
             }
             ImGui.separator();
+            // World Tab
             if (ImGui.beginMenu("World")) {
                 if (ImGui.menuItem("Time")) {
                     UIManager.showWorldTimeUI.set(!UIManager.showWorldTimeUI.get());
@@ -43,6 +44,7 @@ public class EngineNavBarUI {
                 ImGui.endDisabled();
                 ImGui.endMenu();
             }
+            // Region Tab
             if (ImGui.beginMenu("Regions")) {
                 if (ImGui.menuItem("Regions Editor")) {
                     UIManager.showRegionEditorUI.set(!UIManager.showRegionEditorUI.get());
@@ -50,14 +52,18 @@ public class EngineNavBarUI {
                 ImGui.endMenu();
             }
 
+            // Lighting Tab
             if (ImGui.beginMenu("Lighting")) {
+                ImGui.beginDisabled();
                 ImGui.menuItem("Light Profiles");
+                ImGui.endDisabled();
                 if (ImGui.menuItem("Light Editor")) {
                     UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
                 }
                 ImGui.endMenu();
             }
 
+            // Interactions Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Interactions")) {
                 if (ImGui.menuItem("Interactions Editor")) {
@@ -67,6 +73,7 @@ public class EngineNavBarUI {
             }
             ImGui.endDisabled();
 
+            // Audio Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Audio")) {
                 ImGui.menuItem("Audio Sources");
@@ -77,6 +84,7 @@ public class EngineNavBarUI {
             }
             ImGui.endDisabled();
 
+            // Sequences Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Sequences")) {
                 ImGui.menuItem("Sequences Editor");
@@ -84,6 +92,7 @@ public class EngineNavBarUI {
             }
             ImGui.endDisabled();
 
+            // Players Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Player(s)")) {
                 ImGui.menuItem("Universal Attributes");
@@ -92,6 +101,7 @@ public class EngineNavBarUI {
             }
             ImGui.endDisabled();
 
+            // Decals Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Decals")) {
                 if (ImGui.menuItem("Decals Editor")) {

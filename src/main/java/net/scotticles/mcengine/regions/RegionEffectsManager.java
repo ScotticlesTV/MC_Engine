@@ -30,7 +30,7 @@ public class RegionEffectsManager {
                 // Loop Through All Radial Regions To Enable Effects For All Of Them
                 for  (RadialRegionData region : radialRegions) {
 
-
+                    // TODO(priority:low category:Cleanup @Scott): Rework + simplify region effect functionality.
                     // For Condensing This To Less If Statements, Consider:
                     // Checking Dimension and isInRadius in one if statement
                     // Using region.regionEnabled as a wrapper/first check
@@ -78,6 +78,7 @@ public class RegionEffectsManager {
                     }
                 }
 
+                // TODO (priority:high category:Bug-Fix @Scott): North/South facing straight line regions offset by 1.
                 // Loop Through All Linear Regions To Enable Effects For All Of Them
                 for (LinearRegionData region : linearRegions) {
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {

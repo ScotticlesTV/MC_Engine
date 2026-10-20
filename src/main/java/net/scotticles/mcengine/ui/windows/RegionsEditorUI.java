@@ -58,13 +58,12 @@ public class RegionsEditorUI {
                 if (ImGui.beginTabBar("Radial Regions Tab Bar")) {
                     if (ImGui.beginTabItem("Active")) {
                         if (ImGui.button("Add Active Region")) {
+                            // DONE(priority:medium category:Clarity @Scott): Change region default name to "Region" + "RegionUUID"
+                            // DONE(priority:high category:Cleanup @Scott): Move as much logic of Add Region as possible to RegionsManager to make it easier to find
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                UUID uuid = UUID.randomUUID();
-                                RegionsManager.addRadialRegion(uuid, "Region",
-                                        (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                        20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
+                                RegionsManager.addRadialRegion(playerPos);
                                 // Trigger Sync
                                 shouldSyncNetwork = true;
                             }
@@ -241,10 +240,7 @@ public class RegionsEditorUI {
                                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                 if (player != null) {
                                     Vec3d playerPos = player.getPos();
-                                    UUID uuid = UUID.randomUUID();
-                                    RegionsManager.addRadialRegion(uuid,"Region",
-                                            (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                            20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false, "", 1, 2);
+                                    RegionsManager.addRadialRegion(playerPos);
                                     shouldSyncNetwork = true; // Trigger Sync
                                 }
                             }
@@ -425,10 +421,7 @@ public class RegionsEditorUI {
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                UUID uuid = UUID.randomUUID();
-                                RegionsManager.addLinearRegion(uuid, "Region",
-                                        (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                        (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
+                                RegionsManager.addLinearRegion(playerPos);
                                 // Trigger Sync
                                 shouldSyncNetwork = true;
                             }
@@ -633,10 +626,7 @@ public class RegionsEditorUI {
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                UUID uuid = UUID.randomUUID();
-                                RegionsManager.addLinearRegion(uuid,"Region",
-                                        (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(),
-                                        (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), new ArrayList<>(), new ArrayList<>(), new HashSet<>(), false, "", 1, 2);
+                                RegionsManager.addLinearRegion(playerPos);
                                 shouldSyncNetwork = true; // Trigger Sync
                             }
                         }
