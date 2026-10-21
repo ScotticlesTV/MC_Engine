@@ -1,6 +1,7 @@
 package net.scotticles.mcengine;
 
 import net.fabricmc.api.ModInitializer;
+import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.regions.RegionsManager;
@@ -25,6 +26,7 @@ public class MCEngine implements ModInitializer {
 		// Load The Client Side Engine Config
 		MCEngineClientConfig.load();
 		RegionsManager.regionsInit();
+		LightsManager.lightDataInit();
 
 		// Register Packet Channels
 		C2S.registerPacketChannels();

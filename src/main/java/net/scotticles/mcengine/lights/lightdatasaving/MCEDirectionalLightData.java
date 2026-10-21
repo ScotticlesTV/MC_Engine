@@ -23,11 +23,12 @@ public class MCEDirectionalLightData extends DirectionalLightData{
                 buf.writeUuid(value.uuid);
                 buf.writeFloat(value.brightness);
                 buf.writeFloat(value.color.red());
-                buf.writeFloat(value.color.blue());
                 buf.writeFloat(value.color.green());
+                buf.writeFloat(value.color.blue());
                 buf.writeFloat(value.direction.x());
                 buf.writeFloat(value.direction.y);
                 buf.writeFloat(value.direction.z());
+                buf.writeBoolean(value.occlusionEnabled);
             },
             // Packet Decoder
             (RegistryByteBuf buf) -> {
@@ -40,8 +41,9 @@ public class MCEDirectionalLightData extends DirectionalLightData{
                 float directionX = buf.readFloat();
                 float directionY = buf.readFloat();
                 float directionZ = buf.readFloat();
+                boolean occlusionEnabled = buf.readBoolean();
 
-                return new MCEDirectionalLightData(name, uuid, brightness, r, g, b, directionX, directionY, directionZ);
+                return new MCEDirectionalLightData(name, uuid, brightness, r, g, b, directionX, directionY, directionZ, occlusionEnabled);
             }
     );
 
@@ -57,12 +59,13 @@ public class MCEDirectionalLightData extends DirectionalLightData{
      * @param name, the name of the MCE Directional Light Data object.
      * @param uuid, the unique id of the MCE Directional Light Data object.
      */
-    public MCEDirectionalLightData(String name, UUID uuid, float brightness, float r, float g, float b, float directionX, float directionY, float directionZ) {
+    public MCEDirectionalLightData(String name, UUID uuid, float brightness, float r, float g, float b, float directionX, float directionY, float directionZ, boolean occlusionEnabled) {
         this.setName(name);
         this.setUuid(uuid);
         this.setBrightness(brightness);
         this.setColor(r, g, b);
         this.setDirection(directionX, directionY, directionZ);
+        this.setOcclusionEnabled(occlusionEnabled);
     }
 
     // ---------- Getters & Setters ----------

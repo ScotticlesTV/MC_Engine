@@ -27,8 +27,8 @@ public class MCEPointLightData extends PointLightData {
                 buf.writeUuid(value.uuid);
                 buf.writeFloat(value.brightness);
                 buf.writeFloat(value.color.red());
-                buf.writeFloat(value.color.blue());
                 buf.writeFloat(value.color.green());
+                buf.writeFloat(value.color.blue());
                 buf.writeDouble(value.position.x);
                 buf.writeDouble(value.position.y);
                 buf.writeDouble(value.position.z);

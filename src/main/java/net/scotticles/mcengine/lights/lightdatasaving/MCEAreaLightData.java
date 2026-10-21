@@ -30,8 +30,8 @@ public class MCEAreaLightData extends AreaLightData {
                 buf.writeUuid(value.uuid);
                 buf.writeFloat(value.brightness);
                 buf.writeFloat(value.color.red());
-                buf.writeFloat(value.color.blue());
                 buf.writeFloat(value.color.green());
+                buf.writeFloat(value.color.blue());
                 buf.writeFloat(value.size.x);
                 buf.writeFloat(value.size.y);
                 buf.writeDouble(value.position.x);

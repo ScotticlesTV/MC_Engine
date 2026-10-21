@@ -1,11 +1,10 @@
 package net.scotticles.mcengine.lights;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.lights.payloads.*;
 import org.joml.Quaternionf;
 
@@ -21,7 +20,38 @@ public class LightsManager {
     public static final List<MCEDirectionalLightData> activeDirectionalLights = new ArrayList<>();
     public static final List<MCESpotLightData> activeSpotLights = new ArrayList<>();
 
-    /**
+    public static void lightDataInit() {
+        // Load Light Data On Server Start
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            loadLights(server);
+        });
+
+        // Save Light Data On Server Stop
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            saveLights(server);
+        });
+    }
+
+    private static void loadLights(MinecraftServer server) {
+        activeAreaLights.clear();
+        activePointLights.clear();
+        activeDirectionalLights.clear();
+        activeSpotLights.clear();
+        activeAreaLights.addAll(LightDataManager.loadAreaLights(server));
+        activePointLights.addAll(LightDataManager.loadPointLights(server));
+        activeDirectionalLights.addAll(LightDataManager.loadDirectionalLights(server));
+        activeSpotLights.addAll(LightDataManager.loadSpotLights(server));
+    }
+
+    private static void saveLights(MinecraftServer server) {
+        LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server);
+        activeAreaLights.clear();
+        activePointLights.clear();
+        activeDirectionalLights.clear();
+        activeSpotLights.clear();
+    }
+
+     /**
      * Make a new MCE Area Light Data object, track it, and sync it to the server.
      * @param playerPos, the player's position to set the area light to.
      * @param playerOrientation, the player's view orientation to set the area light to.
@@ -42,7 +72,7 @@ public class LightsManager {
      */
     public static void addDirectionalLight() {
         // Make A New MCE Directional Light Object
-        MCEDirectionalLightData mceDirectionalLightData = new MCEDirectionalLightData("Directional Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f);
+        MCEDirectionalLightData mceDirectionalLightData = new MCEDirectionalLightData("Directional Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, false);
 
         // Track The New Wrapper Object In The Active Directional Lights List
         activeDirectionalLights.add(mceDirectionalLightData);

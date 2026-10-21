@@ -232,6 +232,13 @@ public class S2C {
 
             //Sync Regions
             ServerPlayNetworking.send(player, new SyncRadialRegionsDataPayload(RegionsManager.activeRadialRegions));
+
+            //Sync Lights
+//            ServerPlayNetworking.send(player, new ClearLightRendererPayload());
+            ServerPlayNetworking.send(player, new SyncAreaLightsDataPayload(LightsManager.activeAreaLights));
+            ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
+            ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
+            ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
         });
     }
 }
