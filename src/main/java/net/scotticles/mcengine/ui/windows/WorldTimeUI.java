@@ -10,8 +10,6 @@ import net.minecraft.text.Text;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
 import net.scotticles.mcengine.ui.UIManager;
 
-import java.util.HashSet;
-
 public class WorldTimeUI {
     public static void showWorldTimeUI() {
         MinecraftClient client = MinecraftClient.getInstance();

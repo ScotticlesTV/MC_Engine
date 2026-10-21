@@ -12,7 +12,6 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class RegionEffectsManager {

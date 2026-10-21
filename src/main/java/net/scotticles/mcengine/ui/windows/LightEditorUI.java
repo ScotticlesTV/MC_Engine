@@ -1,15 +1,12 @@
 package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
-import foundry.veil.api.client.render.VeilRenderSystem;
 import imgui.ImGui;
 import imgui.type.ImDouble;
 import imgui.type.ImFloat;
-import imgui.type.ImInt;
 import imgui.type.ImString;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.ui.UIManager;

@@ -1,12 +1,6 @@
 package net.scotticles.mcengine.lights;
 
-import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.light.data.DirectionalLightData;
-import foundry.veil.api.client.render.light.data.PointLightData;
-import foundry.veil.api.client.render.light.data.SpotLightData;
-import foundry.veil.api.client.render.light.renderer.LightRenderer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.block.entity.VaultBlockEntity;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
@@ -16,8 +10,6 @@ import net.scotticles.mcengine.networking.lights.payloads.ClearLightRendererPayl
 import net.scotticles.mcengine.networking.lights.payloads.SyncAreaLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SyncDirectionalLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SyncPointLightsDataPayload;
-import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
-import net.scotticles.mcengine.regions.RegionsManager;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;

@@ -17,8 +17,6 @@ import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
 
 public class RegionsEditorUI {
     static ImString imRadialRegionName = new ImString("Region", 256);

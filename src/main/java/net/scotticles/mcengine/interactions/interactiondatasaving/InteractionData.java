@@ -4,7 +4,6 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Uuids;
-import net.scotticles.mcengine.interactions.interactiondatasaving.InteractionData;
 
 import java.util.*;
 

@@ -6,11 +6,8 @@
 package net.scotticles.mcengine.lights.lightdatasaving;
 
 import foundry.veil.api.client.render.light.data.DirectionalLightData;
-import foundry.veil.api.client.render.light.data.PointLightData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.registry.entry.RegistryEntry;
-import org.joml.Quaternionf;
 
 import java.util.UUID;
 

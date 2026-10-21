@@ -10,8 +10,6 @@ import net.minecraft.text.Text;
 import net.scotticles.mcengine.networking.weather.payloads.ChangeWeatherPayload;
 import net.scotticles.mcengine.ui.UIManager;
 
-import java.util.HashSet;
-
 public class WorldWeatherUI {
 
     public static void showWorldWeatherUI() {

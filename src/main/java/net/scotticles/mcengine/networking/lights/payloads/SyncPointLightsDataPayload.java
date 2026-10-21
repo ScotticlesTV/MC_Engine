@@ -5,7 +5,6 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
 
 import java.util.ArrayList;
