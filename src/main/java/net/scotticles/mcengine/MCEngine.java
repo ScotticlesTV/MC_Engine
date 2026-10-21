@@ -39,5 +39,6 @@ public class MCEngine implements ModInitializer {
 		S2C.registerServerJoinSyncingEvents();
 
 		LOGGER.info("Welcome MC Engine users!");
+		// LOGGER.info("MC Engine is initializing. Welcome!");
 	}
 }
