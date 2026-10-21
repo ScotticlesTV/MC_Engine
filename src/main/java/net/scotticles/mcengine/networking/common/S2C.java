@@ -1,5 +1,7 @@
 package net.scotticles.mcengine.networking.common;
 
+import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.light.renderer.LightRenderer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -10,8 +12,16 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
+import net.scotticles.mcengine.lights.LightsManager;
+import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.ClearLightRendererPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncAreaLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncDirectionalLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncPointLightsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
@@ -40,12 +50,71 @@ public class S2C {
         PayloadTypeRegistry.playS2C().register(SyncGamerulesDataPayload.TYPE, SyncGamerulesDataPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(RegionSoundStatePayload.TYPE, RegionSoundStatePayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncAreaLightsDataPayload.ID, SyncAreaLightsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncPointLightsDataPayload.ID, SyncPointLightsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncDirectionalLightsDataPayload.ID, SyncDirectionalLightsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
+        // Client Receiver For Clear Light Renderer Payloads
+        ClientPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
+            context.client().execute(() -> {
+                // Clear The Light Renderer To Prep For The Incoming New Lights
+                VeilRenderSystem.renderer().getLightRenderer().free();
+            });
+        });
+
+        // Client Receiver For Sync Area Light Data Payloads
+        ClientPlayNetworking.registerGlobalReceiver(SyncAreaLightsDataPayload.ID, (payload, context) -> {
+            List<MCEAreaLightData> synchronizedSet = payload.areaLights();
+
+            context.client().execute(() -> {
+                // Clear The Current Local Regions Set And Replace It With The One From The Server
+                LightsManager.activeAreaLights.clear();
+                LightsManager.activeAreaLights.addAll(synchronizedSet);
+                for (MCEAreaLightData mceAreaLightData : synchronizedSet) {
+                    VeilRenderSystem.renderer().getLightRenderer().addLight(mceAreaLightData);
+                }
+            });
+        });
+
+        // Client Receiver For Sync Point Light Data Payloads
+        ClientPlayNetworking.registerGlobalReceiver(SyncPointLightsDataPayload.ID, (payload, context) -> {
+            List<MCEPointLightData> synchronizedSet = payload.pointLights();
+
+            context.client().execute(() -> {
+                // Clear The Current Local Regions Set And Replace It With The One From The Server
+                LightsManager.activePointLights.clear();
+                LightsManager.activePointLights.addAll(synchronizedSet);
+                for (MCEPointLightData mcePointLightData : synchronizedSet) {
+                    VeilRenderSystem.renderer().getLightRenderer().addLight(mcePointLightData);
+                }
+            });
+        });
+
+        // Client Receiver For Sync Directional Light Data Payloads
+        ClientPlayNetworking.registerGlobalReceiver(SyncDirectionalLightsDataPayload.ID, (payload, context) -> {
+            List<MCEDirectionalLightData> synchronizedSet = payload.directionalLights();
+
+            context.client().execute(() -> {
+                // Clear The Current Local Regions Set And Replace It With The One From The Server
+                LightsManager.activeDirectionalLights.clear();
+                LightsManager.activeDirectionalLights.addAll(synchronizedSet);
+                for (MCEDirectionalLightData mceDirectionalLightData : synchronizedSet) {
+                    VeilRenderSystem.renderer().getLightRenderer().addLight(mceDirectionalLightData);
+                }
+            });
+        });
+
+        // Client Receiver For Sync Radial Regions Data Payloads
         ClientPlayNetworking.registerGlobalReceiver(SyncRadialRegionsDataPayload.ID, (payload, context) -> {
-            java.util.List<RadialRegionData> synchronizedSet = payload.radialRegions();
+            List<RadialRegionData> synchronizedSet = payload.radialRegions();
 
             context.client().execute(() -> {
                 // Clear The Current Local Regions Set And Replace It With The One From The Server
@@ -54,6 +123,7 @@ public class S2C {
             });
         });
 
+        // Client Receiver For Sync Linear Regions Data Payloads
         ClientPlayNetworking.registerGlobalReceiver(SyncLinearRegionsDataPayload.ID, (payload, context) -> {
             List<LinearRegionData> synchronizedSet = payload.linearRegionData();
 

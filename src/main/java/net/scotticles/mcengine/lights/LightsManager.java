@@ -1,16 +1,23 @@
 package net.scotticles.mcengine.lights;
 
 import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.light.data.AreaLightData;
 import foundry.veil.api.client.render.light.data.DirectionalLightData;
 import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.data.SpotLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.block.entity.VaultBlockEntity;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
+import net.scotticles.mcengine.networking.lights.payloads.ClearLightRendererPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncAreaLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncDirectionalLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
+import net.scotticles.mcengine.regions.RegionsManager;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
@@ -25,64 +32,58 @@ public class LightsManager {
     public static final List<MCEDirectionalLightData> activeDirectionalLights = new ArrayList<>();
     public static final List<MCESpotLightData> activeSpotLights = new ArrayList<>();
 
-    private static final LightRenderer lightRenderer = VeilRenderSystem.renderer().getLightRenderer();
-
+    /**
+     * Make a new MCE Area Light Data object, track it, and sync it to the server.
+     * @param playerPos, the player's position to set the area light to.
+     * @param playerOrientation, the player's view orientation to set the area light to.
+     */
     public static void addAreaLight(Vec3d playerPos, Quaternionf playerOrientation) {
-        // Create A Veil Area Light And Give It Default Attributes
-        AreaLightData areaLightData = new AreaLightData().setBrightness(1.0f).setColor(1.0f, 1.0f, 1.0f).setSize(1.0f, 1.0f).setAngle((float) Math.toRadians(45.0f)).setDistance(15.0f).setOcclusionEnabled(false).setInscatteringStrength(0.0f);
-        areaLightData.getPosition().set(playerPos.x, playerPos.y, playerPos.z);
-        areaLightData.getOrientation().set(playerOrientation);
-
-        // Make A New MC Engine Wrapper Area Light Data Object And Pass In Default Values (Including The New Veil Area Light)
-        MCEAreaLightData mceAreaLightData = new MCEAreaLightData("Area Light", UUID.randomUUID(), areaLightData);
+        // Make A New MCE Area Light Object
+        MCEAreaLightData mceAreaLightData = new MCEAreaLightData("Area Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, playerPos.getX(), playerPos.getY(), playerPos.getZ(), playerOrientation, (float) Math.toRadians(45.0f),15.0f,false, 0.0f);
 
         // Track The New Wrapper Object In The Active Area Lights List
         activeAreaLights.add(mceAreaLightData);
 
-        // TODO(priority:low category:Cleanup @Scott): Remove Temp Logic That Simulates Syncing
-        // Temp Logic: Add The Light To The Renderer To Simulate Syncing
-        lightRenderer.addLight(mceAreaLightData.getAreaLightData());
-
         // Sync All Lights
         syncAllLights();
     }
 
+    /**
+     * Make a new MCE Directional Light Data object, track it, and sync it to the server.
+     */
     public static void addDirectionalLight() {
-        // Create A Veil Directional Light And Give It Default Attributes
-        DirectionalLightData directionalLightData = new DirectionalLightData().setBrightness(1.0f).setColor(1.0f, 1.0f, 1.0f).setOcclusionEnabled(false).setDirection(0, -1, 0);
+        // Make A New MCE Directional Light Object
+        MCEDirectionalLightData mceDirectionalLightData = new MCEDirectionalLightData("Directional Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f);
 
-        // Make A New MC Engine Wrapper Directional Light Data Object And Pass In Default Values (Including The New Veil Directional Light)
-        MCEDirectionalLightData mceDirectionalLightData = new MCEDirectionalLightData("Directional Light", UUID.randomUUID(), directionalLightData);
+        // Track The New Wrapper Object In The Active Directional Lights List
         activeDirectionalLights.add(mceDirectionalLightData);
 
-        // Temp Logic: Add The Light To The Renderer To Simulate Syncing
-        // TODO(priority:low category:Cleanup @Scott): Remove Temp Logic That Simulates Syncing
-        lightRenderer.addLight(mceDirectionalLightData.getDirectionalLightData());
-
         // Sync All Lights
         syncAllLights();
     }
 
+    /**
+     * Make a new MCE Point Light Data object, track it, and sync it to the server.
+     * @param playerPos, the player's position to set the point light to.
+     */
     public static void addPointLight(Vec3d playerPos) {
-        // Create A Veil Point Light And Give It Default Attributes
-        PointLightData pointLightData = new PointLightData().setBrightness(1.0f).setColor(1.0f, 1.0f, 1.0f).setRadius(15.0f).setOcclusionEnabled(false).setInscatteringStrength(0.0f).setPosition(playerPos.x, playerPos.y, playerPos.z);
+        // Make A New MCE Point Light Data Object
+        MCEPointLightData mcePointLightData = new MCEPointLightData("Point Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, playerPos.getX(), playerPos.getY(), playerPos.getZ(), 15.0f, false, 0.0f);
 
-        // Make A New MC Engine Wrapper Point Light Data Object And Pass In Default Values (Including The New Veil Point Light)
-        MCEPointLightData mcePointLightData = new MCEPointLightData("Point Light", UUID.randomUUID(), pointLightData);
+        // Track The New Wrapper Object In The Active Point Lights List
         activePointLights.add(mcePointLightData);
-
-        // TODO(priority:low category:Cleanup @Scott): Remove Temp Logic That Simulates Syncing
-        // Temp Logic: Add The Light To The Renderer To Simulate Syncing
-        lightRenderer.addLight(mcePointLightData.getPointLightData());
 
         // Sync All Lights
         syncAllLights();
     }
 
     public static void addSpotLight() {
-        SpotLightData spotLightData = new SpotLightData().setBrightness(1.0f);
+
     }
 
+    /**
+     * Delete all lights lists and sync to the server.
+     */
     public static void clearLights() {
         // Clear Light Lists
         activeAreaLights.clear();
@@ -90,19 +91,18 @@ public class LightsManager {
         activeDirectionalLights.clear();
         activeSpotLights.clear();
 
-        // TODO(priority:low category:Cleanup @Scott): Remove Temp Logic That Simulates Syncing
-        // Temp Logic: Clear The Light Renderer To Simulate Syncing
-        VeilRenderSystem.renderer().getLightRenderer().free();
-
         // Sync All Lights
         syncAllLights();
     }
 
+    /**
+     * Send packets to sync all light lists with the server and other clients.
+     */
     public static void syncAllLights() {
-        // TODO(priority:high category:Core-Functionality @Scott): Create Light Syncing Functionality, Send Packets To Sync All Client Tracked Lights To The Server And Other Clients
-        // Send Area Light List Packet
-        // Send Point Light List Packet
-        // Send Directional Light List Packet
+        ClientPlayNetworking.send(new ClearLightRendererPayload());
+        ClientPlayNetworking.send(new SyncAreaLightsDataPayload(new ArrayList<>(activeAreaLights)));
+        ClientPlayNetworking.send(new SyncPointLightsDataPayload(new ArrayList<>(activePointLights)));
+        ClientPlayNetworking.send(new SyncDirectionalLightsDataPayload(new ArrayList<>(activeDirectionalLights)));
         // Send Spot Light List Packet
     }
 }
