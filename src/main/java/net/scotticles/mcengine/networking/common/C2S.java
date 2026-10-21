@@ -11,13 +11,11 @@ import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.ClearLightRendererPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncAreaLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncDirectionalLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.*;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
@@ -55,6 +53,8 @@ public class C2S {
 
         PayloadTypeRegistry.playC2S().register(SyncDirectionalLightsDataPayload.ID, SyncDirectionalLightsDataPayload.CODEC);
 
+        PayloadTypeRegistry.playC2S().register(SyncSpotLightsDataPayload.ID, SyncSpotLightsDataPayload.CODEC);
+
         PayloadTypeRegistry.playC2S().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
     }
 
@@ -67,7 +67,7 @@ public class C2S {
             context.server().execute(() -> {
                 // Send A Packet To All Connected Clients To Clear Their Light Renderers
                 ClearLightRendererPayload syncPayload = new ClearLightRendererPayload();
-                for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }
             });
@@ -84,7 +84,7 @@ public class C2S {
 
                 // Sync The Updated Area Lights To All Players On The Server
                 SyncAreaLightsDataPayload syncPayload = new SyncAreaLightsDataPayload(updatedAreaLights);
-                for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }
             });
@@ -101,7 +101,7 @@ public class C2S {
 
                 // Sync The Updated Area Lights To All Players On The Server
                 SyncPointLightsDataPayload syncPayload = new SyncPointLightsDataPayload(updatedPointLights);
-                for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }
             });
@@ -118,7 +118,24 @@ public class C2S {
 
                 // Sync The Updated Area Lights To All Players On The Server
                 SyncDirectionalLightsDataPayload syncPayload = new SyncDirectionalLightsDataPayload(updatedDirectionalLights);
-                for (net.minecraft.server.network.ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                    ServerPlayNetworking.send(player, syncPayload);
+                }
+            });
+        });
+
+        // Server SyncSpotLightsDataPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SyncSpotLightsDataPayload.ID, (payload, context) -> {
+            List<MCESpotLightData> updatedSpotLights = payload.spotLights();
+
+            context.server().execute(() -> {
+                // Overwrite The Server's Area Light Data List With The Updated Light Data From The Client
+                LightsManager.activeSpotLights.clear();
+                LightsManager.activeSpotLights.addAll(updatedSpotLights);
+
+                // Sync The Updated Area Lights To All Players On The Server
+                SyncSpotLightsDataPayload syncPayload = new SyncSpotLightsDataPayload(updatedSpotLights);
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }
             });

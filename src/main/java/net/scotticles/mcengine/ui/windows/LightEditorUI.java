@@ -19,20 +19,24 @@ public class LightEditorUI {
     static ImString imLightName = new ImString("Light", 256);
     static ImFloat imLightBrightness = new ImFloat(0);
     static float[] lightColor = {1.0f, 1.0f, 1.0f};
+
+    // All But Directional Light Variables
     static ImDouble imLightX = new ImDouble(0);
     static ImDouble imLightY = new ImDouble(0);
     static ImDouble imLightZ = new ImDouble(0);
+    static ImFloat imInScattering = new ImFloat(0);
+
+    // Area Light Variables
     static ImFloat imLightSizeX = new ImFloat(0);
     static ImFloat imLightSizeY = new ImFloat(0);
+
+    // Area & Spot Light Variables
     static ImFloat imLightOrientationX = new ImFloat(0);
     static ImFloat imLightOrientationY = new ImFloat(0);
     static ImFloat imLightOrientationZ = new ImFloat(0);
     static ImFloat imLightOrientationW = new ImFloat(0);
     static ImFloat imAngle = new ImFloat(0);
     static ImFloat imDistance = new ImFloat(0);
-    static ImFloat imInScattering = new ImFloat(0);
-
-    // Area Light Variables
 
     // Point Light Variables
     static ImFloat imRadius = new ImFloat(0);
@@ -43,6 +47,7 @@ public class LightEditorUI {
     static ImFloat imLightDirectionZ = new ImFloat(0);
 
     // Spot Light Variables
+    static ImFloat imSpotLightSize = new ImFloat(0);
 
 
 
@@ -499,7 +504,186 @@ public class LightEditorUI {
             // Spot Lights Tab
             if (ImGui.beginTabItem("Spot Lights")) {
                 if (ImGui.button("Add Spot Light")) {
-                    //TODO(priority:medium category:Core-Functionality @Scott): Make Add Spot Light Functionality
+                    // Get The Player
+                    ClientPlayerEntity player = MinecraftClient.getInstance().player;
+                    if (player != null) {
+                        Vec3d playerPos = player.getPos();
+                        Vec3d look = player.getRotationVector();
+                        Quaternionf playerOrientation = new Quaternionf().lookAlong(
+                                new Vector3f((float) -look.x, (float) -look.y, (float) -look.z),
+                                new Vector3f(0, 1, 0)
+                        );
+                        LightsManager.addSpotLight(playerPos, playerOrientation);
+                    }
+                }
+
+                for (int i = 0; i < LightsManager.activeSpotLights.size(); i++) {
+                    imLightName.set(LightsManager.activeSpotLights.get(i).getName());
+                    imLightBrightness.set(LightsManager.activeSpotLights.get(i).getBrightness());
+                    lightColor[0] = LightsManager.activeSpotLights.get(i).getColor().red();
+                    lightColor[1] = LightsManager.activeSpotLights.get(i).getColor().green();
+                    lightColor[2] = LightsManager.activeSpotLights.get(i).getColor().blue();
+                    imLightX.set(LightsManager.activeSpotLights.get(i).getPosition().x());
+                    imLightY.set(LightsManager.activeSpotLights.get(i).getPosition().y());
+                    imLightZ.set(LightsManager.activeSpotLights.get(i).getPosition().z());
+                    imSpotLightSize.set((float) Math.toDegrees(LightsManager.activeSpotLights.get(i).getSize()));
+                    imLightOrientationX.set(LightsManager.activeSpotLights.get(i).getOrientation().x());
+                    imLightOrientationY.set(LightsManager.activeSpotLights.get(i).getOrientation().y());
+                    imLightOrientationZ.set(LightsManager.activeSpotLights.get(i).getOrientation().z());
+                    imLightOrientationW.set(LightsManager.activeSpotLights.get(i).getOrientation().w());
+                    imAngle.set((float) Math.toDegrees(LightsManager.activeSpotLights.get(i).getAngle()));
+                    imDistance.set(LightsManager.activeSpotLights.get(i).getDistance());
+                    imInScattering.set(LightsManager.activeSpotLights.get(i).getInscatteringStrength());
+
+
+                    ImGui.pushID(i);
+
+                    if (ImGui.collapsingHeader(LightsManager.activeSpotLights.get(i).getName() + "###spotlight_" + LightsManager.activeSpotLights.get(i).getUuid())) {
+                        // Light Name
+                        ImGui.text("Name: "); ImGui.sameLine();
+                        if (ImGui.inputText("##Light Name: ", imLightName)) {
+                            LightsManager.activeSpotLights.get(i).setName(imLightName.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Brightness
+                        ImGui.text("Brightness: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Brightness: ", imLightBrightness)) {
+                            LightsManager.activeSpotLights.get(i).setBrightness(imLightBrightness.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Color
+                        if (ImGui.colorEdit3("Color", lightColor)) {
+                            LightsManager.activeSpotLights.get(i).setColor(lightColor[0], lightColor[1], lightColor[2]);
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Position
+                        // X-Pos
+                        ImGui.text("X: "); ImGui.sameLine();
+                        if (ImGui.inputDouble("##X: ", imLightX)) {
+                            LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Y-Pos
+                        ImGui.text("Y: "); ImGui.sameLine();
+                        if (ImGui.inputDouble("##Y: ", imLightY)) {
+                            LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Z-Pos
+                        ImGui.text("Z: "); ImGui.sameLine();
+                        if (ImGui.inputDouble("##Z: ", imLightZ)) {
+                            LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Size X
+                        ImGui.text("Size: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Size: ", imSpotLightSize)) {
+                            LightsManager.activeSpotLights.get(i).setSize((float) Math.toRadians(imSpotLightSize.get()));
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Orientation X
+                        ImGui.text("Orientation X: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Orientation X: ", imLightOrientationX)) {
+                            LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Orientation Y
+                        ImGui.text("Orientation Y: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Orientation Y: ", imLightOrientationY)) {
+                            LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Orientation Z
+                        ImGui.text("Orientation Z: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Orientation Z: ", imLightOrientationZ)) {
+                            LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Orientation W
+                        ImGui.text("Orientation W: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Orientation W: ", imLightOrientationW)) {
+                            LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Set Light To View
+                        if (ImGui.button("Set Orientation And Position To View")) {
+                            LightsManager.activeSpotLights.get(i).setTo(MinecraftClient.getInstance().gameRenderer.getCamera());
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Angle
+                        ImGui.text("Angle: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Angle: ", imAngle)) {
+                            LightsManager.activeSpotLights.get(i).setAngle((float) Math.toRadians(imAngle.get()));
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Distance
+                        ImGui.text("Distance: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##Distance: ", imDistance)) {
+                            LightsManager.activeSpotLights.get(i).setDistance(imDistance.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light Occlusion Enabled
+                        ImGui.text("Occlusion Enabled: "); ImGui.sameLine();
+                        if (ImGui.checkbox("##Occlusion Enabled: ", LightsManager.activeSpotLights.get(i).isOcclusionEnabled())) {
+                            LightsManager.activeSpotLights.get(i).setOcclusionEnabled(!LightsManager.activeSpotLights.get(i).isOcclusionEnabled());
+                            shouldSyncNetwork = true;
+                        }
+
+                        // Light In-Scattering
+                        ImGui.text("In-Scattering: "); ImGui.sameLine();
+                        if (ImGui.inputFloat("##In-Scattering: ", imInScattering)) {
+                            LightsManager.activeSpotLights.get(i).setInscatteringStrength(imInScattering.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        if (ImGui.button("Remove Light")) {
+                            LightsManager.activeSpotLights.remove(i);
+                            shouldSyncNetwork = true;
+                        }
+                    }
+                    ImGui.popID();
                 }
 
                 ImGui.spacing();

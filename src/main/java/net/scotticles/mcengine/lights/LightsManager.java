@@ -6,10 +6,7 @@ import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
-import net.scotticles.mcengine.networking.lights.payloads.ClearLightRendererPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncAreaLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncDirectionalLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.*;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
@@ -69,8 +66,20 @@ public class LightsManager {
         syncAllLights();
     }
 
-    public static void addSpotLight() {
+    /**
+     * Make a new MCE Spot Light Data object, track it, and sync it to the server.
+     * @param playerPos, the player's position to set the area light to.
+     * @param playerOrientation, the player's view orientation to set the area light to.
+     */
+    public static void addSpotLight(Vec3d playerPos, Quaternionf playerOrientation) {
+        // Make A New MCE Spot Light Data Object
+        MCESpotLightData mceSpotLightData = new MCESpotLightData("Spot Light", UUID.randomUUID(), 1.0f,1.0f, 1.0f, 1.0f, (float) Math.toRadians(45), playerPos.getX(), playerPos.getY(), playerPos.getZ(), playerOrientation, (float) Math.toRadians(45.0f),15.0f,false, 0.0f);
 
+        // Track The New Wrapper Object In The Active Spot Lights List
+        activeSpotLights.add(mceSpotLightData);
+
+        // Sync All Lights
+        syncAllLights();
     }
 
     /**
@@ -95,6 +104,6 @@ public class LightsManager {
         ClientPlayNetworking.send(new SyncAreaLightsDataPayload(new ArrayList<>(activeAreaLights)));
         ClientPlayNetworking.send(new SyncPointLightsDataPayload(new ArrayList<>(activePointLights)));
         ClientPlayNetworking.send(new SyncDirectionalLightsDataPayload(new ArrayList<>(activeDirectionalLights)));
-        // Send Spot Light List Packet
+        ClientPlayNetworking.send(new SyncSpotLightsDataPayload(new ArrayList<>(activeSpotLights)));
     }
 }
