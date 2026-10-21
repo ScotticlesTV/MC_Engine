@@ -14,10 +14,10 @@ public class MCEngineClientConfig {
     public static boolean openNavBarOnWorldJoin = false;
 //    public static boolean reopenWindowsOnWorldJoin = false;
     public static boolean useCustomUIColors = false;
-    public static float uiColorR = 0;
-    public static float uiColorG = 0;
-    public static float uiColorB = 0;
-    public static float uiColorA = 0;
+    public static float uiColorR = 0.059f;
+    public static float uiColorG = 0.059f;
+    public static float uiColorB = 0.059f;
+    public static float uiColorA = 0.9412f;
 
     // Config File Reference Inside Fabric Config File
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + ".properties");
@@ -31,13 +31,12 @@ public class MCEngineClientConfig {
 
                 // Assign config values from file and set them to defaults if they don't exist
                 openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("openNavBarOnWorldJoin", "false"));
-//                reopenWindowsOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
-                // TODO(priority:low category:UX @Scott): Change UI Default Custom Color is default ImGUIMC color scheme
+                // reopenWindowsOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
                 useCustomUIColors = Boolean.parseBoolean(properties.getProperty("useCustomUIColors", "false"));
-                uiColorR = Float.parseFloat(properties.getProperty("uiColorR", "0"));
-                uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0"));
-                uiColorB = Float.parseFloat(properties.getProperty("uiColorB", "0"));
-                uiColorA = Float.parseFloat(properties.getProperty("uiColorA", "0"));
+                uiColorR = Float.parseFloat(properties.getProperty("uiColorR", "0.059"));
+                uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0.059"));
+                uiColorB = Float.parseFloat(properties.getProperty("uiColorB", "0.059"));
+                uiColorA = Float.parseFloat(properties.getProperty("uiColorA", "0.9412"));
 
             } catch (IOException | NumberFormatException e) {
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
