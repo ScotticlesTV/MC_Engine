@@ -1,4 +1,3 @@
-// DONE(priority:high category:Bug-Fix @Scott): Fix reordering issue with regions editor menu.
 // TODO(priority:medium category:Addition @Scott): Add "DELAY" functionality for regions.
 // TODO(priority:low category:Cleanup @Scott): Add Getters and Setters for Region objects.
 // TODO(priority:low category:Safety @Scott): Add a save call when adding or removing regions (including clearing them entirely).

@@ -60,21 +60,21 @@ public class RegionDataManager {
 
         for (LinearRegionData linearRegionData : linearRegions) {
             save.linearRegionsData.add(new LinearRegionData(
-                    linearRegionData.regionUuid,
-                    linearRegionData.regionName,
-                    linearRegionData.regionX1,
-                    linearRegionData.regionY1,
-                    linearRegionData.regionZ1,
-                    linearRegionData.regionX2,
-                    linearRegionData.regionY2,
-                    linearRegionData.regionZ2,
-                    linearRegionData.regionEnterCommands,
-                    linearRegionData.regionExitCommands,
-                    linearRegionData.playersInside,
-                    linearRegionData.regionEnabled,
-                    linearRegionData.regionSound,
-                    linearRegionData.regionSoundVolume,
-                    linearRegionData.regionSoundFadeDuration
+                    linearRegionData.getRegionUuid(),
+                    linearRegionData.getRegionName(),
+                    linearRegionData.getRegionX1(),
+                    linearRegionData.getRegionY1(),
+                    linearRegionData.getRegionZ1(),
+                    linearRegionData.getRegionX2(),
+                    linearRegionData.getRegionY2(),
+                    linearRegionData.getRegionZ2(),
+                    linearRegionData.getRegionEnterCommands(),
+                    linearRegionData.getRegionExitCommands(),
+                    linearRegionData.getPlayersInside(),
+                    linearRegionData.isRegionEnabled(),
+                    linearRegionData.getRegionSound(),
+                    linearRegionData.getRegionSoundVolume(),
+                    linearRegionData.getRegionSoundFadeDuration()
             ));
         }
 

@@ -9,22 +9,25 @@ import java.util.*;
 
 public class LinearRegionData {
 
-    // Region Data Variables
-    public UUID regionUuid;
-    public String regionName;
-    public int regionX1;
-    public int regionY1;
-    public int regionZ1;
-    public int regionX2;
-    public int regionY2;
-    public int regionZ2;
-    public Set<UUID> playersInside;
-    public boolean regionEnabled;
-    public List<String> regionEnterCommands;
-    public List<String> regionExitCommands;
-    public String regionSound;
-    public float regionSoundVolume;
-    public float regionSoundFadeDuration;
+    // ---------- Instance Properties ----------
+
+    private UUID regionUuid;
+    private String regionName;
+    private int regionX1;
+    private int regionY1;
+    private int regionZ1;
+    private int regionX2;
+    private int regionY2;
+    private int regionZ2;
+    private Set<UUID> playersInside;
+    private boolean regionEnabled;
+    private List<String> regionEnterCommands;
+    private List<String> regionExitCommands;
+    private String regionSound;
+    private float regionSoundVolume;
+    private float regionSoundFadeDuration;
+
+    // ---------- Packet Encoding & Decoding ----------
 
     // Codecs For Region Enter, Exit, And UUID Sets
     private static final PacketCodec<RegistryByteBuf, List<String>> STRING_LIST_CODEC =
@@ -75,23 +78,174 @@ public class LinearRegionData {
             }
     );
 
+    // ---------- Constructors ----------
+
+    /**
+     * Workhorse Constructor: Construct a new Linear Region Data object with all parameters specified.
+     * @param regionUuid
+     * @param regionName
+     * @param regionX1
+     * @param regionY1
+     * @param regionZ1
+     * @param regionX2
+     * @param regionY2
+     * @param regionZ2
+     * @param regionEnterCommands
+     * @param regionExitCommands
+     * @param playersInside
+     * @param regionEnabled
+     * @param regionSound
+     * @param regionSoundVolume
+     * @param regionSoundFadeDuration
+     */
     public LinearRegionData(UUID regionUuid, String regionName, int regionX1, int regionY1, int regionZ1, int regionX2, int regionY2, int regionZ2, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
+        this.setRegionUuid(regionUuid);
+        this.setRegionName(regionName);
+        this.setRegionPos1(regionX1, regionY1, regionZ1);
+        this.setRegionPos2(regionX2, regionY2, regionZ2);
+        this.setRegionEnterCommands(regionEnterCommands);
+        this.setRegionExitCommands(regionExitCommands);
+        this.setPlayersInside(playersInside);
+        this.setRegionEnabled(regionEnabled);
+        this.setRegionSound(regionSound);
+        this.setRegionSoundVolume(regionSoundVolume);
+        this.setRegionSoundFadeDuration(regionSoundFadeDuration);
+    }
+
+    // ---------- Getters & Setters ----------
+
+    public UUID getRegionUuid() {
+        return this.regionUuid;
+    }
+
+    private void setRegionUuid(UUID regionUuid) {
         this.regionUuid = regionUuid;
+    }
+
+    public String getRegionName() {
+        return this.regionName;
+    }
+
+    public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public int getRegionX1() {
+        return this.regionX1;
+    }
+
+    public void setRegionX1(int regionX1) {
+        this.regionX1 = regionX1;
+    }
+
+    public int getRegionY1() {
+        return this.regionY1;
+    }
+
+    public void setRegionY1(int regionY1) {
+        this.regionY1 = regionY1;
+    }
+
+    public int getRegionZ1() {
+        return this.regionZ1;
+    }
+
+    public void setRegionZ1(int regionZ1) {
+        this.regionZ1 = regionZ1;
+    }
+
+    public int getRegionX2() {
+        return this.regionX2;
+    }
+
+    public void setRegionX2(int regionX2) {
+        this.regionX1 = regionX2;
+    }
+
+    public int getRegionY2() {
+        return this.regionY2;
+    }
+
+    public void setRegionY2(int regionY2) {
+        this.regionY1 = regionY2;
+    }
+
+    public int getRegionZ2() {
+        return this.regionZ1;
+    }
+
+    public void setRegionZ2(int regionZ2) {
+        this.regionZ1 = regionZ2;
+    }
+
+    public void setRegionPos1(int regionX1, int regionY1, int regionZ1) {
         this.regionX1 = regionX1;
         this.regionY1 = regionY1;
         this.regionZ1 = regionZ1;
+    }
+
+    public void setRegionPos2(int regionX2, int regionY2, int regionZ2) {
         this.regionX2 = regionX2;
         this.regionY2 = regionY2;
         this.regionZ2 = regionZ2;
-        this.regionEnterCommands = new ArrayList<>(regionEnterCommands);
-        this.regionExitCommands = new ArrayList<>(regionExitCommands);
+    }
+
+    public Set<UUID> getPlayersInside() {
+        return this.playersInside;
+    }
+
+    public void setPlayersInside(Set<UUID> playersInside) {
         this.playersInside = playersInside;
+    }
+
+    public boolean isRegionEnabled() {
+        return this.regionEnabled;
+    }
+
+    public void setRegionEnabled(boolean regionEnabled) {
         this.regionEnabled = regionEnabled;
+    }
+
+    public List<String> getRegionEnterCommands() {
+        return this.regionEnterCommands;
+    }
+
+    public void setRegionEnterCommands(List<String> regionEnterCommands) {
+        this.regionEnterCommands = regionEnterCommands;
+    }
+
+    public List<String> getRegionExitCommands() {
+        return this.regionExitCommands;
+    }
+
+    public void setRegionExitCommands(List<String> regionExitCommands) {
+        this.regionExitCommands = regionExitCommands;
+    }
+
+    public String getRegionSound() {
+        return this.regionSound;
+    }
+
+    public void setRegionSound(String regionSound) {
         this.regionSound = regionSound;
+    }
+
+    public float getRegionSoundVolume() {
+        return this.regionSoundVolume;
+    }
+
+    public void setRegionSoundVolume(float regionSoundVolume) {
         this.regionSoundVolume = regionSoundVolume;
+    }
+
+    public float getRegionSoundFadeDuration() {
+        return this.regionSoundFadeDuration;
+    }
+
+    public void setRegionSoundFadeDuration(float regionSoundFadeDuration) {
         this.regionSoundFadeDuration = regionSoundFadeDuration;
     }
+
 
     public LinearRegionData toRegionsData() {
         return new LinearRegionData(regionUuid, regionName, regionX1, regionY1, regionZ1, regionX2, regionY2, regionZ2, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);

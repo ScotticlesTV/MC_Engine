@@ -23,18 +23,5 @@ public class MCEngineClient implements ClientModInitializer {
 
         // Register Client Side Packet Receivers
         S2C.registerClientReceivers();
-
-        // Unbind Veil Editor Key -- Logic Does Not Work
-//        ClientLifecycleEvents.CLIENT_STARTED.register(minecraftClient -> {
-//            for (KeyBinding key : minecraftClient.options.allKeys) {
-//                if ("key.veil.editor".equals(key.getTranslationKey())) {
-//                    key.setBoundKey(InputUtil.UNKNOWN_KEY);
-//
-//                    KeyBinding.updateKeysByCode();
-//                    System.out.println("[" + MCEngine.MOD_ID + "]: Successfully Found And Unbound Veil Editor Key");
-//                    break;
-//                }
-//            }
-//        });
     }
 }
