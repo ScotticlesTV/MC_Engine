@@ -53,7 +53,7 @@ public class EngineNavBarUI {
             }
 
             // Lighting Tab
-            if (ImGui.beginMenu("Lighting")) {
+            if (ImGui.beginMenu("Lights")) {
                 ImGui.beginDisabled();
                 ImGui.menuItem("Light Profiles");
                 ImGui.endDisabled();

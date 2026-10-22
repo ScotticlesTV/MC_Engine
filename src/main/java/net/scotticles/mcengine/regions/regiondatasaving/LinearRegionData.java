@@ -159,7 +159,7 @@ public class LinearRegionData {
     }
 
     public void setRegionX2(int regionX2) {
-        this.regionX1 = regionX2;
+        this.regionX2 = regionX2;
     }
 
     public int getRegionY2() {
@@ -167,15 +167,15 @@ public class LinearRegionData {
     }
 
     public void setRegionY2(int regionY2) {
-        this.regionY1 = regionY2;
+        this.regionY2 = regionY2;
     }
 
     public int getRegionZ2() {
-        return this.regionZ1;
+        return this.regionZ2;
     }
 
     public void setRegionZ2(int regionZ2) {
-        this.regionZ1 = regionZ2;
+        this.regionZ2 = regionZ2;
     }
 
     public void setRegionPos1(int regionX1, int regionY1, int regionZ1) {
@@ -244,10 +244,5 @@ public class LinearRegionData {
 
     public void setRegionSoundFadeDuration(float regionSoundFadeDuration) {
         this.regionSoundFadeDuration = regionSoundFadeDuration;
-    }
-
-
-    public LinearRegionData toRegionsData() {
-        return new LinearRegionData(regionUuid, regionName, regionX1, regionY1, regionZ1, regionX2, regionY2, regionZ2, new ArrayList<>(regionEnterCommands), new ArrayList<>(regionExitCommands), playersInside, regionEnabled, regionSound, regionSoundVolume, regionSoundFadeDuration);
     }
 }

@@ -70,36 +70,36 @@ public class RegionsEditorUI {
 
                         // Loop Through Each Radial Region Data Object
                         for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
-                            imRadialRegionName.set(radialRegionData.regionName);
-                            imRadialRegionX.set(radialRegionData.regionX);
-                            imRadialRegionY.set(radialRegionData.regionY);
-                            imRadialRegionZ.set(radialRegionData.regionZ);
-                            imRadialRegionRadius.set(radialRegionData.regionRadius);
-                            imRadialRegionSound.set(radialRegionData.regionSound);
-                            imRadialRegionSoundVolume.set(radialRegionData.regionSoundVolume);
-                            imRadialRegionSoundFadeDuration.set(radialRegionData.regionSoundFadeDuration);
+                            imRadialRegionName.set(radialRegionData.getRegionName());
+                            imRadialRegionX.set(radialRegionData.getRegionX());
+                            imRadialRegionY.set(radialRegionData.getRegionY());
+                            imRadialRegionZ.set(radialRegionData.getRegionZ());
+                            imRadialRegionRadius.set(radialRegionData.getRegionRadius());
+                            imRadialRegionSound.set(radialRegionData.getRegionSound());
+                            imRadialRegionSoundVolume.set(radialRegionData.getRegionSoundVolume());
+                            imRadialRegionSoundFadeDuration.set(radialRegionData.getRegionSoundFadeDuration());
 
-                            if (radialRegionData.regionEnabled) {
+                            if (radialRegionData.isRegionEnabled()) {
                                 ImGui.pushID(index);
-                                if (ImGui.collapsingHeader(radialRegionData.regionName + "###region_" + radialRegionData.regionUuid)) {
+                                if (ImGui.collapsingHeader(radialRegionData.getRegionName() + "###region_" + radialRegionData.getRegionUuid())) {
 
                                     ImGui.text("Region Name: "); ImGui.sameLine();
                                     if (ImGui.inputText("##Region Name: ", imRadialRegionName)) {
-                                        radialRegionData.regionName = imRadialRegionName.get();
+                                        radialRegionData.setRegionName(imRadialRegionName.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
                                     }
 
                                     ImGui.text("Region Enabled: "); ImGui.sameLine();
-                                    if (ImGui.checkbox("##Region Enabled: ", radialRegionData.regionEnabled)) {
-                                        radialRegionData.regionEnabled = !radialRegionData.regionEnabled;
+                                    if (ImGui.checkbox("##Region Enabled: ", radialRegionData.isRegionEnabled())) {
+                                        radialRegionData.setRegionEnabled(!radialRegionData.isRegionEnabled());
                                         shouldSyncNetwork = true;
                                     }
 
                                     ImGui.text("Region X: "); ImGui.sameLine();
                                     if (ImGui.inputInt("##Region X: ", imRadialRegionX)) {
-                                        radialRegionData.regionX = imRadialRegionX.get();
+                                        radialRegionData.setRegionX(imRadialRegionX.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -107,7 +107,7 @@ public class RegionsEditorUI {
 
                                     ImGui.text("Region Y: "); ImGui.sameLine();
                                     if (ImGui.inputInt("##Region Y: ", imRadialRegionY)) {
-                                        radialRegionData.regionY = imRadialRegionY.get();
+                                        radialRegionData.setRegionY(imRadialRegionY.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -115,7 +115,7 @@ public class RegionsEditorUI {
 
                                     ImGui.text("Region Z: "); ImGui.sameLine();
                                     if (ImGui.inputInt("##Region Z: ", imRadialRegionZ)) {
-                                        radialRegionData.regionZ = imRadialRegionZ.get();
+                                        radialRegionData.setRegionZ(imRadialRegionZ.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -125,16 +125,14 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            radialRegionData.regionX = (int) playerPos.getX();
-                                            radialRegionData.regionY = (int) playerPos.getY();
-                                            radialRegionData.regionZ = (int) playerPos.getZ();
+                                            radialRegionData.setRegionPos((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
                                             shouldSyncNetwork = true;
                                         }
                                     }
 
                                     ImGui.text("Region Radius: "); ImGui.sameLine();
                                     if (ImGui.inputInt("##Region Radius: ", imRadialRegionRadius)) {
-                                        radialRegionData.regionRadius = imRadialRegionRadius.get();
+                                        radialRegionData.setRegionRadius(imRadialRegionRadius.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -142,55 +140,55 @@ public class RegionsEditorUI {
 
                                     // Enter Commands
                                     ImGui.text("Region Enter Commands: ");
-                                    for (int i = 0; i < radialRegionData.regionEnterCommands.size(); i++) {
+                                    for (int i = 0; i < radialRegionData.getRegionEnterCommands().size(); i++) {
                                         ImGui.pushID(i);
-                                        ImString enterCommand = new ImString(radialRegionData.regionEnterCommands.get(i), 256);
+                                        ImString enterCommand = new ImString(radialRegionData.getRegionEnterCommands().get(i), 256);
                                         if (ImGui.inputText("##EnterCommand", enterCommand)) {
-                                            radialRegionData.regionEnterCommands.set(i, enterCommand.get());
+                                            radialRegionData.getRegionEnterCommands().set(i, enterCommand.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
                                         if (ImGui.button("X")) {
-                                            radialRegionData.regionEnterCommands.remove(i);
+                                            radialRegionData.getRegionEnterCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.popID();
                                     }
 
                                     if (ImGui.button("Add Enter Command")) {
-                                        radialRegionData.regionEnterCommands.add("");
+                                        radialRegionData.getRegionEnterCommands().add("");
                                         shouldSyncNetwork = true;
                                     }
 
                                     // Exit Commands
                                     ImGui.text("Region Exit Commands: ");
-                                    for (int i = 0; i < radialRegionData.regionExitCommands.size(); i++) {
+                                    for (int i = 0; i < radialRegionData.getRegionExitCommands().size(); i++) {
                                         ImGui.pushID(i);
-                                        ImString exitCommand = new ImString(radialRegionData.regionExitCommands.get(i), 256);
+                                        ImString exitCommand = new ImString(radialRegionData.getRegionExitCommands().get(i), 256);
                                         if (ImGui.inputText("##ExitCommand", exitCommand)) {
-                                            radialRegionData.regionExitCommands.set(i, exitCommand.get());
+                                            radialRegionData.getRegionExitCommands().set(i, exitCommand.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
                                         if (ImGui.button("X")) {
-                                            radialRegionData.regionExitCommands.remove(i);
+                                            radialRegionData.getRegionExitCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.popID();
                                     }
 
                                     if (ImGui.button("Add Exit Command")) {
-                                        radialRegionData.regionExitCommands.add("");
+                                        radialRegionData.getRegionExitCommands().add("");
                                         shouldSyncNetwork = true;
                                     }
 
                                     ImGui.text("Region Sound: "); ImGui.sameLine();
                                     if (ImGui.inputText("##RegionSound", imRadialRegionSound)) {
-                                        radialRegionData.regionSound = imRadialRegionSound.get();
+                                        radialRegionData.setRegionSound(imRadialRegionSound.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -198,7 +196,7 @@ public class RegionsEditorUI {
 
                                     ImGui.text("Region Sound Volume: "); ImGui.sameLine();
                                     if (ImGui.inputFloat("##Region Sound Volume: ", imRadialRegionSoundVolume)) {
-                                        radialRegionData.regionSoundVolume = imRadialRegionSoundVolume.get();
+                                        radialRegionData.setRegionSoundVolume(imRadialRegionSoundVolume.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -206,7 +204,7 @@ public class RegionsEditorUI {
 
                                     ImGui.text("Region Sound Fade Duration: "); ImGui.sameLine();
                                     if (ImGui.inputFloat("##Region Sound Fade Duration: ", imRadialRegionSoundFadeDuration)) {
-                                        radialRegionData.regionSoundFadeDuration = imRadialRegionSoundFadeDuration.get();
+                                        radialRegionData.setRegionSoundFadeDuration(imRadialRegionSoundFadeDuration.get());
                                     }
                                     if (ImGui.isItemDeactivatedAfterEdit()) {
                                         shouldSyncNetwork = true;
@@ -245,35 +243,35 @@ public class RegionsEditorUI {
                             RadialRegionData regionToDelete = null;
 
                             for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
-                                imRadialRegionName.set(radialRegionData.regionName);
-                                imRadialRegionX.set(radialRegionData.regionX);
-                                imRadialRegionY.set(radialRegionData.regionY);
-                                imRadialRegionZ.set(radialRegionData.regionZ);
-                                imRadialRegionRadius.set(radialRegionData.regionRadius);
-                                imRadialRegionSoundVolume.set(radialRegionData.regionSoundVolume);
-                                imRadialRegionSoundFadeDuration.set(radialRegionData.regionSoundFadeDuration);
+                                imRadialRegionName.set(radialRegionData.getRegionName());
+                                imRadialRegionX.set(radialRegionData.getRegionX());
+                                imRadialRegionY.set(radialRegionData.getRegionY());
+                                imRadialRegionZ.set(radialRegionData.getRegionZ());
+                                imRadialRegionRadius.set(radialRegionData.getRegionRadius());
+                                imRadialRegionSoundVolume.set(radialRegionData.getRegionSoundVolume());
+                                imRadialRegionSoundFadeDuration.set(radialRegionData.getRegionSoundFadeDuration());
 
-                                if (!radialRegionData.regionEnabled) {
+                                if (!radialRegionData.isRegionEnabled()) {
                                     ImGui.pushID(index);
-                                    if (ImGui.collapsingHeader(radialRegionData.regionName + "###region_" + index)) {
+                                    if (ImGui.collapsingHeader(radialRegionData.getRegionName() + "###region_" + index)) {
 
                                         ImGui.text("Region Name: "); ImGui.sameLine();
                                         if (ImGui.inputText("##Region Name: ", imRadialRegionName)) {
-                                            radialRegionData.regionName = imRadialRegionName.get();
+                                            radialRegionData.setRegionName(imRadialRegionName.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
                                         }
 
                                         ImGui.text("Region Enabled: "); ImGui.sameLine();
-                                        if (ImGui.checkbox("##Region Enabled: ", radialRegionData.regionEnabled)) {
-                                            radialRegionData.regionEnabled = !radialRegionData.regionEnabled;
+                                        if (ImGui.checkbox("##Region Enabled: ", radialRegionData.isRegionEnabled())) {
+                                            radialRegionData.setRegionEnabled(!radialRegionData.isRegionEnabled());
                                             shouldSyncNetwork = true;
                                         }
 
                                         ImGui.text("Region X: "); ImGui.sameLine();
                                         if (ImGui.inputInt("##Region X: ", imRadialRegionX)) {
-                                            radialRegionData.regionX = imRadialRegionX.get();
+                                            radialRegionData.setRegionX(imRadialRegionX.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -281,7 +279,7 @@ public class RegionsEditorUI {
 
                                         ImGui.text("Region Y: "); ImGui.sameLine();
                                         if (ImGui.inputInt("##Region Y: ", imRadialRegionY)) {
-                                            radialRegionData.regionY = imRadialRegionY.get();
+                                            radialRegionData.setRegionY(imRadialRegionY.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -289,7 +287,7 @@ public class RegionsEditorUI {
 
                                         ImGui.text("Region Z: "); ImGui.sameLine();
                                         if (ImGui.inputInt("##Region Z: ", imRadialRegionZ)) {
-                                            radialRegionData.regionZ = imRadialRegionZ.get();
+                                            radialRegionData.setRegionZ(imRadialRegionZ.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -299,9 +297,7 @@ public class RegionsEditorUI {
                                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                             if (player != null) {
                                                 Vec3d playerPos = player.getPos();
-                                                radialRegionData.regionX = (int) playerPos.getX();
-                                                radialRegionData.regionY = (int) playerPos.getY();
-                                                radialRegionData.regionZ = (int) playerPos.getZ();
+                                                radialRegionData.setRegionPos((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
                                                 shouldSyncNetwork = true;
                                             }
                                         }
@@ -309,7 +305,7 @@ public class RegionsEditorUI {
                                         // Region Radius
                                         ImGui.text("Region Radius: "); ImGui.sameLine();
                                         if (ImGui.inputInt("##Region Radius: ", imRadialRegionRadius)) {
-                                            radialRegionData.regionRadius = imRadialRegionRadius.get();
+                                            radialRegionData.setRegionRadius(imRadialRegionRadius.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -317,52 +313,52 @@ public class RegionsEditorUI {
 
                                         // Enter Commands
                                         ImGui.text("Region Enter Commands: ");
-                                        for (int i = 0; i < radialRegionData.regionEnterCommands.size(); i++) {
+                                        for (int i = 0; i < radialRegionData.getRegionEnterCommands().size(); i++) {
                                             ImGui.pushID(i);
-                                            ImString enterCommand = new ImString(radialRegionData.regionEnterCommands.get(i), 256);
+                                            ImString enterCommand = new ImString(radialRegionData.getRegionEnterCommands().get(i), 256);
                                             if (ImGui.inputText("##EnterCommand", enterCommand)) {
-                                                radialRegionData.regionEnterCommands.set(i, enterCommand.get());
+                                                radialRegionData.getRegionEnterCommands().set(i, enterCommand.get());
                                             }
                                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.sameLine();
                                             if (ImGui.button("X")) {
-                                                radialRegionData.regionEnterCommands.remove(i);
+                                                radialRegionData.getRegionEnterCommands().remove(i);
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.popID();
                                         }
                                         if (ImGui.button("Add Enter Command")) {
-                                            radialRegionData.regionEnterCommands.add("");
+                                            radialRegionData.getRegionEnterCommands().add("");
                                             shouldSyncNetwork = true;
                                         }
                                         // Exit Commands
                                         ImGui.text("Region Exit Commands: ");
-                                        for (int i = 0; i < radialRegionData.regionExitCommands.size(); i++) {
+                                        for (int i = 0; i < radialRegionData.getRegionExitCommands().size(); i++) {
                                             ImGui.pushID(i);
-                                            ImString exitCommand = new ImString(radialRegionData.regionExitCommands.get(i), 256);
+                                            ImString exitCommand = new ImString(radialRegionData.getRegionExitCommands().get(i), 256);
                                             if (ImGui.inputText("##ExitCommand", exitCommand)) {
-                                                radialRegionData.regionExitCommands.set(i, exitCommand.get());
+                                                radialRegionData.getRegionExitCommands().set(i, exitCommand.get());
                                             }
                                             if (ImGui.isItemDeactivatedAfterEdit()) {
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.sameLine();
                                             if (ImGui.button("X")) {
-                                                radialRegionData.regionExitCommands.remove(i);
+                                                radialRegionData.getRegionExitCommands().remove(i);
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.popID();
                                         }
                                         if (ImGui.button("Add Exit Command")) {
-                                            radialRegionData.regionExitCommands.add("");
+                                            radialRegionData.getRegionExitCommands().add("");
                                             shouldSyncNetwork = true;
                                         }
 
                                         ImGui.text("Region Sound: "); ImGui.sameLine();
                                         if (ImGui.inputText("##RegionSound", imRadialRegionSound)) {
-                                            radialRegionData.regionSound = imRadialRegionSound.get();
+                                            radialRegionData.setRegionSound(imRadialRegionSound.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -370,7 +366,7 @@ public class RegionsEditorUI {
 
                                         ImGui.text("Region Sound Volume: "); ImGui.sameLine();
                                         if (ImGui.inputFloat("##Region Sound Volume: ", imRadialRegionSoundVolume)) {
-                                            radialRegionData.regionSoundVolume = imRadialRegionSoundVolume.get();
+                                            radialRegionData.setRegionSoundVolume(imRadialRegionSoundVolume.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -378,7 +374,7 @@ public class RegionsEditorUI {
 
                                         ImGui.text("Region Sound Fade Duration: "); ImGui.sameLine();
                                         if (ImGui.inputFloat("##Region Sound Volume: ", imRadialRegionSoundFadeDuration)) {
-                                            radialRegionData.regionSoundFadeDuration = imRadialRegionSoundFadeDuration.get();
+                                            radialRegionData.setRegionSoundFadeDuration(imRadialRegionSoundFadeDuration.get());
                                         }
                                         if (ImGui.isItemDeactivatedAfterEdit()) {
                                             shouldSyncNetwork = true;
@@ -823,7 +819,7 @@ public class RegionsEditorUI {
             if (ImGui.beginTabItem("Mass Region Editing")) {
                 if (ImGui.button("Enable All Regions")) {
                     for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
-                        radialRegionData.regionEnabled = true;
+                        radialRegionData.setRegionEnabled(true);
                     }
                     for (LinearRegionData linearRegionData : RegionsManager.activeLinearRegions) {
                         linearRegionData.setRegionEnabled(true);
@@ -832,7 +828,7 @@ public class RegionsEditorUI {
                 }
                 if (ImGui.button("Disable All Regions")) {
                     for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
-                        radialRegionData.regionEnabled = false;
+                        radialRegionData.setRegionEnabled(false);
                     }
                     for (LinearRegionData linearRegionData : RegionsManager.activeLinearRegions) {
                         linearRegionData.setRegionEnabled(false);

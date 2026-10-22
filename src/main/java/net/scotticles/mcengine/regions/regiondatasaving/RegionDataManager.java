@@ -42,19 +42,19 @@ public class RegionDataManager {
 
         for (RadialRegionData radialRegionData : radialRegions) {
             save.radialRegionsData.add(new RadialRegionData(
-                    radialRegionData.regionUuid,
-                    radialRegionData.regionName,
-                    radialRegionData.regionX,
-                    radialRegionData.regionY,
-                    radialRegionData.regionZ,
-                    radialRegionData.regionRadius,
-                    radialRegionData.regionEnterCommands,
-                    radialRegionData.regionExitCommands,
-                    radialRegionData.playersInside,
-                    radialRegionData.regionEnabled,
-                    radialRegionData.regionSound,
-                    radialRegionData.regionSoundVolume,
-                    radialRegionData.regionSoundFadeDuration
+                    radialRegionData.getRegionUuid(),
+                    radialRegionData.getRegionName(),
+                    radialRegionData.getRegionX(),
+                    radialRegionData.getRegionY(),
+                    radialRegionData.getRegionZ(),
+                    radialRegionData.getRegionRadius(),
+                    radialRegionData.getRegionEnterCommands(),
+                    radialRegionData.getRegionExitCommands(),
+                    radialRegionData.getPlayersInside(),
+                    radialRegionData.isRegionEnabled(),
+                    radialRegionData.getRegionSound(),
+                    radialRegionData.getRegionSoundVolume(),
+                    radialRegionData.getRegionSoundFadeDuration()
             ));
         }
 
@@ -112,10 +112,8 @@ public class RegionDataManager {
                 return radialRegions;
             }
 
-            for (RadialRegionData region : loaded.radialRegionsData) {
-                RadialRegionData radialRegionData = region.toRegionsData();
-                RegionsManager.activeRadialRegions.add (radialRegionData);
-            }
+            RegionsManager.activeRadialRegions.addAll(loaded.radialRegionsData);
+
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -145,10 +143,8 @@ public class RegionDataManager {
                 return linearRegions;
             }
 
-            for (LinearRegionData region : loaded.linearRegionsData) {
-                LinearRegionData linearRegionData = region.toRegionsData();
-                RegionsManager.activeLinearRegions.add (linearRegionData);
-            }
+            RegionsManager.activeLinearRegions.addAll(loaded.linearRegionsData);
+
         }
         catch (IOException e) {
             e.printStackTrace();
