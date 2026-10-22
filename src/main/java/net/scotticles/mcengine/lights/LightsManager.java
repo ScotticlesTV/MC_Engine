@@ -67,6 +67,19 @@ public class LightsManager {
         syncAllLights();
     }
 
+    public static void duplicateAreaLight(MCEAreaLightData mceAreaLightData) {
+        // Create A Duplicate Of The Passed In MCE Area Light Data
+        MCEAreaLightData duplicatedLight = new MCEAreaLightData(mceAreaLightData);
+
+        // Track The New Light
+        activeAreaLights.add(duplicatedLight);
+
+        // Sync All Lights
+        syncAllLights();
+    }
+
+
+
     /**
      * Make a new MCE Directional Light Data object, track it, and sync it to the server.
      */
@@ -76,6 +89,17 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Directional Lights List
         activeDirectionalLights.add(mceDirectionalLightData);
+
+        // Sync All Lights
+        syncAllLights();
+    }
+
+    public static void duplicateDirectionalLight(MCEDirectionalLightData mceDirectionalLightData) {
+        // Create A Duplicate Of The Passed In MCE Directional Light Data
+        MCEDirectionalLightData duplicatedLight = new MCEDirectionalLightData(mceDirectionalLightData);
+
+        // Track The New Light
+        activeDirectionalLights.add(duplicatedLight);
 
         // Sync All Lights
         syncAllLights();
@@ -96,6 +120,17 @@ public class LightsManager {
         syncAllLights();
     }
 
+    public static void duplicatePointLight(MCEPointLightData mcePointLightData) {
+        // Create A Duplicate Of The New Passed In MCE Point Light Data
+        MCEPointLightData duplicatedLight = new MCEPointLightData(mcePointLightData);
+
+        // Track The New Light
+        activePointLights.add(duplicatedLight);
+
+        // Sync All Lights
+        syncAllLights();
+    }
+
     /**
      * Make a new MCE Spot Light Data object, track it, and sync it to the server.
      * @param playerPos, the player's position to set the area light to.
@@ -107,6 +142,17 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Spot Lights List
         activeSpotLights.add(mceSpotLightData);
+
+        // Sync All Lights
+        syncAllLights();
+    }
+
+    public static void duplicateSpotLight(MCESpotLightData mceSpotLightData) {
+        // Create A Duplicate Of The passed In MCE Spot Light Data
+        MCESpotLightData duplicatedLight = new MCESpotLightData(mceSpotLightData);
+
+        // Track The New Light
+        activeSpotLights.add(duplicatedLight);
 
         // Sync All Lights
         syncAllLights();

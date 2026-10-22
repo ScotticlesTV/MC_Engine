@@ -175,6 +175,12 @@ public class LightEditorUI {
                         }
 
                         ImGui.spacing();
+                        if (ImGui.button("Duplicate Light")) {
+                            LightsManager.duplicatePointLight(LightsManager.activePointLights.get(i));
+                            shouldSyncNetwork = true;
+                        }
+
+                        ImGui.spacing();
                         if (ImGui.button("Remove Light")) {
                             LightsManager.activePointLights.remove(i);
                             shouldSyncNetwork = true;
@@ -261,7 +267,6 @@ public class LightEditorUI {
                         ImGui.spacing();
                         ImGui.text("Light Position: ");
                         // X-Pos
-//                        ImGui.text("X: "); ImGui.sameLine();
                         if (ImGui.inputDouble("X", imLightX)) {
                             LightsManager.activeAreaLights.get(i).getPosition().set(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
@@ -289,7 +294,7 @@ public class LightEditorUI {
                         ImGui.spacing();
                         ImGui.text("Light Size: ");
                         // Light Size X
-                        if (ImGui.inputFloat("Size X", imLightSizeX)) {
+                        if (ImGui.inputFloat("X" + "##size", imLightSizeX)) {
                             LightsManager.activeAreaLights.get(i).setSize(imLightSizeX.get(), imLightSizeY.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -297,7 +302,7 @@ public class LightEditorUI {
                         }
 
                         // Light Size Y
-                        if (ImGui.inputFloat("Size Y", imLightSizeX)) {
+                        if (ImGui.inputFloat("Y" + "##size", imLightSizeX)) {
                             LightsManager.activeAreaLights.get(i).setSize(imLightSizeX.get(), imLightSizeY.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -310,7 +315,7 @@ public class LightEditorUI {
                         ImGui.text("Light Orientation: ");
 
                         // Light Orientation X
-                        if (ImGui.inputFloat("Orientation X", imLightOrientationX)) {
+                        if (ImGui.inputFloat("X" + "##orientation", imLightOrientationX)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -318,7 +323,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Y
-                        if (ImGui.inputFloat("Orientation Y", imLightOrientationY)) {
+                        if (ImGui.inputFloat("Y" + "##orientation", imLightOrientationY)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -326,7 +331,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Z
-                        if (ImGui.inputFloat("Orientation Z", imLightOrientationZ)) {
+                        if (ImGui.inputFloat("Z" + "##orientation", imLightOrientationZ)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -334,7 +339,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation W
-                        if (ImGui.inputFloat("Orientation W", imLightOrientationW)) {
+                        if (ImGui.inputFloat("W" + "##orientation", imLightOrientationW)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -377,6 +382,12 @@ public class LightEditorUI {
                             LightsManager.activeAreaLights.get(i).setInscatteringStrength(imInScattering.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        ImGui.spacing();
+                        if (ImGui.button("Duplicate Light")) {
+                            LightsManager.duplicateAreaLight(LightsManager.activeAreaLights.get(i));
                             shouldSyncNetwork = true;
                         }
 
@@ -477,6 +488,12 @@ public class LightEditorUI {
                         // Light Occlusion Enabled
                         if (ImGui.checkbox("Occlusion Enabled", LightsManager.activeDirectionalLights.get(i).isOcclusionEnabled())) {
                             LightsManager.activeDirectionalLights.get(i).setOcclusionEnabled(!LightsManager.activeDirectionalLights.get(i).isOcclusionEnabled());
+                            shouldSyncNetwork = true;
+                        }
+
+                        ImGui.spacing();
+                        if (ImGui.button("Duplicate Light")) {
+                            LightsManager.duplicateDirectionalLight(LightsManager.activeDirectionalLights.get(i));
                             shouldSyncNetwork = true;
                         }
 
@@ -592,7 +609,7 @@ public class LightEditorUI {
                         ImGui.spacing();
                         ImGui.text("Light Orientation: ");
                         // Light Orientation X
-                        if (ImGui.inputFloat("X", imLightOrientationX)) {
+                        if (ImGui.inputFloat("X" + "##orientation", imLightOrientationX)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -600,7 +617,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Y
-                        if (ImGui.inputFloat("Y", imLightOrientationY)) {
+                        if (ImGui.inputFloat("Y" + "##orientation", imLightOrientationY)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -608,7 +625,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Z
-                        if (ImGui.inputFloat("Z", imLightOrientationZ)) {
+                        if (ImGui.inputFloat("Z" + "##orientation", imLightOrientationZ)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -616,7 +633,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation W
-                        if (ImGui.inputFloat("W", imLightOrientationW)) {
+                        if (ImGui.inputFloat("W" + "##orientation", imLightOrientationW)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -666,6 +683,12 @@ public class LightEditorUI {
                             LightsManager.activeSpotLights.get(i).setInscatteringStrength(imInScattering.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
+                        ImGui.spacing();
+                        if (ImGui.button("Duplicate Light")) {
+                            LightsManager.duplicateSpotLight(LightsManager.activeSpotLights.get(i));
                             shouldSyncNetwork = true;
                         }
 

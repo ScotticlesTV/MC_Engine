@@ -82,7 +82,7 @@ public class MCEDirectionalLightData extends DirectionalLightData{
      */
     public MCEDirectionalLightData(MCEDirectionalLightData mceDirectionalLightData) {
         this(
-                mceDirectionalLightData.getName(),
+                mceDirectionalLightData.getName() + "(D)",
                 UUID.randomUUID(),
                 mceDirectionalLightData.getBrightness(),
                 mceDirectionalLightData.getColor().red(),

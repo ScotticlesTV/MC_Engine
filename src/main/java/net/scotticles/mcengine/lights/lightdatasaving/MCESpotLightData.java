@@ -103,7 +103,7 @@ public class MCESpotLightData extends SpotLightData {
      */
     public MCESpotLightData(MCESpotLightData mceSpotLightData) {
         this(
-                mceSpotLightData.getName(),
+                mceSpotLightData.getName() + "(D)",
                 UUID.randomUUID(),
                 mceSpotLightData.getBrightness(),
                 mceSpotLightData.getColor().red(),

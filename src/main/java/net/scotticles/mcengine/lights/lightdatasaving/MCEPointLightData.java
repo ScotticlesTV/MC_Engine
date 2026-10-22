@@ -89,7 +89,7 @@ public class MCEPointLightData extends PointLightData {
      */
     public MCEPointLightData(MCEPointLightData mcePointLightData) {
         this(
-                mcePointLightData.getName(),
+                mcePointLightData.getName() + "(D)",
                 UUID.randomUUID(),
                 mcePointLightData.getBrightness(),
                 mcePointLightData.getColor().red(),

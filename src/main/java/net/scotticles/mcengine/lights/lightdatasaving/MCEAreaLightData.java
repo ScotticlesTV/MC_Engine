@@ -107,7 +107,7 @@ public class MCEAreaLightData extends AreaLightData {
      */
     public MCEAreaLightData(MCEAreaLightData mceAreaLightData) {
         this(
-                mceAreaLightData.getName(),
+                mceAreaLightData.getName() + "(D)",
                 UUID.randomUUID(),
                 mceAreaLightData.getBrightness(),
                 mceAreaLightData.getColor().red(),
