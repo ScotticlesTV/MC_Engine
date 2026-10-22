@@ -12,10 +12,10 @@ public class DisableKeybindMixin {
 
     @Inject(method = "registerKeyBinding", at = @At("HEAD"), cancellable = true)
     private static void onRegisterKeyBinding(KeyBinding keyBinding, CallbackInfoReturnable<KeyBinding> cir) {
-        // Replace with the exact translation key of the dependency's keybind
         if ("key.veil.editor".equals(keyBinding.getTranslationKey())) {
-            // Cancel the registration, returning the keybind without adding it to the game
+            // Set the key's binding to unbound.
             keyBinding.setBoundKey(InputUtil.UNKNOWN_KEY);
+            // Cancel the registration, returning the keybind without adding it to the game
             cir.setReturnValue(keyBinding);
         }
     }

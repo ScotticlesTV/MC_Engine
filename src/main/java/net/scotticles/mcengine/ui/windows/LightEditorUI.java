@@ -92,8 +92,7 @@ public class LightEditorUI {
 
                     if (ImGui.collapsingHeader(LightsManager.activePointLights.get(i).getName() + "###pointlight_" + LightsManager.activePointLights.get(i).getUuid())) {
                         // Light Name
-                        ImGui.text("Name: "); ImGui.sameLine();
-                        if (ImGui.inputText("##Light Name: ", imLightName)) {
+                        if (ImGui.inputText("Name", imLightName)) {
                             LightsManager.activePointLights.get(i).setName(imLightName.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -101,8 +100,7 @@ public class LightEditorUI {
                         }
 
                         // Light Brightness
-                        ImGui.text("Brightness: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Brightness: ", imLightBrightness)) {
+                        if (ImGui.inputFloat("Brightness", imLightBrightness)) {
                             LightsManager.activePointLights.get(i).setBrightness(imLightBrightness.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -118,9 +116,10 @@ public class LightEditorUI {
                         }
 
                         // Light Position
+                        ImGui.spacing();
+                        ImGui.text("Light Position: ");
                         // X-Pos
-                        ImGui.text("X: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##X: ", imLightX)) {
+                        if (ImGui.inputDouble("X", imLightX)) {
                             LightsManager.activePointLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -128,8 +127,7 @@ public class LightEditorUI {
                         }
 
                         // Y-Pos
-                        ImGui.text("Y: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Y: ", imLightY)) {
+                        if (ImGui.inputDouble("Y", imLightY)) {
                             LightsManager.activePointLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -137,18 +135,8 @@ public class LightEditorUI {
                         }
 
                         // Z-Pos
-                        ImGui.text("Z: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Z: ", imLightZ)) {
+                        if (ImGui.inputDouble("Z", imLightZ)) {
                             LightsManager.activePointLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
-                        }
-                        if (ImGui.isItemDeactivatedAfterEdit()) {
-                            shouldSyncNetwork = true;
-                        }
-
-                        // Light Size X
-                        ImGui.text("Radius: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Radius: ", imRadius)) {
-                            LightsManager.activePointLights.get(i).setRadius(imRadius.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
@@ -160,22 +148,33 @@ public class LightEditorUI {
                             shouldSyncNetwork = true;
                         }
 
+
+                        // Light Position
+                        ImGui.spacing();
+                        ImGui.text("Light Spread Properties: ");
+                        // Light Radius
+                        if (ImGui.inputFloat("Radius", imRadius)) {
+                            LightsManager.activePointLights.get(i).setRadius(imRadius.get());
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
                         // Light Occlusion Enabled
-                        ImGui.text("Occlusion Enabled: "); ImGui.sameLine();
-                        if (ImGui.checkbox("##Occlusion Enabled: ", LightsManager.activePointLights.get(i).isOcclusionEnabled())) {
+                        if (ImGui.checkbox("Occlusion Enabled", LightsManager.activePointLights.get(i).isOcclusionEnabled())) {
                             LightsManager.activePointLights.get(i).setOcclusionEnabled(!LightsManager.activePointLights.get(i).isOcclusionEnabled());
                             shouldSyncNetwork = true;
                         }
 
                         // Light In-Scattering
-                        ImGui.text("In-Scattering: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##In-Scattering: ", imInScattering)) {
+                        if (ImGui.inputFloat("In-Scattering", imInScattering)) {
                             LightsManager.activePointLights.get(i).setInscatteringStrength(imInScattering.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+                        ImGui.spacing();
                         if (ImGui.button("Remove Light")) {
                             LightsManager.activePointLights.remove(i);
                             shouldSyncNetwork = true;
@@ -235,8 +234,7 @@ public class LightEditorUI {
 
                     if (ImGui.collapsingHeader(LightsManager.activeAreaLights.get(i).getName() + "###arealight_" + LightsManager.activeAreaLights.get(i).getUuid())) {
                         // Light Name
-                        ImGui.text("Name: "); ImGui.sameLine();
-                        if (ImGui.inputText("##Light Name: ", imLightName)) {
+                        if (ImGui.inputText("Name", imLightName)) {
                             LightsManager.activeAreaLights.get(i).setName(imLightName.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -244,8 +242,7 @@ public class LightEditorUI {
                         }
 
                         // Light Brightness
-                        ImGui.text("Brightness: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Brightness: ", imLightBrightness)) {
+                        if (ImGui.inputFloat("Brightness", imLightBrightness)) {
                             LightsManager.activeAreaLights.get(i).setBrightness(imLightBrightness.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -261,9 +258,11 @@ public class LightEditorUI {
                         }
 
                         // Light Position
+                        ImGui.spacing();
+                        ImGui.text("Light Position: ");
                         // X-Pos
-                        ImGui.text("X: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##X: ", imLightX)) {
+//                        ImGui.text("X: "); ImGui.sameLine();
+                        if (ImGui.inputDouble("X", imLightX)) {
                             LightsManager.activeAreaLights.get(i).getPosition().set(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -271,8 +270,7 @@ public class LightEditorUI {
                         }
 
                         // Y-Pos
-                        ImGui.text("Y: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Y: ", imLightY)) {
+                        if (ImGui.inputDouble("Y", imLightY)) {
                             LightsManager.activeAreaLights.get(i).getPosition().set(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -280,17 +278,18 @@ public class LightEditorUI {
                         }
 
                         // Z-Pos
-                        ImGui.text("Z: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Z: ", imLightZ)) {
+                        if (ImGui.inputDouble("Z", imLightZ)) {
                             LightsManager.activeAreaLights.get(i).getPosition().set(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+                        // Light Size
+                        ImGui.spacing();
+                        ImGui.text("Light Size: ");
                         // Light Size X
-                        ImGui.text("Size X: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Size X: ", imLightSizeX)) {
+                        if (ImGui.inputFloat("Size X", imLightSizeX)) {
                             LightsManager.activeAreaLights.get(i).setSize(imLightSizeX.get(), imLightSizeY.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -298,17 +297,20 @@ public class LightEditorUI {
                         }
 
                         // Light Size Y
-                        ImGui.text("Size Y: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Size y: ", imLightSizeX)) {
+                        if (ImGui.inputFloat("Size Y", imLightSizeX)) {
                             LightsManager.activeAreaLights.get(i).setSize(imLightSizeX.get(), imLightSizeY.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+
+                        // Light Orientation
+                        ImGui.spacing();
+                        ImGui.text("Light Orientation: ");
+
                         // Light Orientation X
-                        ImGui.text("Orientation X: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation X: ", imLightOrientationX)) {
+                        if (ImGui.inputFloat("Orientation X", imLightOrientationX)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -316,8 +318,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Y
-                        ImGui.text("Orientation Y: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation Y: ", imLightOrientationY)) {
+                        if (ImGui.inputFloat("Orientation Y", imLightOrientationY)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -325,8 +326,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Z
-                        ImGui.text("Orientation Z: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation Z: ", imLightOrientationZ)) {
+                        if (ImGui.inputFloat("Orientation Z", imLightOrientationZ)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -334,8 +334,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation W
-                        ImGui.text("Orientation W: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation W: ", imLightOrientationW)) {
+                        if (ImGui.inputFloat("Orientation W", imLightOrientationW)) {
                             LightsManager.activeAreaLights.get(i).getOrientation().set(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -348,9 +347,11 @@ public class LightEditorUI {
                             shouldSyncNetwork = true;
                         }
 
+
+                        ImGui.spacing();
+                        ImGui.text("Light Spread Properties: ");
                         // Light Angle
-                        ImGui.text("Angle: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Angle: ", imAngle)) {
+                        if (ImGui.inputFloat("Angle", imAngle)) {
                             LightsManager.activeAreaLights.get(i).setAngle((float) Math.toRadians(imAngle.get()));
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -358,8 +359,7 @@ public class LightEditorUI {
                         }
 
                         // Light Distance
-                        ImGui.text("Distance: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Distance: ", imDistance)) {
+                        if (ImGui.inputFloat("Distance", imDistance)) {
                             LightsManager.activeAreaLights.get(i).setDistance(imDistance.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -367,21 +367,20 @@ public class LightEditorUI {
                         }
 
                         // Light Occlusion Enabled
-                        ImGui.text("Occlusion Enabled: "); ImGui.sameLine();
-                        if (ImGui.checkbox("##Occlusion Enabled: ", LightsManager.activeAreaLights.get(i).isOcclusionEnabled())) {
+                        if (ImGui.checkbox("Occlusion Enabled", LightsManager.activeAreaLights.get(i).isOcclusionEnabled())) {
                             LightsManager.activeAreaLights.get(i).setOcclusionEnabled(!LightsManager.activeAreaLights.get(i).isOcclusionEnabled());
                             shouldSyncNetwork = true;
                         }
 
                         // Light In-Scattering
-                        ImGui.text("In-Scattering: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##In-Scattering: ", imInScattering)) {
+                        if (ImGui.inputFloat("In-Scattering", imInScattering)) {
                             LightsManager.activeAreaLights.get(i).setInscatteringStrength(imInScattering.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+                        ImGui.spacing();
                         if (ImGui.button("Remove Light")) {
                             LightsManager.activeAreaLights.remove(i);
                             shouldSyncNetwork = true;
@@ -422,8 +421,7 @@ public class LightEditorUI {
 
                     if (ImGui.collapsingHeader(LightsManager.activeDirectionalLights.get(i).getName() + "###directionallight_" + LightsManager.activeDirectionalLights.get(i).getUuid())) {
                         // Light Name
-                        ImGui.text("Name: "); ImGui.sameLine();
-                        if (ImGui.inputText("##Light Name: ", imLightName)) {
+                        if (ImGui.inputText("Name", imLightName)) {
                             LightsManager.activeDirectionalLights.get(i).setName(imLightName.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -431,8 +429,7 @@ public class LightEditorUI {
                         }
 
                         // Light Brightness
-                        ImGui.text("Brightness: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Brightness: ", imLightBrightness)) {
+                        if (ImGui.inputFloat("Brightness", imLightBrightness)) {
                             LightsManager.activeDirectionalLights.get(i).setBrightness(imLightBrightness.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -448,9 +445,10 @@ public class LightEditorUI {
                         }
 
                         // Light Position
+                        ImGui.spacing();
+                        ImGui.text("Light Direction: ");
                         // X-Pos
-                        ImGui.text("Direction X: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Direction X: ", imLightDirectionX)) {
+                        if (ImGui.inputFloat("X", imLightDirectionX)) {
                             LightsManager.activeDirectionalLights.get(i).setDirection(imLightDirectionX.get(), imLightDirectionY.get(), imLightDirectionZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -458,8 +456,7 @@ public class LightEditorUI {
                         }
 
                         // Y-Pos
-                        ImGui.text("Direction Y: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Direction Y: ", imLightDirectionY)) {
+                        if (ImGui.inputFloat("Y", imLightDirectionY)) {
                             LightsManager.activeDirectionalLights.get(i).setDirection(imLightDirectionX.get(), imLightDirectionY.get(), imLightDirectionZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -467,20 +464,23 @@ public class LightEditorUI {
                         }
 
                         // Z-Pos
-                        ImGui.text("Direction Z: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Direction Z: ", imLightDirectionZ)) {
+                        if (ImGui.inputFloat("Z", imLightDirectionZ)) {
                             LightsManager.activeDirectionalLights.get(i).setDirection(imLightDirectionX.get(), imLightDirectionY.get(), imLightDirectionZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+                        ImGui.spacing();
+                        ImGui.text("Light Spread Properties: ");
+
                         // Light Occlusion Enabled
-                        ImGui.text("Occlusion Enabled: "); ImGui.sameLine();
-                        if (ImGui.checkbox("##Occlusion Enabled: ", LightsManager.activeDirectionalLights.get(i).isOcclusionEnabled())) {
+                        if (ImGui.checkbox("Occlusion Enabled", LightsManager.activeDirectionalLights.get(i).isOcclusionEnabled())) {
                             LightsManager.activeDirectionalLights.get(i).setOcclusionEnabled(!LightsManager.activeDirectionalLights.get(i).isOcclusionEnabled());
                             shouldSyncNetwork = true;
                         }
+
+                        ImGui.spacing();
 
                         if (ImGui.button("Remove Light")) {
                             LightsManager.activeDirectionalLights.remove(i);
@@ -535,13 +535,11 @@ public class LightEditorUI {
                     imDistance.set(LightsManager.activeSpotLights.get(i).getDistance());
                     imInScattering.set(LightsManager.activeSpotLights.get(i).getInscatteringStrength());
 
-
                     ImGui.pushID(i);
 
                     if (ImGui.collapsingHeader(LightsManager.activeSpotLights.get(i).getName() + "###spotlight_" + LightsManager.activeSpotLights.get(i).getUuid())) {
                         // Light Name
-                        ImGui.text("Name: "); ImGui.sameLine();
-                        if (ImGui.inputText("##Light Name: ", imLightName)) {
+                        if (ImGui.inputText("Name", imLightName)) {
                             LightsManager.activeSpotLights.get(i).setName(imLightName.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -549,8 +547,7 @@ public class LightEditorUI {
                         }
 
                         // Light Brightness
-                        ImGui.text("Brightness: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Brightness: ", imLightBrightness)) {
+                        if (ImGui.inputFloat("Brightness", imLightBrightness)) {
                             LightsManager.activeSpotLights.get(i).setBrightness(imLightBrightness.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -566,9 +563,10 @@ public class LightEditorUI {
                         }
 
                         // Light Position
+                        ImGui.spacing();
+                        ImGui.text("Light Position: ");
                         // X-Pos
-                        ImGui.text("X: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##X: ", imLightX)) {
+                        if (ImGui.inputDouble("X", imLightX)) {
                             LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -576,8 +574,7 @@ public class LightEditorUI {
                         }
 
                         // Y-Pos
-                        ImGui.text("Y: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Y: ", imLightY)) {
+                        if (ImGui.inputDouble("Y", imLightY)) {
                             LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -585,26 +582,17 @@ public class LightEditorUI {
                         }
 
                         // Z-Pos
-                        ImGui.text("Z: "); ImGui.sameLine();
-                        if (ImGui.inputDouble("##Z: ", imLightZ)) {
+                        if (ImGui.inputDouble("Z", imLightZ)) {
                             LightsManager.activeSpotLights.get(i).setPosition(imLightX.get(), imLightY.get(), imLightZ.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
-                        // Light Size X
-                        ImGui.text("Size: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Size: ", imSpotLightSize)) {
-                            LightsManager.activeSpotLights.get(i).setSize((float) Math.toRadians(imSpotLightSize.get()));
-                        }
-                        if (ImGui.isItemDeactivatedAfterEdit()) {
-                            shouldSyncNetwork = true;
-                        }
-
+                        ImGui.spacing();
+                        ImGui.text("Light Orientation: ");
                         // Light Orientation X
-                        ImGui.text("Orientation X: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation X: ", imLightOrientationX)) {
+                        if (ImGui.inputFloat("X", imLightOrientationX)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -612,8 +600,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Y
-                        ImGui.text("Orientation Y: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation Y: ", imLightOrientationY)) {
+                        if (ImGui.inputFloat("Y", imLightOrientationY)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -621,8 +608,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation Z
-                        ImGui.text("Orientation Z: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation Z: ", imLightOrientationZ)) {
+                        if (ImGui.inputFloat("Z", imLightOrientationZ)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -630,8 +616,7 @@ public class LightEditorUI {
                         }
 
                         // Light Orientation W
-                        ImGui.text("Orientation W: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Orientation W: ", imLightOrientationW)) {
+                        if (ImGui.inputFloat("W", imLightOrientationW)) {
                             LightsManager.activeSpotLights.get(i).setOrientation(imLightOrientationX.get(), imLightOrientationY.get(), imLightOrientationZ.get(), imLightOrientationW.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -644,9 +629,18 @@ public class LightEditorUI {
                             shouldSyncNetwork = true;
                         }
 
+                        ImGui.spacing();
+                        ImGui.text("Light Spread Properties: ");
+                        // Light Size
+                        if (ImGui.inputFloat("Size", imSpotLightSize)) {
+                            LightsManager.activeSpotLights.get(i).setSize((float) Math.toRadians(imSpotLightSize.get()));
+                        }
+                        if (ImGui.isItemDeactivatedAfterEdit()) {
+                            shouldSyncNetwork = true;
+                        }
+
                         // Light Angle
-                        ImGui.text("Angle: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Angle: ", imAngle)) {
+                        if (ImGui.inputFloat("Angle", imAngle)) {
                             LightsManager.activeSpotLights.get(i).setAngle((float) Math.toRadians(imAngle.get()));
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -654,8 +648,7 @@ public class LightEditorUI {
                         }
 
                         // Light Distance
-                        ImGui.text("Distance: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##Distance: ", imDistance)) {
+                        if (ImGui.inputFloat("Distance", imDistance)) {
                             LightsManager.activeSpotLights.get(i).setDistance(imDistance.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
@@ -663,21 +656,20 @@ public class LightEditorUI {
                         }
 
                         // Light Occlusion Enabled
-                        ImGui.text("Occlusion Enabled: "); ImGui.sameLine();
-                        if (ImGui.checkbox("##Occlusion Enabled: ", LightsManager.activeSpotLights.get(i).isOcclusionEnabled())) {
+                        if (ImGui.checkbox("Occlusion Enabled", LightsManager.activeSpotLights.get(i).isOcclusionEnabled())) {
                             LightsManager.activeSpotLights.get(i).setOcclusionEnabled(!LightsManager.activeSpotLights.get(i).isOcclusionEnabled());
                             shouldSyncNetwork = true;
                         }
 
                         // Light In-Scattering
-                        ImGui.text("In-Scattering: "); ImGui.sameLine();
-                        if (ImGui.inputFloat("##In-Scattering: ", imInScattering)) {
+                        if (ImGui.inputFloat("In-Scattering", imInScattering)) {
                             LightsManager.activeSpotLights.get(i).setInscatteringStrength(imInScattering.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
                             shouldSyncNetwork = true;
                         }
 
+                        ImGui.spacing();
                         if (ImGui.button("Remove Light")) {
                             LightsManager.activeSpotLights.remove(i);
                             shouldSyncNetwork = true;
