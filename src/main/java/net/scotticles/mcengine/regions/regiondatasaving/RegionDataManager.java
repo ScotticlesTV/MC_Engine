@@ -42,39 +42,39 @@ public class RegionDataManager {
 
         for (RadialRegionData radialRegionData : radialRegions) {
             save.radialRegionsData.add(new RadialRegionData(
-                    radialRegionData.getRegionUuid(),
-                    radialRegionData.getRegionName(),
-                    radialRegionData.getRegionX(),
-                    radialRegionData.getRegionY(),
-                    radialRegionData.getRegionZ(),
-                    radialRegionData.getRegionRadius(),
-                    radialRegionData.getRegionEnterCommands(),
-                    radialRegionData.getRegionExitCommands(),
+                    radialRegionData.getUuid(),
+                    radialRegionData.getName(),
+                    radialRegionData.getX(),
+                    radialRegionData.getY(),
+                    radialRegionData.getZ(),
+                    radialRegionData.getRadius(),
+                    radialRegionData.getEnterCommands(),
+                    radialRegionData.getExitCommands(),
                     radialRegionData.getPlayersInside(),
-                    radialRegionData.isRegionEnabled(),
-                    radialRegionData.getRegionSound(),
-                    radialRegionData.getRegionSoundVolume(),
-                    radialRegionData.getRegionSoundFadeDuration()
+                    radialRegionData.isEnabled(),
+                    radialRegionData.getSound(),
+                    radialRegionData.getSoundVolume(),
+                    radialRegionData.getSoundFadeDuration()
             ));
         }
 
         for (LinearRegionData linearRegionData : linearRegions) {
             save.linearRegionsData.add(new LinearRegionData(
-                    linearRegionData.getRegionUuid(),
-                    linearRegionData.getRegionName(),
-                    linearRegionData.getRegionX1(),
-                    linearRegionData.getRegionY1(),
-                    linearRegionData.getRegionZ1(),
-                    linearRegionData.getRegionX2(),
-                    linearRegionData.getRegionY2(),
-                    linearRegionData.getRegionZ2(),
-                    linearRegionData.getRegionEnterCommands(),
-                    linearRegionData.getRegionExitCommands(),
+                    linearRegionData.getUuid(),
+                    linearRegionData.getName(),
+                    linearRegionData.getPos1X(),
+                    linearRegionData.getPos1Y(),
+                    linearRegionData.getPos1Z(),
+                    linearRegionData.getPos2X(),
+                    linearRegionData.getPos2Y(),
+                    linearRegionData.getPos2Z(),
+                    linearRegionData.getEnterCommands(),
+                    linearRegionData.getExitCommands(),
                     linearRegionData.getPlayersInside(),
-                    linearRegionData.isRegionEnabled(),
-                    linearRegionData.getRegionSound(),
-                    linearRegionData.getRegionSoundVolume(),
-                    linearRegionData.getRegionSoundFadeDuration()
+                    linearRegionData.isEnabled(),
+                    linearRegionData.getSound(),
+                    linearRegionData.getSoundVolume(),
+                    linearRegionData.getSoundFadeDuration()
             ));
         }
 

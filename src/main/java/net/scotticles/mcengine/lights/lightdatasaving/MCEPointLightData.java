@@ -59,18 +59,18 @@ public class MCEPointLightData extends PointLightData {
 
     /**
      * Workhorse Constructor: Construct a new MCE point Light Data object with all parameters specified.
-     * @param name
-     * @param uuid
-     * @param brightness
-     * @param r
-     * @param g
-     * @param b
-     * @param posX
-     * @param posY
-     * @param posZ
-     * @param radius
-     * @param occlusionEnabled
-     * @param inScattering
+     * @param name the name of the MCE Point Light Data.
+     * @param uuid the unique ID of the MCE Point Light Data.
+     * @param brightness the brightness of the MCE Point Light Data.
+     * @param r the red-value of the MCE Spot Light Data's color property.
+     * @param g the green-value of the MCE Spot Light Data's color property.
+     * @param b the blue-value of the MCE Spot Light Data's color property.
+     * @param posX the MCE Spot Light Data's position's x-value.
+     * @param posY the MCE Spot Light Data's position's y-value.
+     * @param posZ the MCE Spot Light Data's position's z-value.
+     * @param radius the radius the MCe Spot Light Data's light should emit to.
+     * @param occlusionEnabled whether or not occlusion (shadows) is enabled on the MCE Point Light Data.
+     * @param inScattering the intensity of the MCE Point Light Data's in-scattering.
      */
     public MCEPointLightData(String name, UUID uuid, float brightness, float r, float g, float b, double posX, double posY, double posZ, float radius, boolean occlusionEnabled, float inScattering) {
         this.setName(name);
@@ -85,18 +85,34 @@ public class MCEPointLightData extends PointLightData {
 
     // ---------- Getters & Setters ----------
 
+    /**
+     * Retrieve the name parameter of the MCE Point Light Data object.
+     * @return the object's name.
+     */
     public String getName() {
-        return name;
+        return this.name;
     }
 
+    /**
+     * Assign the name parameter of the MCE Point Light Data object.
+     * @param name the name to set the object's name parameter to.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Retrieve the UUID parameter of the MCE Point Light Data object.
+     * @return the object's UUID.
+     */
     public UUID getUuid() {
-        return uuid;
+        return this.uuid;
     }
 
+    /**
+     * Assign the UUID parameter of the MCE Point Light Data object.
+     * @param uuid the uuid to set the object's uuid parameter to.
+     */
     private void setUuid(UUID uuid) {
         this.uuid = uuid;
     }

@@ -56,8 +56,16 @@ public class MCEDirectionalLightData extends DirectionalLightData{
 
     /**
      * Workhorse Constructor: Construct a new MCE Directional Light Data object with all parameters specified.
-     * @param name, the name of the MCE Directional Light Data object.
-     * @param uuid, the unique id of the MCE Directional Light Data object.
+     * @param name the name of the MCE Directional Light Data.
+     * @param uuid the unique ID of the MCE Directional Light Data.
+     * @param brightness the brightness of the MCE Directional Light Data.
+     * @param r the red-value of the MCE Directional Light Data's color property.
+     * @param g the green-value of the MCE Directional Light Data's color property.
+     * @param b the blue-value of the MCE Directional Light Data's color property.
+     * @param directionX the MCE Directional Light Data's x direction value.
+     * @param directionY the MCE Directional Light Data's y direction value.
+     * @param directionZ the MCE Directional Light Data's z direction value.
+     * @param occlusionEnabled whether or not occlusion (shadows) is enabled on the MCE Directional Light Data.
      */
     public MCEDirectionalLightData(String name, UUID uuid, float brightness, float r, float g, float b, float directionX, float directionY, float directionZ, boolean occlusionEnabled) {
         this.setName(name);
@@ -70,18 +78,34 @@ public class MCEDirectionalLightData extends DirectionalLightData{
 
     // ---------- Getters & Setters ----------
 
+    /**
+     * Retrieve the name parameter of the MCE Directional Light Data object.
+     * @return the object's name.
+     */
     public String getName() {
-        return name;
+        return this.name;
     }
 
+    /**
+     * Assign the name parameter of the MCE Directional Light Data object.
+     * @param name the name to set the object's name parameter to.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Retrieve the UUID parameter of the MCE Directional Light Data object.
+     * @return the object's UUID.
+     */
     public UUID getUuid() {
-        return uuid;
+        return this.uuid;
     }
 
+    /**
+     * Assign the UUID parameter of the MCE Directional Light Data object.
+     * @param uuid the uuid to set the object's uuid parameter to.
+     */
     private void setUuid(UUID uuid) {
         this.uuid = uuid;
     }

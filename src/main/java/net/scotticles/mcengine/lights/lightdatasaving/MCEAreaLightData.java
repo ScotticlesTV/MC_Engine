@@ -70,22 +70,22 @@ public class MCEAreaLightData extends AreaLightData {
 
     /**
      * Workhorse Constructor: Construct a new MCE Area Light Data object with all parameters specified.
-     * @param name
-     * @param uuid
-     * @param brightness
-     * @param r
-     * @param g
-     * @param b
-     * @param sizeX
-     * @param sizeY
-     * @param posX
-     * @param posY
-     * @param posZ
-     * @param orientation
-     * @param angle
-     * @param distance
-     * @param occlusionEnabled
-     * @param inScattering
+     * @param name the name of the MCE Area Light Data.
+     * @param uuid the unique ID of the MCE Area Light Data.
+     * @param brightness the brightness of the MCE Area Light Data.
+     * @param r the red-value of the MCE Area Light Data's color property.
+     * @param g the green-value of the MCE Area Light Data's color property.
+     * @param b the blue-value of the MCE Area Light Data's color property.
+     * @param sizeX the MCE Area Light Data's x or width value.
+     * @param sizeY the MCE Area Light Data's y or height value.
+     * @param posX the MCE Area Light Data's position's x-value.
+     * @param posY the MCE Area Light Data's position's y-value.
+     * @param posZ the MCE Area Light Data's position's z-value.
+     * @param orientation the orientation/ emission direction of the MCE Area Light Data.
+     * @param angle the angle the MCE Area Light Data's light should emit from its emitting plane.
+     * @param distance the distance the MCE Area Light Data should travel.
+     * @param occlusionEnabled whether or not occlusion (shadows) is enabled on the MCE Area Light Data.
+     * @param inScattering the intensity of the MCE Area Light Data's in-scattering.
      */
     public MCEAreaLightData(String name, UUID uuid, float brightness, float r, float g, float b, float sizeX, float sizeY, double posX, double posY, double posZ, Quaternionfc orientation, float angle, float distance, boolean occlusionEnabled, float inScattering) {
         this.setName(name);
@@ -103,23 +103,35 @@ public class MCEAreaLightData extends AreaLightData {
 
     // ---------- Getters & Setters ----------
 
+    /**
+     * Retrieve the name parameter of the MCE Area Light Data object.
+     * @return the object's name.
+     */
     public String getName() {
-        return name;
+        return this.name;
     }
 
+    /**
+     * Assign the name parameter of the MCE Area Light Data object.
+     * @param name the name to set the object's name parameter to.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Retrieve the UUID parameter of the MCE Area Light Data object.
+     * @return the object's UUID.
+     */
     public UUID getUuid() {
-        return uuid;
+        return this.uuid;
     }
 
+    /**
+     * Assign the UUID parameter of the MCE Area Light Data object.
+     * @param uuid the uuid to set the object's uuid parameter to.
+     */
     private void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    public void setRA(float v, float v1) {
-
     }
 }

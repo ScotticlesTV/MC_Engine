@@ -67,22 +67,22 @@ public class MCESpotLightData extends SpotLightData {
     // ---------- Constructors ----------
 
     /**
-     * Workhorse Constructor: Construct a new MCE Spot Light Data object with all parameters specified.
-     * @param name, the name of the MCE Spot Light Data object.
-     * @param uuid
-     * @param brightness
-     * @param r
-     * @param g
-     * @param b
-     * @param size
-     * @param posX
-     * @param posY
-     * @param posZ
-     * @param orientation
-     * @param angle
-     * @param distance
-     * @param occlusionEnabled
-     * @param inScattering
+     * Workhorse Constructor: Construct a new MCE Spot Light Data with all parameters specified.
+     * @param name the name of the MCE Spot Light Data.
+     * @param uuid the unique ID of the MCE Spot Light Data.
+     * @param brightness the brightness of the MCE Spot Light Data.
+     * @param r the red-value of the MCE Spot Light Data's color property.
+     * @param g the green-value of the MCE Spot Light Data's color property.
+     * @param b the blue-value of the MCE Spot Light Data's color property.
+     * @param size the size of the MCE Spot Light Data.
+     * @param posX the MCE Spot Light Data's position's x-value.
+     * @param posY the MCE Spot Light Data's position's y-value.
+     * @param posZ the MCE Spot Light Data's position's z-value.
+     * @param orientation the orientation/emission direction of the MCE Spot Light Data.
+     * @param angle the angle the MCE Spot Light Data's light should emit from its origin point.
+     * @param distance the distance the MCE Spot Light Data should travel.
+     * @param occlusionEnabled whether or not occlusion (shadows) is enabled on the MCE Spot Light Data.
+     * @param inScattering the intensity of the MCE Spot Light Data's in-scattering.
      */
     public MCESpotLightData(String name, UUID uuid, float brightness, float r, float g, float b, float size, double posX, double posY, double posZ, Quaternionfc orientation, float angle, float distance, boolean occlusionEnabled, float inScattering) {
         this.setName(name);
@@ -90,8 +90,8 @@ public class MCESpotLightData extends SpotLightData {
         this.setBrightness(brightness);
         this.setColor(r, g, b);
         this.setSize(size);
-        this.position.set(posX, posY, posZ);
-        this.orientation.set(orientation);
+        this.setPosition(posX, posY, posZ);
+        this.setOrientation(orientation.x(), orientation.y(), orientation.z(), orientation.w());
         this.setAngle(angle);
         this.setDistance(distance);
         this.setOcclusionEnabled(occlusionEnabled);
@@ -102,7 +102,7 @@ public class MCESpotLightData extends SpotLightData {
 
     /**
      * Retrieve the name parameter of the MCE Spot Light Data object.
-     * @return, the object's name.
+     * @return the object's name.
      */
     public String getName() {
         return this.name;
@@ -110,7 +110,7 @@ public class MCESpotLightData extends SpotLightData {
 
     /**
      * Assign the name parameter of the MCE Spot Light Data object.
-     * @param name, the name to set the object's name parameter to.
+     * @param name the name to set the object's name parameter to.
      */
     public void setName(String name) {
         this.name = name;
@@ -118,7 +118,7 @@ public class MCESpotLightData extends SpotLightData {
 
     /**
      * Retrieve the UUID parameter of the MCE Spot Light Data object.
-     * @return, the object's UUID.
+     * @return the object's UUID.
      */
     public UUID getUuid() {
         return this.uuid;
@@ -126,16 +126,29 @@ public class MCESpotLightData extends SpotLightData {
 
     /**
      * Assign the UUID parameter of the MCE Spot Light Data object.
-     * @param uuid, the uuid to set the object's uuid parameter to.
+     * @param uuid the uuid to set the object's uuid parameter to.
      */
     private void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
+    /**
+     * Assign the position of the MCE Spot Light Data object.
+     * @param x the x-value of the new position.
+     * @param y the y-value of the new position.
+     * @param z the z-value of the new position.
+     */
     public void setPosition(double x, double y, double z) {
         this.position.set(x, y, z);
     }
 
+    /**
+     * Assign the orientation of the MCE Spot Light Data object.
+     * @param x the x-value of the new orientation.
+     * @param y the y-value of the new orientation.
+     * @param z the z-value of the new orientation.
+     * @param w the w-value of the new orientation.
+     */
     public void setOrientation(float x, float y, float z, float w) {
         this.orientation.set(x, y, z, w);
     }

@@ -40,19 +40,19 @@ public class RegionEffectsManager {
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 
                         // Check If The Player Is In Range Of The Region
-                        Vec3d regionPos = new Vec3d(region.getRegionX(), region.getRegionY(), region.getRegionZ());
-                        boolean isInRadius = player.getPos().squaredDistanceTo(regionPos) <= region.getRegionRadius() * region.getRegionRadius();
+                        Vec3d regionPos = new Vec3d(region.getX(), region.getY(), region.getZ());
+                        boolean isInRadius = player.getPos().squaredDistanceTo(regionPos) <= region.getRadius() * region.getRadius();
                         if (isInRadius) {
                             // If The Player Isn't Tracked In The Region, Add Their UUID To Track
                             if (region.getPlayersInside().add(playerUuid)) {
                                 // Check If The Region Is Enabled
-                                if (region.isRegionEnabled()) {
+                                if (region.isEnabled()) {
                                     // Run All Enter Commands
-                                    for (String command : region.getRegionEnterCommands()) {
+                                    for (String command : region.getEnterCommands()) {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
                                     // Send A Packet To Have The Player's Client Play The Sound
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getRegionSound(), true, region.getRegionSoundVolume(), region.getRegionSoundFadeDuration()));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
                                 }
                             }
                         }
@@ -61,12 +61,12 @@ public class RegionEffectsManager {
                             // If They Were In The Radius, Remove Their UUID To Stop Tracking
                             if (region.getPlayersInside().remove(playerUuid)) {
                                 // Check If The Region Is Enabled
-                                if  (region.isRegionEnabled()) {
+                                if  (region.isEnabled()) {
                                     // Run All Exit Commands
-                                    for (String command : region.getRegionExitCommands()) {
+                                    for (String command : region.getExitCommands()) {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getRegionSound(), false, region.getRegionSoundVolume(), region.getRegionSoundFadeDuration()));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
                                 }
                             }
                         }
@@ -83,32 +83,32 @@ public class RegionEffectsManager {
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 
                         BlockBox box = BlockBox.create(
-                                new Vec3i(region.getRegionX1() - 1, region.getRegionY1(), region.getRegionZ1()), new Vec3i(region.getRegionX2() - 1, region.getRegionY2(), region.getRegionZ2())
+                                new Vec3i(region.getPos1X() - 1, region.getPos1Y(), region.getPos1Z()), new Vec3i(region.getPos2X() - 1, region.getPos2Y(), region.getPos2Z())
                         );
 
                         boolean isInRadius = box.contains(player.getBlockPos());
                         if (isInRadius) {
                             if (region.getPlayersInside().add(playerUuid)) {
                                 // Check If The Region Is Enabled
-                                if (region.isRegionEnabled()) {
+                                if (region.isEnabled()) {
                                     // Run All Enter Commands
-                                    for (String command : region.getRegionEnterCommands()) {
+                                    for (String command : region.getEnterCommands()) {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
                                     // Send A Packet To Have The Player's Client Play The Sound
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getRegionSound(), true, region.getRegionSoundVolume(), region.getRegionSoundFadeDuration()));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
                                 }
                             }
                         } else {
                             // If They Were In The Radius, Remove Their UUID To Stop Tracking
                             if (region.getPlayersInside().remove(playerUuid)) {
                                 // Check If The Region Is Enabled
-                                if  (region.isRegionEnabled()) {
+                                if  (region.isEnabled()) {
                                     // Run All Exit Commands
-                                    for (String command : region.getRegionExitCommands()) {
+                                    for (String command : region.getExitCommands()) {
                                         server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                                     }
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getRegionSound(), false, region.getRegionSoundVolume(), region.getRegionSoundFadeDuration()));
+                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
                                 }
                             }
                         }

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = KeyBindingHelper.class, remap = false)
-public class HideKeybindMixin {
+public class DisableKeybindMixin {
 
     @Inject(method = "registerKeyBinding", at = @At("HEAD"), cancellable = true)
     private static void onRegisterKeyBinding(KeyBinding keyBinding, CallbackInfoReturnable<KeyBinding> cir) {

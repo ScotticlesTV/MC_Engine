@@ -1,3 +1,7 @@
+/**
+ * Author: Scotticles
+ * Description: A class defining a spherical area that the player can interact with by entering and exiting.
+ */
 package net.scotticles.mcengine.regions.regiondatasaving;
 
 import net.minecraft.network.RegistryByteBuf;
@@ -11,19 +15,19 @@ public class RadialRegionData {
 
     // ---------- Instance Properties ----------
 
-    private UUID regionUuid;
-    private String regionName;
-    private int regionX;
-    private int regionY;
-    private int regionZ;
-    private int regionRadius;
+    private UUID uuid;
+    private String name;
+    private int x;
+    private int y;
+    private int z;
+    private int radius;
     private Set<UUID> playersInside;
-    private boolean regionEnabled;
-    private List<String> regionEnterCommands;
-    private List<String> regionExitCommands;
-    private String regionSound;
-    private float regionSoundVolume;
-    private float regionSoundFadeDuration;
+    private boolean enabled;
+    private List<String> enterCommands;
+    private List<String> exitCommands;
+    private String sound;
+    private float soundVolume;
+    private float soundFadeDuration;
 
     // ---------- Packet Encoding & Decoding ----------
 
@@ -38,19 +42,19 @@ public class RadialRegionData {
     public static final PacketCodec<RegistryByteBuf, RadialRegionData> PACKET_CODEC = PacketCodec.of(
             // Packet Encoder: Value comes first, then the buffer (value, buf)
             (RadialRegionData value, RegistryByteBuf buf) -> {
-                buf.writeUuid(value.regionUuid);
-                buf.writeString(value.regionName);
-                buf.writeInt(value.regionX);
-                buf.writeInt(value.regionY);
-                buf.writeInt(value.regionZ);
-                buf.writeInt(value.regionRadius);
-                STRING_LIST_CODEC.encode(buf, value.regionEnterCommands);
-                STRING_LIST_CODEC.encode(buf, value.regionExitCommands);
+                buf.writeUuid(value.uuid);
+                buf.writeString(value.name);
+                buf.writeInt(value.x);
+                buf.writeInt(value.y);
+                buf.writeInt(value.z);
+                buf.writeInt(value.radius);
+                STRING_LIST_CODEC.encode(buf, value.enterCommands);
+                STRING_LIST_CODEC.encode(buf, value.exitCommands);
                 UUID_SET_CODEC.encode(buf, value.playersInside);
-                buf.writeBoolean(value.regionEnabled);
-                buf.writeString(value.regionSound);
-                buf.writeFloat(value.regionSoundVolume);
-                buf.writeFloat(value.regionSoundFadeDuration);
+                buf.writeBoolean(value.enabled);
+                buf.writeString(value.sound);
+                buf.writeFloat(value.soundVolume);
+                buf.writeFloat(value.soundFadeDuration);
             },
             // Packet Decoder
             (RegistryByteBuf buf) -> {
@@ -76,143 +80,253 @@ public class RadialRegionData {
 
     /**
      * Workhorse Constructor: Construct a new Radial Region Data object with all parameters specified.
-     * @param regionUuid
-     * @param regionName
-     * @param regionX
-     * @param regionY
-     * @param regionZ
-     * @param regionRadius
-     * @param regionEnterCommands
-     * @param regionExitCommands
-     * @param playersInside
-     * @param regionEnabled
-     * @param regionSound
-     * @param regionSoundVolume
-     * @param regionSoundFadeDuration
+     * @param uuid, the unique ID of the Radial Region.
+     * @param name, the name of the Radial Region.
+     * @param x, the x-value of the Radial Region's location.
+     * @param y, the y-value of the Radial Region's location.
+     * @param z, the z-value of the Radial Region's location.
+     * @param radius, the radius of the Radial Region.
+     * @param enterCommands, the Radial Region's enter commands.
+     * @param exitCommands, the Radial Region's exit commands.
+     * @param playersInside, the player's currently inside the Radial Region's bounds.
+     * @param enabled, whether or not the Radial Region is currently enabled.
+     * @param sound, the sound to play when a player enters the Radial Region.
+     * @param soundVolume, the volume to play the Radial Region's sound at.
+     * @param soundFadeDuration, the time it should take for the Radial Region's sound to fade when a player exits the region.
      */
-    public RadialRegionData(UUID regionUuid, String regionName, int regionX, int regionY, int regionZ, int regionRadius, List<String> regionEnterCommands, List<String> regionExitCommands, Set<UUID> playersInside, boolean regionEnabled, String regionSound, float regionSoundVolume, float regionSoundFadeDuration) {
-        this.setRegionUuid(regionUuid);
-        this.setRegionName(regionName);
-        this.setRegionPos(regionX, regionY, regionZ);
-        this.setRegionRadius(regionRadius);
-        this.setRegionEnterCommands(regionEnterCommands);
-        this.setRegionExitCommands(regionExitCommands);
+    public RadialRegionData(UUID uuid, String name, int x, int y, int z, int radius, List<String> enterCommands, List<String> exitCommands, Set<UUID> playersInside, boolean enabled, String sound, float soundVolume, float soundFadeDuration) {
+        this.setUuid(uuid);
+        this.setName(name);
+        this.setPos(x, y, z);
+        this.setRadius(radius);
+        this.setEnterCommands(enterCommands);
+        this.setExitCommands(exitCommands);
         this.setPlayersInside(playersInside);
-        this.setRegionEnabled(regionEnabled);
-        this.setRegionSound(regionSound);
-        this.setRegionSoundVolume(regionSoundVolume);
-        this.setRegionSoundFadeDuration(regionSoundFadeDuration);
+        this.setEnabled(enabled);
+        this.setSound(sound);
+        this.setSoundVolume(soundVolume);
+        this.setSoundFadeDuration(soundFadeDuration);
     }
 
     // ---------- Getters & Setters ----------
 
-    public UUID getRegionUuid() {
-        return this.regionUuid;
+    /**
+     * Retrieve the Radial Region Data's uuid property.
+     * @return the Radial Region Data's uuid.
+     */
+    public UUID getUuid() {
+        return this.uuid;
     }
 
-    private void setRegionUuid(UUID regionUuid) {
-        this.regionUuid = regionUuid;
+    /**
+     * Assign the Radial Region Data's uuid property.
+     * @param uuid the uuid to set the Radial Region Data's uuid property to.
+     */
+    private void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
-    public String getRegionName() {
-        return this.regionName;
+    /**
+     * Retrieve the Radial Region Data's name property.
+     * @return the Radial Region Data's name.
+     */
+    public String getName() {
+        return this.name;
     }
 
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
+    /**
+     * Assign the Radial Region Data's name property.
+     * @param name the Radial Region Data's name.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getRegionX() {
-        return this.regionX;
+    /**
+     * Retrieve the x-value of the Radial Region Data's current position.
+     * @return the x-value of the Radial Region Data's current position.
+     */
+    public int getX() {
+        return this.x;
     }
 
-    public void setRegionX(int regionX) {
-        this.regionX = regionX;
+    /**
+     * Assign the x-value of the Radial Region Data's current position.
+     * @param x the x-value to set the Radial Region Data's current position to.
+     */
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public int getRegionY() {
-        return this.regionY;
+    /**
+     * Retrieve the y-value of the Radial Region Data's current position.
+     * @return the y-value of the Radial Region Data's current position.
+     */
+    public int getY() {
+        return this.y;
     }
 
-    public void setRegionY(int regionY) {
-        this.regionY = regionY;
+    /**
+     * Assign the y-value of the Radial Region Data's current position.
+     * @param y the y-value to set the Radial Region Data's current position to.
+     */
+    public void setY(int y) {
+        this.y = y;
     }
 
-    public int getRegionZ() {
-        return this.regionZ;
+    /**
+     * Retrieve the z-value of the Radial Region Data's current position.
+     * @return the z-value of the Radial Region Data's current position.
+     */
+    public int getZ() {
+        return this.z;
     }
 
-    public void setRegionZ(int regionZ) {
-        this.regionZ = regionZ;
+    /**
+     * Assign the z-value of the Radial Region Data's current position.
+     * @param z the z-value to set the Radial Region Data's current position to.
+     */
+    public void setZ(int z) {
+        this.z = z;
     }
 
-    public void setRegionPos(int regionX, int regionY, int regionZ) {
-        this.regionX = regionX;
-        this.regionY = regionY;
-        this.regionZ = regionZ;
+    /**
+     * Assign the entire position of the Radial Region Data.
+     * @param x the x-value of the Radial Region Data's new position.
+     * @param y the y-value of the Radial Region Data's new position.
+     * @param z the z-value of the Radial Region Data's new position.
+     */
+    public void setPos(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public int getRegionRadius() {
-        return this.regionRadius;
+    /**
+     * Retrieve the radius property of the Radial Region Data (the distance the region extends in all directions from its position).
+     * @return the Radial Region Data's radius property.
+     */
+    public int getRadius() {
+        return this.radius;
     }
 
-    public void setRegionRadius(int regionRadius) {
-        this.regionRadius = regionRadius;
+    /**
+     * Assign the radius property of the Radial Region Data (the distance the region extends in all directions from its position).
+     * @param radius the radius to set the Radial Region Data's radius property to.
+     */
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
+    /**
+     * Retrieve the playersInside property of the Radial Region Data.
+     * @return the set of players currently inside the Radial Region Data's bounds.
+     */
     public Set<UUID> getPlayersInside() {
         return this.playersInside;
     }
 
+    /**
+     * Assign the playersInside property of the Radial Region Data.
+     * @param playersInside, the set of players currently inside the Radial Region Data's bounds to set the playersInside property to.
+     */
     public void setPlayersInside(Set<UUID> playersInside) {
         this.playersInside = playersInside;
     }
 
-    public boolean isRegionEnabled() {
-        return this.regionEnabled;
+    /**
+     * Retriever whether or not the Radial Region Data is currently enabled.
+     * @return the Radial Region Data's enabled status.
+     */
+    public boolean isEnabled() {
+        return this.enabled;
     }
 
-    public void setRegionEnabled(boolean regionEnabled) {
-        this.regionEnabled = regionEnabled;
+    /**
+     * Assign whether or not the Radial Region Data is currently enabled.
+     * @param enabled, the enabled value to set the Radial Region Data's enabled property to.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public List<String> getRegionEnterCommands() {
-        return this.regionEnterCommands;
+    /**
+     * Retrieve the Radial Region Data's enter commands.
+     * @return the list of enter commands for the Radial Region Data.
+     */
+    public List<String> getEnterCommands() {
+        return this.enterCommands;
     }
 
-    public void setRegionEnterCommands(List<String> regionEnterCommands) {
-        this.regionEnterCommands = regionEnterCommands;
+    /**
+     * Assign the enter commands list property of the Radial Region Data.
+     * @param enterCommands, the list of enter commands to set the Radial Region Data's enterCommands property to.
+     */
+    public void setEnterCommands(List<String> enterCommands) {
+        this.enterCommands = enterCommands;
     }
 
-    public List<String> getRegionExitCommands() {
-        return this.regionExitCommands;
+    /**
+     * Retrieve the Radial Region Data's enter commands.
+     * @return the list of enter commands for the Radial Region Data.
+     */
+    public List<String> getExitCommands() {
+        return this.exitCommands;
     }
 
-    public void setRegionExitCommands(List<String> regionExitCommands) {
-        this.regionExitCommands = regionExitCommands;
+    /**
+     * Assign the exit commands list property of the Radial Region Data.
+     * @param exitCommands, the list of exit commands to set the Radial Region Data's exitCommands property to.
+     */
+    public void setExitCommands(List<String> exitCommands) {
+        this.exitCommands = exitCommands;
     }
 
-    public String getRegionSound() {
-        return this.regionSound;
+    /**
+     * Retrieve the sound property of the Radial Region Data.
+     * @return the sound property of the Radial Region Data.
+     */
+    public String getSound() {
+        return this.sound;
     }
 
-    public void setRegionSound(String regionSound) {
-        this.regionSound = regionSound;
+    /**
+     * Assign the sound property of the Radial Region Data.
+     * @param sound, the sound to set the sound property of the Radial Region Data to.
+     */
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 
-    public float getRegionSoundVolume() {
-        return this.regionSoundVolume;
+    /**
+     * Retrieve the sound volume property of the Radial Region Data.
+     * @return the sound volume of the Radial Region Data.
+     */
+    public float getSoundVolume() {
+        return this.soundVolume;
     }
 
-    public void setRegionSoundVolume(float regionSoundVolume) {
-        this.regionSoundVolume = regionSoundVolume;
+    /**
+     * Assign the sound volume property of the Radial Region Data.
+     * @param soundVolume, the sound volume to set the Radial Region Data's sound property to.
+     */
+    public void setSoundVolume(float soundVolume) {
+        this.soundVolume = soundVolume;
     }
 
-    public float getRegionSoundFadeDuration() {
-        return this.regionSoundFadeDuration;
+    /**
+     * Get the sound fade duration property of the Radial Region Data.
+     * @return the Radial Region Data's sound fade duration property.
+     */
+    public float getSoundFadeDuration() {
+        return this.soundFadeDuration;
     }
 
-    public void setRegionSoundFadeDuration(float regionSoundFadeDuration) {
-        this.regionSoundFadeDuration = regionSoundFadeDuration;
+    /**
+     * Assign the sound fade duration property of the Radial Region Data.
+     * @param soundFadeDuration, the sound fade duration value to set the Radial Region Data's sound fade duration property to.
+     */
+    public void setSoundFadeDuration(float soundFadeDuration) {
+        this.soundFadeDuration = soundFadeDuration;
     }
 }
