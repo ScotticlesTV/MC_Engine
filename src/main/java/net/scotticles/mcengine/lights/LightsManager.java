@@ -58,7 +58,7 @@ public class LightsManager {
      */
     public static void addAreaLight(Vec3d playerPos, Quaternionf playerOrientation) {
         // Make A New MCE Area Light Object
-        MCEAreaLightData mceAreaLightData = new MCEAreaLightData("Area Light", UUID.randomUUID(), 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, playerPos.getX(), playerPos.getY(), playerPos.getZ(), playerOrientation, (float) Math.toRadians(45.0f),15.0f,false, 0.0f);
+        MCEAreaLightData mceAreaLightData = new MCEAreaLightData("Area Light", UUID.randomUUID(),  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, playerPos.getX(), playerPos.getY(), playerPos.getZ(), playerOrientation, (float) Math.toRadians(45.0f),15.0f,false, 0.0f);
 
         // Track The New Wrapper Object In The Active Area Lights List
         activeAreaLights.add(mceAreaLightData);

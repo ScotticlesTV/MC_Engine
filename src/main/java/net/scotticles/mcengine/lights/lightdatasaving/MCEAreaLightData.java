@@ -101,6 +101,31 @@ public class MCEAreaLightData extends AreaLightData {
         this.setInscatteringStrength(inScattering);
     }
 
+    /**
+     * Copy Constructor: Construct a new MCE Area Light Data with values taken from an already existing MCE Area Light Data.
+     * @param mceAreaLightData the MCE Area Light Data to copy values from.
+     */
+    public MCEAreaLightData(MCEAreaLightData mceAreaLightData) {
+        this(
+                mceAreaLightData.getName(),
+                UUID.randomUUID(),
+                mceAreaLightData.getBrightness(),
+                mceAreaLightData.getColor().red(),
+                mceAreaLightData.getColor().green(),
+                mceAreaLightData.getColor().blue(),
+                mceAreaLightData.getSize().x(),
+                mceAreaLightData.getSize().y(),
+                mceAreaLightData.getPosition().x(),
+                mceAreaLightData.getPosition().y(),
+                mceAreaLightData.getPosition().z(),
+                mceAreaLightData.getOrientation(),
+                mceAreaLightData.getAngle(),
+                mceAreaLightData.getDistance(),
+                mceAreaLightData.isOcclusionEnabled(),
+                mceAreaLightData.getInscatteringStrength()
+        );
+    }
+
     // ---------- Getters & Setters ----------
 
     /**

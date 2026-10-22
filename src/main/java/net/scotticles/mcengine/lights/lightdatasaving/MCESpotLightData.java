@@ -69,7 +69,6 @@ public class MCESpotLightData extends SpotLightData {
     /**
      * Workhorse Constructor: Construct a new MCE Spot Light Data with all parameters specified.
      * @param name the name of the MCE Spot Light Data.
-     * @param uuid the unique ID of the MCE Spot Light Data.
      * @param brightness the brightness of the MCE Spot Light Data.
      * @param r the red-value of the MCE Spot Light Data's color property.
      * @param g the green-value of the MCE Spot Light Data's color property.
@@ -96,6 +95,30 @@ public class MCESpotLightData extends SpotLightData {
         this.setDistance(distance);
         this.setOcclusionEnabled(occlusionEnabled);
         this.setInscatteringStrength(inScattering);
+    }
+
+    /**
+     * Copy Constructor: Construct a new MCE Spot Light Data with values taken from an already existing MCE Spot Light Data.
+     * @param mceSpotLightData the MCE Spot Light Data to copy values from.
+     */
+    public MCESpotLightData(MCESpotLightData mceSpotLightData) {
+        this(
+                mceSpotLightData.getName(),
+                UUID.randomUUID(),
+                mceSpotLightData.getBrightness(),
+                mceSpotLightData.getColor().red(),
+                mceSpotLightData.getColor().green(),
+                mceSpotLightData.getColor().blue(),
+                mceSpotLightData.getSize(),
+                mceSpotLightData.getPosition().x(),
+                mceSpotLightData.getPosition().y(),
+                mceSpotLightData.getPosition().z(),
+                mceSpotLightData.getOrientation(),
+                mceSpotLightData.getAngle(),
+                mceSpotLightData.getDistance(),
+                mceSpotLightData.isOcclusionEnabled(),
+                mceSpotLightData.getInscatteringStrength()
+        );
     }
 
     // ---------- Getters & Setters ----------

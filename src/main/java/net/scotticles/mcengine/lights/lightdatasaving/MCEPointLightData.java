@@ -83,6 +83,27 @@ public class MCEPointLightData extends PointLightData {
         this.setInscatteringStrength(inScattering);
     }
 
+    /**
+     * Copy Constructor: Construct a new MCE Point Light Data with values taken from an already existing MCE Point Light Data.
+     * @param mcePointLightData the MCE Point Light Data to copy values from.
+     */
+    public MCEPointLightData(MCEPointLightData mcePointLightData) {
+        this(
+                mcePointLightData.getName(),
+                UUID.randomUUID(),
+                mcePointLightData.getBrightness(),
+                mcePointLightData.getColor().red(),
+                mcePointLightData.getColor().green(),
+                mcePointLightData.getColor().blue(),
+                mcePointLightData.getPosition().x(),
+                mcePointLightData.getPosition().y(),
+                mcePointLightData.getPosition().z(),
+                mcePointLightData.getRadius(),
+                mcePointLightData.isOcclusionEnabled(),
+                mcePointLightData.getInscatteringStrength()
+        );
+    }
+
     // ---------- Getters & Setters ----------
 
     /**

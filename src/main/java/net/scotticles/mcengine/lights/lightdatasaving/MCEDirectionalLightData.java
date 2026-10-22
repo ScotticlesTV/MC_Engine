@@ -76,6 +76,25 @@ public class MCEDirectionalLightData extends DirectionalLightData{
         this.setOcclusionEnabled(occlusionEnabled);
     }
 
+    /**
+     * Copy Constructor: Construct a new MCE Directional Light Data with values taken from an already existing MCE Directional Light Data.
+     * @param mceDirectionalLightData the MCE Directional Light Data to copy values from.
+     */
+    public MCEDirectionalLightData(MCEDirectionalLightData mceDirectionalLightData) {
+        this(
+                mceDirectionalLightData.getName(),
+                UUID.randomUUID(),
+                mceDirectionalLightData.getBrightness(),
+                mceDirectionalLightData.getColor().red(),
+                mceDirectionalLightData.getColor().green(),
+                mceDirectionalLightData.getColor().blue(),
+                mceDirectionalLightData.getDirection().x(),
+                mceDirectionalLightData.getDirection().y(),
+                mceDirectionalLightData.getDirection().z(),
+                mceDirectionalLightData.isOcclusionEnabled()
+        );
+    }
+
     // ---------- Getters & Setters ----------
 
     /**
