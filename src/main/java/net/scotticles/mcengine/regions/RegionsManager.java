@@ -57,24 +57,26 @@ public class RegionsManager {
 
     /**
      *Make a new Radial Region object and add it to the actively tracked list of Radial Regions.
-     * @param playerPos, the player's current position.
+     * @param playerPos the player's current position.
+     * @param enabled whether or not the region starts enabled.
      */
-    public static void addRadialRegion(Vec3d playerPos) {
+    public static void addRadialRegion(Vec3d playerPos, boolean enabled) {
         // Make a new radial region data object.
         UUID uuid = UUID.randomUUID();
-        RadialRegionData radialRegionData = new RadialRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), 20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
+        RadialRegionData radialRegionData = new RadialRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), 20, new ArrayList<>(), new ArrayList<>(), new HashSet<>(), enabled, "", 1.0f, 2.0f);
         // Add the new object to the active radial regions list to track it.
         activeRadialRegions.add(radialRegionData);
     }
 
     /**
      * Make a new Linear Region object and add it to the actively tracked list of Linear Regions.
-     * @param playerPos, the player's current position.
+     * @param playerPos the player's current position.
+     * @param enabled whether or not the region starts enabled.
      */
-    public static void addLinearRegion(Vec3d playerPos) {
+    public static void addLinearRegion(Vec3d playerPos, boolean enabled) {
         // Make a new linear region data object.
         UUID uuid = UUID.randomUUID();
-        LinearRegionData linearRegionData = new LinearRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), new ArrayList<>(), new ArrayList<>(), new HashSet<>(), true, "", 1.0f, 2.0f);
+        LinearRegionData linearRegionData = new LinearRegionData(uuid, "Region " + uuid, (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), (int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ(), new ArrayList<>(), new ArrayList<>(), new HashSet<>(), enabled, "", 1.0f, 2.0f);
         // Add the new object to the active linear regions list to track it.
         activeLinearRegions.add(linearRegionData);
     }

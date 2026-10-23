@@ -59,7 +59,7 @@ public class RegionsEditorUI {
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                RegionsManager.addRadialRegion(playerPos);
+                                RegionsManager.addRadialRegion(playerPos, true);
                                 // Trigger Sync
                                 shouldSyncNetwork = true;
                             }
@@ -150,7 +150,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteEnterCommand")) {
                                             radialRegionData.getEnterCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
@@ -174,7 +174,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteExitCommand")) {
                                             radialRegionData.getExitCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
@@ -234,7 +234,7 @@ public class RegionsEditorUI {
                                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                 if (player != null) {
                                     Vec3d playerPos = player.getPos();
-                                    RegionsManager.addRadialRegion(playerPos);
+                                    RegionsManager.addRadialRegion(playerPos, false);
                                     shouldSyncNetwork = true; // Trigger Sync
                                 }
                             }
@@ -323,7 +323,7 @@ public class RegionsEditorUI {
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.sameLine();
-                                            if (ImGui.button("X")) {
+                                            if (ImGui.button("X" + "##deleteEnterCommand")) {
                                                 radialRegionData.getEnterCommands().remove(i);
                                                 shouldSyncNetwork = true;
                                             }
@@ -345,7 +345,7 @@ public class RegionsEditorUI {
                                                 shouldSyncNetwork = true;
                                             }
                                             ImGui.sameLine();
-                                            if (ImGui.button("X")) {
+                                            if (ImGui.button("X" + "##deleteExitCommand")) {
                                                 radialRegionData.getExitCommands().remove(i);
                                                 shouldSyncNetwork = true;
                                             }
@@ -413,7 +413,7 @@ public class RegionsEditorUI {
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                RegionsManager.addLinearRegion(playerPos);
+                                RegionsManager.addLinearRegion(playerPos, true);
                                 // Trigger Sync
                                 shouldSyncNetwork = true;
                             }
@@ -532,7 +532,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteEnterCommand")) {
                                             linearRegionData.getEnterCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
@@ -554,7 +554,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteExitCommand")) {
                                             linearRegionData.getExitCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
@@ -614,8 +614,8 @@ public class RegionsEditorUI {
                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                             if (player != null) {
                                 Vec3d playerPos = player.getPos();
-                                RegionsManager.addLinearRegion(playerPos);
-                                shouldSyncNetwork = true; // Trigger Sync
+                                RegionsManager.addLinearRegion(playerPos, false);
+                                shouldSyncNetwork = true;
                             }
                         }
 
@@ -732,7 +732,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteEnterCommand")) {
                                             linearRegionData.getEnterCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
@@ -754,7 +754,7 @@ public class RegionsEditorUI {
                                             shouldSyncNetwork = true;
                                         }
                                         ImGui.sameLine();
-                                        if (ImGui.button("X")) {
+                                        if (ImGui.button("X" + "##deleteExitCommand")) {
                                             linearRegionData.getExitCommands().remove(i);
                                             shouldSyncNetwork = true;
                                         }
