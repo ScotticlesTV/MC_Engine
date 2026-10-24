@@ -12,6 +12,7 @@ import net.scotticles.mcengine.ui.windows.*;
 public class UIManager {
 
     // UI States
+    public static ImBoolean showWelcomeWindowUI = new ImBoolean(false);
     public static boolean showEngineUI = false;
     public static ImBoolean showClientEngineSettings = new ImBoolean(false);
     public static ImBoolean showWorldTimeUI = new ImBoolean(false);
@@ -66,15 +67,29 @@ public class UIManager {
                     LightEditorUI.showLightEditorUI();
                 }
             }
+
+            if (showWelcomeWindowUI.get()) {
+                WelcomeWindowUI.showWelcomeWindowUI();
+                MCEngineClientConfig.firstLaunch = false;
+                MCEngineClientConfig.save();
+            }
         });
     }
 
     public static void engineUIWorldJoinInit() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (MCEngineClientConfig.openNavBarOnWorldJoin) {
-                UIManager.showEngineUI = true;
+                showEngineUI = true;
             } else {
-                UIManager.showEngineUI = false;
+                showEngineUI = false;
+            }
+        });
+    }
+
+    public static void welcomeWindowUIInit() {
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            if (MCEngineClientConfig.firstLaunch) {
+                showWelcomeWindowUI.set(true);
             }
         });
     }

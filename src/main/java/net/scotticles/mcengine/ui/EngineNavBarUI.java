@@ -23,6 +23,10 @@ public class EngineNavBarUI {
                     Util.getOperatingSystem().open("https://github.com/ScotticlesTV/MC_Engine/wiki");
                 }
                 ImGui.setItemTooltip("Open the MC Engine documentation in your web browser.");
+                if (ImGui.menuItem("Reopen Welcome Window")) {
+                    UIManager.showWelcomeWindowUI.set(true);
+                }
+                ImGui.setItemTooltip("Reopen the Welcome Window that shows on first joining a world with MC Engine installed.");
                 ImGui.endMenu();
             }
             ImGui.separator();

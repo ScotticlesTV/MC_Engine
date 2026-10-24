@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class MCEngineClientConfig {
     // Config variables
+    public static boolean firstLaunch = true;
     public static boolean openNavBarOnWorldJoin = false;
 //    public static boolean reopenWindowsOnWorldJoin = false;
     public static boolean useCustomUIColors = false;
@@ -30,6 +31,7 @@ public class MCEngineClientConfig {
                 properties.load(in);
 
                 // Assign config values from file and set them to defaults if they don't exist
+                firstLaunch = Boolean.parseBoolean(properties.getProperty("firstLaunch", "true"));
                 openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("openNavBarOnWorldJoin", "false"));
                 // reopenWindowsOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
                 useCustomUIColors = Boolean.parseBoolean(properties.getProperty("useCustomUIColors", "false"));
@@ -52,6 +54,7 @@ public class MCEngineClientConfig {
         Properties properties = new Properties();
 
         // Put variables into properties object
+        properties.put("firstLaunch", String.valueOf(firstLaunch));
         properties.setProperty("openNavBarOnWorldJoin", String.valueOf(openNavBarOnWorldJoin));
 //        properties.setProperty("reopenWindowsOnWorldJoin", String.valueOf(reopenWindowsOnWorldJoin));
         properties.setProperty("useCustomUIColors", String.valueOf(useCustomUIColors));
