@@ -822,6 +822,10 @@ public class RegionsEditorUI {
             //  - Disable All Regions
             //  - Delete All Regions
             if (ImGui.beginTabItem("Mass Region Editing")) {
+                // All Regions
+                ImGui.spacing();
+                ImGui.textWrapped("All Regions");
+                ImGui.separator();
                 if (ImGui.button("Enable All Regions")) {
                     for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
                         radialRegionData.setEnabled(true);
@@ -842,6 +846,48 @@ public class RegionsEditorUI {
                 }
                 if (ImGui.button("Delete All Regions")) {
                     RegionsManager.clearRegions();
+                    shouldSyncNetwork = true;
+                }
+
+                // Radial Regions
+                ImGui.spacing();
+                ImGui.textWrapped("Radial Regions");
+                ImGui.separator();
+                if (ImGui.button("Enable All Radial Regions")) {
+                    for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
+                        radialRegionData.setEnabled(true);
+                    }
+                    shouldSyncNetwork = true;
+                }
+                if (ImGui.button("Disable All Radial Regions")) {
+                    for (RadialRegionData radialRegionData : RegionsManager.activeRadialRegions) {
+                        radialRegionData.setEnabled(false);
+                    }
+                    shouldSyncNetwork = true;
+                }
+                if (ImGui.button("Delete All Radial Regions")) {
+                    RegionsManager.activeRadialRegions.clear();
+                    shouldSyncNetwork = true;
+                }
+
+                // Linear Regions
+                ImGui.spacing();
+                ImGui.textWrapped("Linear Regions");
+                ImGui.separator();
+                if (ImGui.button("Enable All Linear Regions")) {
+                    for (LinearRegionData linearRegionData : RegionsManager.activeLinearRegions) {
+                        linearRegionData.setEnabled(true);
+                    }
+                    shouldSyncNetwork = true;
+                }
+                if (ImGui.button("Disable All Linear Regions")) {
+                    for (LinearRegionData linearRegionData : RegionsManager.activeLinearRegions) {
+                        linearRegionData.setEnabled(false);
+                    }
+                    shouldSyncNetwork = true;
+                }
+                if (ImGui.button("Delete All Linear Regions")) {
+                    RegionsManager.activeLinearRegions.clear();
                     shouldSyncNetwork = true;
                 }
                 ImGui.endTabItem();
