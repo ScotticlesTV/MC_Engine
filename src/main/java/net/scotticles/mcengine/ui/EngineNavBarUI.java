@@ -48,7 +48,7 @@ public class EngineNavBarUI {
                 ImGui.endDisabled();
                 ImGui.endMenu();
             }
-            // Region Tab
+            // Regions Tab
             if (ImGui.beginMenu("Regions")) {
                 if (ImGui.menuItem("Regions Editor")) {
                     UIManager.showRegionEditorUI.set(!UIManager.showRegionEditorUI.get());
@@ -56,11 +56,11 @@ public class EngineNavBarUI {
                 ImGui.endMenu();
             }
 
-            // Lighting Tab
+            // Lights Tab
             if (ImGui.beginMenu("Lights")) {
-                ImGui.beginDisabled();
-                ImGui.menuItem("Light Profiles");
-                ImGui.endDisabled();
+                if (ImGui.menuItem("Light Profiles")) {
+                    UIManager.showLightsProfilesUI.set(!UIManager.showLightsProfilesUI.get());
+                }
                 if (ImGui.menuItem("Light Editor")) {
                     UIManager.showLightEditorUI.set(!UIManager.showLightEditorUI.get());
                 }

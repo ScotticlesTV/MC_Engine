@@ -22,6 +22,7 @@ public class UIManager {
     public static ImBoolean showRegionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightEditorUI = new ImBoolean(false);
     public static ImBoolean showInteractionEditorUI = new ImBoolean(false);
+    public static ImBoolean showLightsProfilesUI = new ImBoolean(false);
 //    public static ImBoolean showDecalsEditorUI = new ImBoolean(false);
 
 
@@ -65,6 +66,9 @@ public class UIManager {
                 }
                 if (showLightEditorUI.get()) {
                     LightEditorUI.showLightEditorUI();
+                }
+                if (showLightsProfilesUI.get()) {
+                    LightProfilesUI.showLightProfilesUI();
                 }
             }
 

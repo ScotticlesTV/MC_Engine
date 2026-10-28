@@ -890,10 +890,8 @@ public class RegionsEditorUI {
                 ImGui.endTabItem();
             }
 
-
             ImGui.endTabBar();
             ImGui.end();
-
 
             // Server/Network syncing: Send the client's up to date set of regions to the server
             if (shouldSyncNetwork) {
