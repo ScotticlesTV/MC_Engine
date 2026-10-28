@@ -1,9 +1,12 @@
 package net.scotticles.mcengine.regions;
 
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
+import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
+import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
@@ -87,5 +90,13 @@ public class RegionsManager {
     public static void clearRegions() {
         activeRadialRegions.clear();
         activeLinearRegions.clear();
+    }
+
+    /**
+     * Send packets to sync all region lists with the server and other clients.
+     */
+    public static void syncAllRegions() {
+        ClientPlayNetworking.send(new SyncRadialRegionsDataPayload(new ArrayList<>(RegionsManager.activeRadialRegions)));
+        ClientPlayNetworking.send(new SyncLinearRegionsDataPayload(new ArrayList<>(RegionsManager.activeLinearRegions)));
     }
 }
