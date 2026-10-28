@@ -42,8 +42,7 @@ public class RegionsManager {
      * @param server, the server used to get the world save file.
      */
     private static void loadRegions(MinecraftServer server) {
-        activeRadialRegions.clear();
-        activeLinearRegions.clear();
+        clearRegions();
         activeRadialRegions.addAll(RegionDataManager.loadRadialRegions(server));
         activeLinearRegions.addAll(RegionDataManager.loadLinearRegions(server));
     }
@@ -54,8 +53,7 @@ public class RegionsManager {
      */
     private static void saveRegions(MinecraftServer server) {
         RegionDataManager.save(activeRadialRegions, activeLinearRegions, server);
-        activeRadialRegions.clear();
-        activeLinearRegions.clear();
+        clearRegions();
     }
 
     /**
