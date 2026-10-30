@@ -2,9 +2,14 @@ package net.scotticles.mcengine.lights.lightdatasaving;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
+import net.scotticles.mcengine.lights.LightProfileManager;
 import net.scotticles.mcengine.lights.LightsManager;
+import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
+import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -40,90 +45,104 @@ public class LightDataManager {
      * @param fileName, the name of the file to make at the directory.
      */
     public static void save(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server, String fileName) {
-        LightsDataSave save = new LightsDataSave();
+        // Message To Send To All Players After Action Is Completed
+        String message = "";
 
-        for (MCEAreaLightData mceAreaLightData : mceAreaLightDatas) {
-            save.areaLightsData.add(new MCEAreaLightData(
-                    mceAreaLightData.getName(),
-                    mceAreaLightData.getUuid(),
-                    mceAreaLightData.getBrightness(),
-                    mceAreaLightData.getColor().red(),
-                    mceAreaLightData.getColor().green(),
-                    mceAreaLightData.getColor().blue(),
-                    mceAreaLightData.getSize().x(),
-                    mceAreaLightData.getSize().y(),
-                    mceAreaLightData.getPosition().x(),
-                    mceAreaLightData.getPosition().y(),
-                    mceAreaLightData.getPosition().z(),
-                    mceAreaLightData.getOrientation(),
-                    mceAreaLightData.getAngle(),
-                    mceAreaLightData.getDistance(),
-                    mceAreaLightData.isOcclusionEnabled(),
-                    mceAreaLightData.getInscatteringStrength()
-            ));
-        }
+        if (fileName.isEmpty()) {
+            message = "Cannot Save Light Profile With No Name";
+        } else {
+            LightsDataSave save = new LightsDataSave();
 
-        for (MCEPointLightData mcePointLightData : mcePointLightDatas) {
-            save.pointLightsData.add(new MCEPointLightData(
-                    mcePointLightData.getName(),
-                    mcePointLightData.getUuid(),
-                    mcePointLightData.getBrightness(),
-                    mcePointLightData.getColor().red(),
-                    mcePointLightData.getColor().green(),
-                    mcePointLightData.getColor().blue(),
-                    mcePointLightData.getPosition().x(),
-                    mcePointLightData.getPosition().y(),
-                    mcePointLightData.getPosition().z(),
-                    mcePointLightData.getRadius(),
-                    mcePointLightData.isOcclusionEnabled(),
-                    mcePointLightData.getInscatteringStrength()
-            ));
-        }
-
-        for (MCEDirectionalLightData mceDirectionalLightData : mceDirectionalLightDatas) {
-            save.directionalLightsData.add(new MCEDirectionalLightData(
-                    mceDirectionalLightData.getName(),
-                    mceDirectionalLightData.getUuid(),
-                    mceDirectionalLightData.getBrightness(),
-                    mceDirectionalLightData.getColor().red(),
-                    mceDirectionalLightData.getColor().green(),
-                    mceDirectionalLightData.getColor().blue(),
-                    mceDirectionalLightData.getDirection().x(),
-                    mceDirectionalLightData.getDirection().y(),
-                    mceDirectionalLightData.getDirection().z(),
-                    mceDirectionalLightData.isOcclusionEnabled()
-            ));
-        }
-
-        for (MCESpotLightData mceSpotLightData : mceSpotLightDatas) {
-            save.spotLightsData.add(new MCESpotLightData(
-                    mceSpotLightData.getName(),
-                    mceSpotLightData.getUuid(),
-                    mceSpotLightData.getBrightness(),
-                    mceSpotLightData.getColor().red(),
-                    mceSpotLightData.getColor().green(),
-                    mceSpotLightData.getColor().blue(),
-                    mceSpotLightData.getSize(),
-                    mceSpotLightData.getPosition().x(),
-                    mceSpotLightData.getPosition().y(),
-                    mceSpotLightData.getPosition().z(),
-                    mceSpotLightData.getOrientation(),
-                    mceSpotLightData.getAngle(),
-                    mceSpotLightData.getDistance(),
-                    mceSpotLightData.isOcclusionEnabled(),
-                    mceSpotLightData.getInscatteringStrength()
-            ));
-        }
-
-        Path saveFile = getSaveFile(server, fileName);
-
-        try {
-            Files.createDirectories(saveFile.getParent());
-            try (Writer writer = Files.newBufferedWriter(saveFile)) {
-                GSON.toJson(save, writer);
+            for (MCEAreaLightData mceAreaLightData : mceAreaLightDatas) {
+                save.areaLightsData.add(new MCEAreaLightData(
+                        mceAreaLightData.getName(),
+                        mceAreaLightData.getUuid(),
+                        mceAreaLightData.getBrightness(),
+                        mceAreaLightData.getColor().red(),
+                        mceAreaLightData.getColor().green(),
+                        mceAreaLightData.getColor().blue(),
+                        mceAreaLightData.getSize().x(),
+                        mceAreaLightData.getSize().y(),
+                        mceAreaLightData.getPosition().x(),
+                        mceAreaLightData.getPosition().y(),
+                        mceAreaLightData.getPosition().z(),
+                        mceAreaLightData.getOrientation(),
+                        mceAreaLightData.getAngle(),
+                        mceAreaLightData.getDistance(),
+                        mceAreaLightData.isOcclusionEnabled(),
+                        mceAreaLightData.getInscatteringStrength()
+                ));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            for (MCEPointLightData mcePointLightData : mcePointLightDatas) {
+                save.pointLightsData.add(new MCEPointLightData(
+                        mcePointLightData.getName(),
+                        mcePointLightData.getUuid(),
+                        mcePointLightData.getBrightness(),
+                        mcePointLightData.getColor().red(),
+                        mcePointLightData.getColor().green(),
+                        mcePointLightData.getColor().blue(),
+                        mcePointLightData.getPosition().x(),
+                        mcePointLightData.getPosition().y(),
+                        mcePointLightData.getPosition().z(),
+                        mcePointLightData.getRadius(),
+                        mcePointLightData.isOcclusionEnabled(),
+                        mcePointLightData.getInscatteringStrength()
+                ));
+            }
+
+            for (MCEDirectionalLightData mceDirectionalLightData : mceDirectionalLightDatas) {
+                save.directionalLightsData.add(new MCEDirectionalLightData(
+                        mceDirectionalLightData.getName(),
+                        mceDirectionalLightData.getUuid(),
+                        mceDirectionalLightData.getBrightness(),
+                        mceDirectionalLightData.getColor().red(),
+                        mceDirectionalLightData.getColor().green(),
+                        mceDirectionalLightData.getColor().blue(),
+                        mceDirectionalLightData.getDirection().x(),
+                        mceDirectionalLightData.getDirection().y(),
+                        mceDirectionalLightData.getDirection().z(),
+                        mceDirectionalLightData.isOcclusionEnabled()
+                ));
+            }
+
+            for (MCESpotLightData mceSpotLightData : mceSpotLightDatas) {
+                save.spotLightsData.add(new MCESpotLightData(
+                        mceSpotLightData.getName(),
+                        mceSpotLightData.getUuid(),
+                        mceSpotLightData.getBrightness(),
+                        mceSpotLightData.getColor().red(),
+                        mceSpotLightData.getColor().green(),
+                        mceSpotLightData.getColor().blue(),
+                        mceSpotLightData.getSize(),
+                        mceSpotLightData.getPosition().x(),
+                        mceSpotLightData.getPosition().y(),
+                        mceSpotLightData.getPosition().z(),
+                        mceSpotLightData.getOrientation(),
+                        mceSpotLightData.getAngle(),
+                        mceSpotLightData.getDistance(),
+                        mceSpotLightData.isOcclusionEnabled(),
+                        mceSpotLightData.getInscatteringStrength()
+                ));
+            }
+
+            Path saveFile = getSaveFile(server, fileName);
+
+            try {
+                Files.createDirectories(saveFile.getParent());
+                try (Writer writer = Files.newBufferedWriter(saveFile)) {
+                    GSON.toJson(save, writer);
+                    message = String.format("Lights Saved To Profile: %s", fileName);
+                    LightProfileManager.getLPNames(server);
+                }
+            } catch (IOException e) {
+                message = String.format("Lights Could Not Be Saved To Profile: %s, File Not Accessible", fileName);
+            }
+        }
+
+        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, message);
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            ServerPlayNetworking.send(player, syncPayload);
         }
     }
 

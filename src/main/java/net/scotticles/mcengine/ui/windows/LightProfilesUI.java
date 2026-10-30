@@ -11,6 +11,7 @@ import net.scotticles.mcengine.lights.LightProfileManager;
 import net.scotticles.mcengine.lights.lightdatasaving.LightDataManager;
 import net.scotticles.mcengine.networking.lights.payloads.LoadLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.ui.UIManager;
 
 import java.util.ArrayList;
@@ -41,9 +42,6 @@ public class LightProfilesUI {
                 ImGui.sameLine();
                 ImGui.textWrapped(lpName.get());
 
-//                ImGui.setItemTooltip("Delete The Currently Open Light Profile - This Will Load The First Remaining Profile In The List");
-//                ImGui.button("Delete Current Profile");
-
                 ImGui.dummy(0f, 20f);
                 ImGui.textWrapped("All Light Profiles");
                 ImGui.separator();
@@ -67,7 +65,7 @@ public class LightProfilesUI {
                     // Send A Packet To Tell The Server To Save The Current Lights Into A LP File With The Above Specified Name
                     ClientPlayNetworking.send(new SaveLightsDataPayload(newLPName.get()));
                 }
-                ImGui.setItemTooltip("Save all currently loaded lights to a Light Profile file with the specified name.");
+                ImGui.setItemTooltip("Create / Save To A New Light Profile With The Specified Name Containing All Currently Loaded Lights");
 
                 // Load Lights From A File Based On The Above LP Name
                 ImGui.sameLine();
@@ -77,25 +75,12 @@ public class LightProfilesUI {
                 }
                 ImGui.setItemTooltip("Load lights from a Light Profile file with the specified name.");
 
-                // Make A New Light Profile File Based On The Above LP name
-                ImGui.sameLine();
-                if (ImGui.button("New")) {
-//                    ClientPlayNetworking.send(new LoadLightsDataPayload(newLPName.get()));
-                }
-                ImGui.setItemTooltip("Make a new Light Profile file with the specified name.");
-
                 // Delete A Light Profile File Based On The Above LP name
                 ImGui.sameLine();
                 if (ImGui.button("Delete")) {
+                    ClientPlayNetworking.send(new DeleteLightProfilePayload(newLPName.get()));
                 }
                 ImGui.setItemTooltip("Delete a Light Profile file with the specified name.");
-                ImGui.endTabItem();
-            }
-            if (ImGui.beginTabItem("Mass Light Profile Editing")) {
-                // Delete All Light Profiles
-                if (ImGui.button("Clear All Light Profiles")) {
-                    System.out.println("Clearing all Light Profiles");
-                }
                 ImGui.endTabItem();
             }
             ImGui.endTabBar();

@@ -2,6 +2,7 @@ package net.scotticles.mcengine.networking.common;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.realms.Request;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
@@ -14,6 +15,7 @@ import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.*;
+import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
@@ -63,41 +65,32 @@ public class C2S {
         PayloadTypeRegistry.playC2S().register(SaveLightsDataPayload.TYPE, SaveLightsDataPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(LoadLightsDataPayload.TYPE, LoadLightsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(DeleteLightProfilePayload.TYPE, DeleteLightProfilePayload.CODEC);
     }
 
 
     // Register Receivers That Handle Actions When The Server Receives A Packet
     public static void registerServerRecievers() {
 
-        // Server Save Lights Data Payload
-        ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
-            // Get All Light Profile Names While On The Server
-//            ArrayList<String> lpNames = new ArrayList<>(LightDataManager.getLPNames(context.server()));
-
+        // Server DeleteLightProfilePayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(DeleteLightProfilePayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Save Light Profile With No Name");
-                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                    }
-                } else {
-                    LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
-
-                    LightProfileManager.getLPNames(context.server());
-
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, payload.fileName(), "Lights Saved To Profile: " + payload.fileName());
-                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                    }
-                }
+                LightProfileManager.deleteLP(context.server(), payload.fileName());
             });
         });
 
-        // Server Load Lights Data Payload
+        // Server SaveLightsDataPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
+
+            context.server().execute(() -> {
+                LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
+            });
+        });
+
+        // Server LoadLightsDataPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                // Get All Light Profile Names While On The Server
-//                ArrayList<String> lpNames = new ArrayList<>(LightDataManager.getLPNames(context.server()));
 
                 if (!LightProfileManager.lpNames.contains(payload.fileName())) {
                     SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
@@ -105,13 +98,11 @@ public class C2S {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
                 } else if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Load Light Profile With No Name" + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
                 } else {
-                    // Update The fileName
-//                    LightDataManager.fileName = payload.fileName();
 
                     // Call load lights to update the lists
                     LightsManager.loadLights(context.server(), payload.fileName());
@@ -134,7 +125,7 @@ public class C2S {
             });
         });
 
-        // Server ClearLightRenderer Receiver
+        // Server ClearLightRendererPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
                 // Send A Packet To All Connected Clients To Clear Their Light Renderers

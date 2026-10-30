@@ -30,7 +30,7 @@ public class LightsManager {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             // Get the last loaded LP and load the lights from it.
             loadLights(server, MCEngineServerSettings.lastLPLoaded);
-//            LightDataManager.lpNames.addAll(LightDataManager.getLPNames(server));
+            LightProfileManager.getLPNames(server);
         });
 
         // Save Light Data On Server Stop

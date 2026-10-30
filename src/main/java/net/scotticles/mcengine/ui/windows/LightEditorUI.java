@@ -302,7 +302,7 @@ public class LightEditorUI {
                         }
 
                         // Light Size Y
-                        if (ImGui.inputFloat("Y" + "##size", imLightSizeX)) {
+                        if (ImGui.inputFloat("Y" + "##size", imLightSizeY)) {
                             LightsManager.activeAreaLights.get(i).setSize(imLightSizeX.get(), imLightSizeY.get());
                         }
                         if (ImGui.isItemDeactivatedAfterEdit()) {
