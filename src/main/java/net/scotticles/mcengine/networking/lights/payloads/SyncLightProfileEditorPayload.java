@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 
-public record SyncLightProfileEditorPayload(ArrayList<String> lpNames, String newLPName) implements CustomPayload {
+public record SyncLightProfileEditorPayload(ArrayList<String> lpNames, String newLPName, String message) implements CustomPayload {
     public static final Id<SyncLightProfileEditorPayload> TYPE =
             new Id<>(Identifier.of("mc_engine", "sync_light_profile_editor_packet"));
 
@@ -16,6 +16,7 @@ public record SyncLightProfileEditorPayload(ArrayList<String> lpNames, String ne
             PacketCodecs.STRING.collect(PacketCodecs.toCollection(ArrayList::new)),
             SyncLightProfileEditorPayload::lpNames,
             PacketCodecs.STRING, SyncLightProfileEditorPayload::newLPName,
+            PacketCodecs.STRING, SyncLightProfileEditorPayload::message,
             SyncLightProfileEditorPayload::new
     );
 

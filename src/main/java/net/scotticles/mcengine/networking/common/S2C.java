@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.lights.LightsManager;
@@ -67,13 +68,16 @@ public class S2C {
         ClientPlayNetworking.registerGlobalReceiver(SyncLightProfileEditorPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
                 LightProfilesUI.lpName.set(payload.newLPName());
+                if (UIManager.showEngineUI && !payload.message().equals("")) {
+                    context.player().sendMessage(Text.of(payload.message()), true);
+                }
             });
         });
 
         // Client Receiver For Clear Light Renderer Payloads
         ClientPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
-                // Clear The Light Renderer To Prep For The Incoming New Lights
+                // Clear The Light Renderer
                 VeilRenderSystem.renderer().getLightRenderer().free();
             });
         });
@@ -250,7 +254,7 @@ public class S2C {
             ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
 
             // Sync LP Editor
-            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName));
+            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName, ""));
         });
     }
 }
