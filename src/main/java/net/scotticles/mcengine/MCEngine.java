@@ -1,11 +1,13 @@
 package net.scotticles.mcengine;
 
 import net.fabricmc.api.ModInitializer;
+import net.scotticles.mcengine.commands.LightCommands;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.settings.MCEngineClientConfig;
+import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +27,13 @@ public class MCEngine implements ModInitializer {
 
 		// Load The Client Side Engine Config
 		MCEngineClientConfig.load();
+		// Load The Server Settings Config
+		MCEngineServerSettings.load();
+
+		// Load Regions
 		RegionsManager.regionsInit();
+
+		// Load Lights
 		LightsManager.lightDataInit();
 
 		// Register Packet Channels
@@ -37,6 +45,8 @@ public class MCEngine implements ModInitializer {
 
 		//Register Data Syncing Events For When A Player Joins The Server
 		S2C.registerServerJoinSyncingEvents();
+
+		LightCommands.registerCommands();
 
 		LOGGER.info("Welcome MC Engine users!");
 		// LOGGER.info("MC Engine is initializing. Welcome!");

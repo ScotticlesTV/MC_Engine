@@ -5,9 +5,6 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 import net.scotticles.mcengine.lights.LightsManager;
-import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
-import net.scotticles.mcengine.regions.regiondatasaving.RegionsDataSave;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -15,12 +12,13 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 public class LightDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static String fileName = "";
+    public static ArrayList<String> lpNames = new ArrayList<>();
 
     /**
      * Get the save file to use for the world's light data from the server.
@@ -30,7 +28,27 @@ public class LightDataManager {
     private static Path getSaveFile(MinecraftServer server) {
         // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        return worldFolder.resolve("mcengine/lights.json");
+        // return worldFolder.resolve("mcengine/lights.json");
+        return worldFolder.resolve("mcengine/lights/" + fileName + ".json");
+    }
+
+    public static void getLPNames(MinecraftServer server) {
+
+        Path path = server.getSavePath(WorldSavePath.ROOT).resolve("mcengine/lights/");
+
+        // try-with-resources ensures the system file handles are closed properly
+        try (Stream<Path> stream = Files.list(path)) {
+            List<String> fileNames = stream
+                    .filter(Files::isRegularFile) // Exclude folders
+                    .map(p -> p.getFileName().toString().replace(".json", ""))
+                    .toList(); // Use .collect(Collectors.toList()) if on Java 16 or older
+
+            lpNames.clear();
+            lpNames.addAll(fileNames);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void save(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server) {

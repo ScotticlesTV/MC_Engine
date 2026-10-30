@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.lights.payloads.*;
+import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ public class LightsManager {
     public static void lightDataInit() {
         // Load Light Data On Server Start
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            LightDataManager.fileName = MCEngineServerSettings.lastLPLoaded;
             loadLights(server);
+            LightDataManager.getLPNames(server);
         });
 
         // Save Light Data On Server Stop
@@ -32,7 +35,7 @@ public class LightsManager {
         });
     }
 
-    private static void loadLights(MinecraftServer server) {
+    public static void loadLights(MinecraftServer server) {
         activeAreaLights.clear();
         activePointLights.clear();
         activeDirectionalLights.clear();
@@ -43,7 +46,7 @@ public class LightsManager {
         activeSpotLights.addAll(LightDataManager.loadSpotLights(server));
     }
 
-    private static void saveLights(MinecraftServer server) {
+    public static void saveLights(MinecraftServer server) {
         LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server);
         activeAreaLights.clear();
         activePointLights.clear();

@@ -21,7 +21,7 @@ public class MCEngineClientConfig {
     public static float uiColorA = 0.9412f;
 
     // Config File Reference Inside Fabric Config File
-    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + ".properties");
+    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + "_client.properties");
 
     public static void load() {
         Properties properties = new Properties();

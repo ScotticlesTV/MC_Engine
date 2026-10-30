@@ -77,13 +77,12 @@ public class RegionEffectsManager {
                     }
                 }
 
-                // TODO (priority:high category:Bug-Fix @Scott): North/South facing straight line regions offset by 1.
                 // Loop Through All Linear Regions To Enable Effects For All Of Them
                 for (LinearRegionData region : linearRegions) {
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 
                         BlockBox box = BlockBox.create(
-                                new Vec3i(region.getPos1X() - 1, region.getPos1Y(), region.getPos1Z()), new Vec3i(region.getPos2X() - 1, region.getPos2Y(), region.getPos2Z())
+                                new Vec3i(region.getPos1X(), region.getPos1Y(), region.getPos1Z()), new Vec3i(region.getPos2X(), region.getPos2Y(), region.getPos2Z())
                         );
 
                         boolean isInRadius = box.contains(player.getBlockPos());

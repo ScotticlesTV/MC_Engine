@@ -4,14 +4,12 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.scotticles.mcengine.lights.LightsManager;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
@@ -24,11 +22,10 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
+import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class C2S {
 
@@ -56,11 +53,75 @@ public class C2S {
         PayloadTypeRegistry.playC2S().register(SyncSpotLightsDataPayload.ID, SyncSpotLightsDataPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(SaveLightsDataPayload.TYPE, SaveLightsDataPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(LoadLightsDataPayload.TYPE, LoadLightsDataPayload.CODEC);
     }
 
 
     // Register Receivers That Handle Actions When The Server Receives A Packet
     public static void registerServerRecievers() {
+
+        // Server Save Lights Data Payload
+        ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+                if (payload.fileName().equals("")) {
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName);
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        ServerPlayNetworking.send(player, syncPayload);
+                        player.sendMessage(Text.of("Cannot Save Light Profile With No Name"), true);
+                    }
+                } else {
+                    String oldFileName = LightDataManager.fileName;
+                    LightDataManager.fileName = payload.fileName();
+                    LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server());
+                    LightDataManager.fileName = oldFileName;
+
+                    LightDataManager.getLPNames(context.server());
+
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName());
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        ServerPlayNetworking.send(player, syncPayload);
+                        player.sendMessage(Text.of("Lights Saved To Profile: " + payload.fileName()), true);
+                    }
+                }
+            });
+        });
+
+        // Server Load Lights Data Payload
+        ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+
+                if (!LightDataManager.lpNames.contains(payload.fileName())) {
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        player.sendMessage(Text.of("No Light Profile Exists By Name: " + payload.fileName()), true);
+                    }
+                } else {
+                    // Update The fileName
+                    LightDataManager.fileName = payload.fileName();
+
+                    // Call load lights to update the lists
+                    LightsManager.loadLights(context.server());
+
+                    // Update the last LP property of the config file.
+                    MCEngineServerSettings.lastLPLoaded = LightDataManager.fileName;
+                    MCEngineServerSettings.save();
+
+                    // Call Sync In Light Manager
+                    LightsManager.syncAllLights();
+
+                    // Send A Message To All Players Saying A New LP Has Been Loaded
+                    LightDataManager.getLPNames(context.server());
+
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName());
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        player.sendMessage(Text.of("Lights Loaded From Profile: " + payload.fileName()), true);
+                        ServerPlayNetworking.send(player, syncPayload);
+                    }
+                }
+            });
+        });
 
         // Server ClearLightRenderer Receiver
         ServerPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {

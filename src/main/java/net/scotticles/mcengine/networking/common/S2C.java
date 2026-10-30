@@ -12,10 +12,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.lights.LightsManager;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEPointLightData;
-import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
+import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.*;
@@ -27,6 +24,7 @@ import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.ui.UIManager;
+import net.scotticles.mcengine.ui.windows.LightProfilesUI;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
 import java.util.HashMap;
@@ -57,10 +55,21 @@ public class S2C {
         PayloadTypeRegistry.playS2C().register(SyncSpotLightsDataPayload.ID, SyncSpotLightsDataPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncLightProfileEditorPayload.TYPE, SyncLightProfileEditorPayload.CODEC);
+
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
+
+        // Client Receiver For Sync Light Profile Editor Payloads
+        ClientPlayNetworking.registerGlobalReceiver(SyncLightProfileEditorPayload.TYPE, (payload, context) -> {
+            context.client().execute(() -> {
+                LightProfilesUI.lpName.set(payload.newLPName());
+            });
+        });
+
         // Client Receiver For Clear Light Renderer Payloads
         ClientPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
@@ -239,6 +248,9 @@ public class S2C {
             ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
             ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
             ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
+
+            // Sync LP Editor
+            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName));
         });
     }
 }
