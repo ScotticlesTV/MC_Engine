@@ -83,11 +83,11 @@ public class LightProfileManager {
                         MCEngineServerSettings.save();
                     }
                 } else {
-                    message = String.format("Cannot Delete Light Profile By Name \"%s\", No Such Profile Exists", fileName);
+                    message = String.format("Cannot Delete Light Profile By Name \"%s\". No Such Profile Exists", fileName);
                     newFileName = MCEngineServerSettings.lastLPLoaded;
                 }
             } catch (IOException e) {
-                message = "Cannot Access Light Profile \"%s\", Light Profile Not Deleted";
+                message = String.format("Cannot Not Delete Light Profile \"%s\". File Could Not Be Accessed", fileName);
                 newFileName = MCEngineServerSettings.lastLPLoaded;
             }
         }
@@ -97,9 +97,5 @@ public class LightProfileManager {
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             ServerPlayNetworking.send(player, syncPayload);
         }
-    }
-
-    public static void newLP(MinecraftServer server) {
-
     }
 }
