@@ -25,18 +25,19 @@ public class MCEngine implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		// Load The Client Side Engine Config
+		// Load The Client Engine Settings Config
 		MCEngineClientConfig.load();
+
 		// Load The Server Settings Config
 		MCEngineServerSettings.load();
 
-		// Load Regions
+		// Load Region Systems
 		RegionsManager.regionsInit();
 
-		// Load Lights
+		// Load Light Systems
 		LightsManager.lightDataInit();
 
-		// Register Packet Channels
+		// Register Packet Channels (Both C2S and S2C)
 		C2S.registerPacketChannels();
 		S2C.registerPacketChannels();
 

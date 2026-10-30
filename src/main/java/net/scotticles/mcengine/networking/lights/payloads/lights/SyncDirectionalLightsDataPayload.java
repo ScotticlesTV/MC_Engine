@@ -1,4 +1,4 @@
-package net.scotticles.mcengine.networking.lights.payloads;
+package net.scotticles.mcengine.networking.lights.payloads.lights;
 
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

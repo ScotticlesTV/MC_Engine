@@ -1,11 +1,10 @@
-package net.scotticles.mcengine.networking.lights.payloads;
+package net.scotticles.mcengine.networking.lights.payloads.lights;
 
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEAreaLightData;
 import net.scotticles.mcengine.lights.lightdatasaving.MCESpotLightData;
 
 import java.util.ArrayList;

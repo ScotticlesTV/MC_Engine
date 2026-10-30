@@ -6,6 +6,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.lights.payloads.*;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import org.joml.Quaternionf;
 
@@ -24,30 +28,31 @@ public class LightsManager {
     public static void lightDataInit() {
         // Load Light Data On Server Start
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            LightDataManager.fileName = MCEngineServerSettings.lastLPLoaded;
-            loadLights(server);
-            LightDataManager.getLPNames(server);
+            // Get the last loaded LP and load the lights from it.
+            loadLights(server, MCEngineServerSettings.lastLPLoaded);
+//            LightDataManager.lpNames.addAll(LightDataManager.getLPNames(server));
         });
 
         // Save Light Data On Server Stop
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            saveLights(server);
+            // MCEngineServerSettings.lastLPLoaded is the definitive currently loaded LP.
+            saveLights(server, MCEngineServerSettings.lastLPLoaded);
         });
     }
 
-    public static void loadLights(MinecraftServer server) {
+    public static void loadLights(MinecraftServer server, String fileName) {
         activeAreaLights.clear();
         activePointLights.clear();
         activeDirectionalLights.clear();
         activeSpotLights.clear();
-        activeAreaLights.addAll(LightDataManager.loadAreaLights(server));
-        activePointLights.addAll(LightDataManager.loadPointLights(server));
-        activeDirectionalLights.addAll(LightDataManager.loadDirectionalLights(server));
-        activeSpotLights.addAll(LightDataManager.loadSpotLights(server));
+        activeAreaLights.addAll(LightDataManager.loadAreaLights(server, fileName));
+        activePointLights.addAll(LightDataManager.loadPointLights(server, fileName));
+        activeDirectionalLights.addAll(LightDataManager.loadDirectionalLights(server, fileName));
+        activeSpotLights.addAll(LightDataManager.loadSpotLights(server, fileName));
     }
 
-    public static void saveLights(MinecraftServer server) {
-        LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server);
+    public static void saveLights(MinecraftServer server, String fileName) {
+        LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, fileName);
         activeAreaLights.clear();
         activePointLights.clear();
         activeDirectionalLights.clear();

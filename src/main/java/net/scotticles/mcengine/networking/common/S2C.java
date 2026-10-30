@@ -12,11 +12,17 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
+import net.scotticles.mcengine.lights.LightProfileManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.*;
+import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
@@ -24,6 +30,7 @@ import net.scotticles.mcengine.regions.RegionSoundInstance;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
+import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.LightProfilesUI;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
@@ -254,7 +261,8 @@ public class S2C {
             ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
 
             // Sync LP Editor
-            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName, ""));
+//            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
+            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
         });
     }
 }

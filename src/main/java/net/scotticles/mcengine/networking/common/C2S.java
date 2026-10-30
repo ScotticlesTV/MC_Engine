@@ -4,16 +4,21 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
+import net.scotticles.mcengine.lights.LightProfileManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.*;
+import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
@@ -24,6 +29,7 @@ import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,21 +71,21 @@ public class C2S {
 
         // Server Save Lights Data Payload
         ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
+            // Get All Light Profile Names While On The Server
+//            ArrayList<String> lpNames = new ArrayList<>(LightDataManager.getLPNames(context.server()));
+
             context.server().execute(() -> {
                 if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName, "Cannot Save Light Profile With No Name");
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Save Light Profile With No Name");
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
                 } else {
-                    String oldFileName = LightDataManager.fileName;
-                    LightDataManager.fileName = payload.fileName();
-                    LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server());
-                    LightDataManager.fileName = oldFileName;
+                    LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
 
-                    LightDataManager.getLPNames(context.server());
+                    LightProfileManager.getLPNames(context.server());
 
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName(), "Lights Saved To Profile: " + payload.fileName());
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, payload.fileName(), "Lights Saved To Profile: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
@@ -90,39 +96,37 @@ public class C2S {
         // Server Load Lights Data Payload
         ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
+                // Get All Light Profile Names While On The Server
+//                ArrayList<String> lpNames = new ArrayList<>(LightDataManager.getLPNames(context.server()));
 
-                if (!LightDataManager.lpNames.contains(payload.fileName())) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName, "No Light Profile Exists By Name: " + payload.fileName());
+                if (!LightProfileManager.lpNames.contains(payload.fileName())) {
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
                 } else if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName, "No Light Profile Exists By Name: " + payload.fileName());
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
-                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
-//                        if (player.hasPermissionLevel(2)) {
-//                            player.sendMessage(Text.of("Cannot Load Light Profile From Empty Name"), true);
-//                        }
                     }
                 } else {
                     // Update The fileName
-                    LightDataManager.fileName = payload.fileName();
+//                    LightDataManager.fileName = payload.fileName();
 
                     // Call load lights to update the lists
-                    LightsManager.loadLights(context.server());
+                    LightsManager.loadLights(context.server(), payload.fileName());
 
                     // Update the last LP property of the config file.
-                    MCEngineServerSettings.lastLPLoaded = LightDataManager.fileName;
+                    MCEngineServerSettings.lastLPLoaded = payload.fileName();
                     MCEngineServerSettings.save();
 
                     // Call Sync In Light Manager
                     LightsManager.syncAllLights();
 
 
-                    LightDataManager.getLPNames(context.server());
+                    LightProfileManager.getLPNames(context.server());
 
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName(), "Lights Loaded From Profile: " + payload.fileName());
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, payload.fileName(), "Lights Loaded From Profile: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
