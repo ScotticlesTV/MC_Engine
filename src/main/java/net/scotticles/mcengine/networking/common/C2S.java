@@ -67,10 +67,13 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
                 if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName);
+//                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, LightDataManager.fileName);
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                        player.sendMessage(Text.of("Cannot Save Light Profile With No Name"), true);
+//                        ServerPlayNetworking.send(player, syncPayload);
+                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
+                        if (player.hasPermissionLevel(2)) {
+                            player.sendMessage(Text.of("Cannot Save Light Profile With No Name"), true);
+                        }
                     }
                 } else {
                     String oldFileName = LightDataManager.fileName;
@@ -83,7 +86,10 @@ public class C2S {
                     SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
-                        player.sendMessage(Text.of("Lights Saved To Profile: " + payload.fileName()), true);
+                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
+                        if (player.hasPermissionLevel(2)) {
+                            player.sendMessage(Text.of("Lights Saved To Profile: " + payload.fileName()), true);
+                        }
                     }
                 }
             });
@@ -95,7 +101,17 @@ public class C2S {
 
                 if (!LightDataManager.lpNames.contains(payload.fileName())) {
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        player.sendMessage(Text.of("No Light Profile Exists By Name: " + payload.fileName()), true);
+                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
+                        if (player.hasPermissionLevel(2)) {
+                            player.sendMessage(Text.of("No Light Profile Exists By Name: " + payload.fileName()), true);
+                        }
+                    }
+                } else if (payload.fileName().equals("")) {
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
+                        if (player.hasPermissionLevel(2)) {
+                            player.sendMessage(Text.of("Cannot Load Light Profile From Empty Name"), true);
+                        }
                     }
                 } else {
                     // Update The fileName
@@ -111,12 +127,15 @@ public class C2S {
                     // Call Sync In Light Manager
                     LightsManager.syncAllLights();
 
-                    // Send A Message To All Players Saying A New LP Has Been Loaded
+
                     LightDataManager.getLPNames(context.server());
 
                     SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightDataManager.lpNames, payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        player.sendMessage(Text.of("Lights Loaded From Profile: " + payload.fileName()), true);
+                        //TODO: Move Messaging To Client Side Reciever And Check If The Engine UI Is Open
+                        if (player.hasPermissionLevel(2)) {
+                            player.sendMessage(Text.of("Lights Loaded From Profile: " + payload.fileName()), true);
+                        }
                         ServerPlayNetworking.send(player, syncPayload);
                     }
                 }
