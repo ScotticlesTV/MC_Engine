@@ -1,15 +1,9 @@
 package net.scotticles.mcengine;
 
-import foundry.veil.Veil;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.scotticles.mcengine.event.KeyInputHandler;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.ui.UIManager;
-
-import javax.swing.text.JTextComponent;
 
 public class MCEngineClient implements ClientModInitializer {
     @Override

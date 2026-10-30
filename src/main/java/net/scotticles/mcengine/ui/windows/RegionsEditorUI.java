@@ -13,8 +13,6 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.ui.UIManager;
 
-import java.util.ArrayList;
-
 public class RegionsEditorUI {
     // General Region Variables
     static ImString imRegionName = new ImString("Region", 256);

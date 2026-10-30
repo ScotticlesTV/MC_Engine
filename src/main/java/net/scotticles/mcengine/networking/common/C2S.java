@@ -2,7 +2,6 @@ package net.scotticles.mcengine.networking.common;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.realms.Request;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
@@ -31,7 +30,6 @@ import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
