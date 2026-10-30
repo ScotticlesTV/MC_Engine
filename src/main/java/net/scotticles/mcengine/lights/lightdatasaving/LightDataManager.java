@@ -17,41 +17,29 @@ import java.util.stream.Stream;
 
 public class LightDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static String fileName = "";
-    public static ArrayList<String> lpNames = new ArrayList<>();
 
     /**
      * Get the save file to use for the world's light data from the server.
      * @param server, the server used to get the world save file.
      * @return The save file as to save/load light data from.
      */
-    private static Path getSaveFile(MinecraftServer server) {
+    private static Path getSaveFile(MinecraftServer server, String fileName) {
         // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
         // return worldFolder.resolve("mcengine/lights.json");
         return worldFolder.resolve("mcengine/lights/" + fileName + ".json");
     }
 
-    public static void getLPNames(MinecraftServer server) {
-
-        Path path = server.getSavePath(WorldSavePath.ROOT).resolve("mcengine/lights/");
-
-        // try-with-resources ensures the system file handles are closed properly
-        try (Stream<Path> stream = Files.list(path)) {
-            List<String> fileNames = stream
-                    .filter(Files::isRegularFile) // Exclude folders
-                    .map(p -> p.getFileName().toString().replace(".json", ""))
-                    .toList(); // Use .collect(Collectors.toList()) if on Java 16 or older
-
-            lpNames.clear();
-            lpNames.addAll(fileNames);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void save(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server) {
+    /**
+     * Save all lights in the world to the specified Light Profile file.
+     * @param mceAreaLightDatas, the Area Lights to save.
+     * @param mcePointLightDatas, the Point Lights to save.
+     * @param mceDirectionalLightDatas, the Directional Lights to save.
+     * @param mceSpotLightDatas, the Spot Lights to save.
+     * @param server, the server to get the directory from.
+     * @param fileName, the name of the file to make at the directory.
+     */
+    public static void save(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server, String fileName) {
         LightsDataSave save = new LightsDataSave();
 
         for (MCEAreaLightData mceAreaLightData : mceAreaLightDatas) {
@@ -127,7 +115,7 @@ public class LightDataManager {
             ));
         }
 
-        Path saveFile = getSaveFile(server);
+        Path saveFile = getSaveFile(server, fileName);
 
         try {
             Files.createDirectories(saveFile.getParent());
@@ -139,8 +127,8 @@ public class LightDataManager {
         }
     }
 
-    public static List<MCEAreaLightData> loadAreaLights(MinecraftServer server) {
-        Path saveFile = getSaveFile(server);
+    public static List<MCEAreaLightData> loadAreaLights(MinecraftServer server, String fileName) {
+        Path saveFile = getSaveFile(server, fileName);
 
         List<MCEAreaLightData> areaLights = new ArrayList<>();
 
@@ -165,8 +153,8 @@ public class LightDataManager {
         return areaLights;
     }
 
-    public static List<MCEPointLightData> loadPointLights(MinecraftServer server) {
-        Path saveFile = getSaveFile(server);
+    public static List<MCEPointLightData> loadPointLights(MinecraftServer server, String fileName) {
+        Path saveFile = getSaveFile(server, fileName);
 
         List<MCEPointLightData> pointLights = new ArrayList<>();
 
@@ -191,8 +179,8 @@ public class LightDataManager {
         return pointLights;
     }
 
-    public static List<MCEDirectionalLightData> loadDirectionalLights(MinecraftServer server) {
-        Path saveFile = getSaveFile(server);
+    public static List<MCEDirectionalLightData> loadDirectionalLights(MinecraftServer server, String fileName) {
+        Path saveFile = getSaveFile(server, fileName);
 
         List<MCEDirectionalLightData> directionalLights = new ArrayList<>();
 
@@ -217,8 +205,8 @@ public class LightDataManager {
         return directionalLights;
     }
 
-    public static List<MCESpotLightData> loadSpotLights(MinecraftServer server) {
-        Path saveFile = getSaveFile(server);
+    public static List<MCESpotLightData> loadSpotLights(MinecraftServer server, String fileName) {
+        Path saveFile = getSaveFile(server, fileName);
 
         List<MCESpotLightData> spotLights = new ArrayList<>();
 

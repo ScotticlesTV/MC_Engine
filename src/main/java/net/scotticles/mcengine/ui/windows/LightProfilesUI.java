@@ -7,6 +7,7 @@ import imgui.flag.ImGuiCond;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.util.Util;
+import net.scotticles.mcengine.lights.LightProfileManager;
 import net.scotticles.mcengine.lights.lightdatasaving.LightDataManager;
 import net.scotticles.mcengine.networking.lights.payloads.LoadLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
@@ -48,7 +49,7 @@ public class LightProfilesUI {
                 ImGui.separator();
                 // List of All LP Names
                 ImGui.indent();
-                for (String s : LightDataManager.lpNames) {
+                for (String s : LightProfileManager.lpNames) {
                     ImGui.bulletText(s);
                 }
                 ImGui.unindent();
