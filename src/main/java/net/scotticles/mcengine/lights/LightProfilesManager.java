@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class LightProfileManager {
+public class LightProfilesManager {
 
     // List of All Light Profile Names
     public static ArrayList<String> lpNames = new ArrayList<>();

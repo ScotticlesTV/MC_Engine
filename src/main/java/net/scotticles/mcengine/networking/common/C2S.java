@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
-import net.scotticles.mcengine.lights.LightProfileManager;
+import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
@@ -74,7 +74,7 @@ public class C2S {
         // Server DeleteLightProfilePayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(DeleteLightProfilePayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                LightProfileManager.deleteLP(context.server(), payload.fileName());
+                LightProfilesManager.deleteLP(context.server(), payload.fileName());
             });
         });
 
@@ -90,13 +90,13 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
 
-                if (!LightProfileManager.lpNames.contains(payload.fileName())) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
+                if (!LightProfilesManager.lpNames.contains(payload.fileName())) {
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
-                } else if (payload.fileName().equals("")) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Load Light Profile With No Name" + payload.fileName());
+                } else if (payload.fileName().isEmpty()) {
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Load Light Profile With No Name" + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }
@@ -113,9 +113,9 @@ public class C2S {
                     LightsManager.syncAllLights();
 
 
-                    LightProfileManager.getLPNames(context.server());
+                    LightProfilesManager.getLPNames(context.server());
 
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, payload.fileName(), "Lights Loaded From Profile: " + payload.fileName());
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, payload.fileName(), "Lights Loaded From Profile: " + payload.fileName());
                     for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                         ServerPlayNetworking.send(player, syncPayload);
                     }

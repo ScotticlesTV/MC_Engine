@@ -6,13 +6,11 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.scotticles.mcengine.lights.LightProfileManager;
+import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.networking.lights.payloads.LoadLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.ui.UIManager;
-
-import java.util.ArrayList;
 
 public class LightProfilesUI {
     public static ImString lpName = new ImString("", 256);
@@ -45,7 +43,7 @@ public class LightProfilesUI {
                 ImGui.separator();
                 // List of All LP Names
                 ImGui.indent();
-                for (String s : LightProfileManager.lpNames) {
+                for (String s : LightProfilesManager.lpNames) {
                     ImGui.bulletText(s);
                 }
                 ImGui.unindent();

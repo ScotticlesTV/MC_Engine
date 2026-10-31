@@ -12,7 +12,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
-import net.scotticles.mcengine.lights.LightProfileManager;
+import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdatasaving.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
@@ -262,7 +262,7 @@ public class S2C {
 
             // Sync LP Editor
 //            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
-            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
+            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
         });
     }
 }

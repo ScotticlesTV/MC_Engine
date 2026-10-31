@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
-import net.scotticles.mcengine.lights.LightProfileManager;
+import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
@@ -132,14 +132,14 @@ public class LightDataManager {
                 try (Writer writer = Files.newBufferedWriter(saveFile)) {
                     GSON.toJson(save, writer);
                     message = String.format("Lights Saved To Profile: %s", fileName);
-                    LightProfileManager.getLPNames(server);
+                    LightProfilesManager.getLPNames(server);
                 }
             } catch (IOException e) {
                 message = String.format("Lights Could Not Be Saved To Profile: %s, File Not Accessible", fileName);
             }
         }
 
-        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfileManager.lpNames, MCEngineServerSettings.lastLPLoaded, message);
+        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, message);
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             ServerPlayNetworking.send(player, syncPayload);
         }

@@ -30,7 +30,7 @@ public class LightsManager {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             // Get the last loaded LP and load the lights from it.
             loadLights(server, MCEngineServerSettings.lastLPLoaded);
-            LightProfileManager.getLPNames(server);
+            LightProfilesManager.getLPNames(server);
         });
 
         // Save Light Data On Server Stop
@@ -40,6 +40,11 @@ public class LightsManager {
         });
     }
 
+    /**
+     * Load all light data from a specified file and load each light type into its corresponding tracked list.
+     * @param server, the server to get the loading directory from.
+     * @param fileName, the filename of the Light Profile to get the light data from.
+     */
     public static void loadLights(MinecraftServer server, String fileName) {
         activeAreaLights.clear();
         activePointLights.clear();
@@ -51,6 +56,11 @@ public class LightsManager {
         activeSpotLights.addAll(LightDataManager.loadSpotLights(server, fileName));
     }
 
+    /**
+     * Save all light data from the currently open light profile to a file with the same name.
+     * @param server, the server to get the saving directory from.
+     * @param fileName, the filename of the Light Profile file to save the light data to.
+     */
     public static void saveLights(MinecraftServer server, String fileName) {
         LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, fileName);
         activeAreaLights.clear();
@@ -75,6 +85,10 @@ public class LightsManager {
         syncAllLights();
     }
 
+    /**
+     * Duplicate the passed in Area Light.
+     * @param mceAreaLightData, the Area Light to duplicate.
+     */
     public static void duplicateAreaLight(MCEAreaLightData mceAreaLightData) {
         // Create A Duplicate Of The Passed In MCE Area Light Data
         MCEAreaLightData duplicatedLight = new MCEAreaLightData(mceAreaLightData);
@@ -102,6 +116,10 @@ public class LightsManager {
         syncAllLights();
     }
 
+    /**
+     * Duplicate the passed in Directional Light.
+     * @param mceDirectionalLightData, the Directional Light to duplicate.
+     */
     public static void duplicateDirectionalLight(MCEDirectionalLightData mceDirectionalLightData) {
         // Create A Duplicate Of The Passed In MCE Directional Light Data
         MCEDirectionalLightData duplicatedLight = new MCEDirectionalLightData(mceDirectionalLightData);
@@ -128,6 +146,10 @@ public class LightsManager {
         syncAllLights();
     }
 
+    /**
+     * Duplicate the passed in Point Light.
+     * @param mcePointLightData, the Point Light to duplicate.
+     */
     public static void duplicatePointLight(MCEPointLightData mcePointLightData) {
         // Create A Duplicate Of The New Passed In MCE Point Light Data
         MCEPointLightData duplicatedLight = new MCEPointLightData(mcePointLightData);
@@ -155,6 +177,10 @@ public class LightsManager {
         syncAllLights();
     }
 
+    /**
+     * Duplicate the passed in Spot Light.
+     * @param mceSpotLightData, the Spot Light to duplicate.
+     */
     public static void duplicateSpotLight(MCESpotLightData mceSpotLightData) {
         // Create A Duplicate Of The passed In MCE Spot Light Data
         MCESpotLightData duplicatedLight = new MCESpotLightData(mceSpotLightData);
