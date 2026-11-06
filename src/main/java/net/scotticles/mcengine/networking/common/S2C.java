@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
-import net.scotticles.mcengine.lights.lightdatasaving.*;
+import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.*;
@@ -32,7 +32,7 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import net.scotticles.mcengine.ui.UIManager;
-import net.scotticles.mcengine.ui.windows.LightProfilesUI;
+import net.scotticles.mcengine.ui.windows.LightProfilesEditorUI;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public class S2C {
         // Client Receiver For Sync Light Profile Editor Payloads
         ClientPlayNetworking.registerGlobalReceiver(SyncLightProfileEditorPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
-                LightProfilesUI.lpName.set(payload.newLPName());
+                LightProfilesEditorUI.lpName.set(payload.newLPName());
                 if (UIManager.showEngineUI && !payload.message().equals("")) {
                     context.player().sendMessage(Text.of(payload.message()), true);
                 }

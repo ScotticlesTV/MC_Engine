@@ -12,7 +12,7 @@ import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.ui.UIManager;
 
-public class LightProfilesUI {
+public class LightProfilesEditorUI {
     public static ImString lpName = new ImString("", 256);
     public static ImString newLPName = new ImString("", 256);
 
@@ -27,7 +27,7 @@ public class LightProfilesUI {
             ImGui.setNextWindowPos(screenCenter.x, screenCenter.y, ImGuiCond.Once, 0.5f, 0.5f);
 //            ImGui.setNextWindowSize(820, 520, ImGuiCond.Once);
 
-            ImGui.begin("Light Profiles", UIManager.showLightsProfilesUI);
+            ImGui.begin("Light Profile Editor", UIManager.showLightsProfilesUI);
             ImGui.textWrapped("Edit the world's light profiles.");
             ImGui.beginTabBar("Light Profiles");
             if (ImGui.beginTabItem("Active Profile")) {

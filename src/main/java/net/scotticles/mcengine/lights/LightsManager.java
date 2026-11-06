@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
-import net.scotticles.mcengine.lights.lightdatasaving.*;
+import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.lights.payloads.*;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
@@ -29,6 +29,8 @@ public class LightsManager {
         // Load Light Data On Server Start
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             // Get the last loaded LP and load the lights from it.
+            // Load The Server Settings Config
+            MCEngineServerSettings.load(server);
             loadLights(server, MCEngineServerSettings.lastLPLoaded);
             LightProfilesManager.getLPNames(server);
         });

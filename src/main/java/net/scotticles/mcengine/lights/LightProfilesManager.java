@@ -74,7 +74,7 @@ public class LightProfilesManager {
                         LightsManager.loadLights(server, newFileName);
                         LightsManager.syncAllLights();
                         MCEngineServerSettings.lastLPLoaded = newFileName;
-                        MCEngineServerSettings.save();
+                        MCEngineServerSettings.save(server);
                     }
                 } else {
                     message = String.format("Cannot Delete Light Profile By Name \"%s\". No Such Profile Exists", fileName);

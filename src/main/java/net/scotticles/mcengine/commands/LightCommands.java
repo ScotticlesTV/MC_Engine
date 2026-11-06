@@ -22,7 +22,6 @@ public class LightCommands {
                         .suggests((CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) -> {
                             builder.suggest("save");
                             builder.suggest("load");
-//                            builder.suggest("list");
                             return builder.buildFuture();
                         })
                             .then(CommandManager.argument("profile_name", StringArgumentType.word())

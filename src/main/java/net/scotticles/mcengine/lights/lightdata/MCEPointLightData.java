@@ -3,7 +3,7 @@
  * Description: A wrapper class for Veil's PointLightData class to allow for
  * adding name and UUID properties within the custom MC Engine Light Editor.
  */
-package net.scotticles.mcengine.lights.lightdatasaving;
+package net.scotticles.mcengine.lights.lightdata;
 
 import foundry.veil.api.client.render.light.data.PointLightData;
 import net.minecraft.network.RegistryByteBuf;

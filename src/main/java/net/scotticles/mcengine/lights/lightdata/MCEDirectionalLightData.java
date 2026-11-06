@@ -3,7 +3,7 @@
  * Description: A wrapper class for Veil's DirectionalLightData class to allow for
  * adding name and UUID properties within the custom MC Engine Light Editor.
  */
-package net.scotticles.mcengine.lights.lightdatasaving;
+package net.scotticles.mcengine.lights.lightdata;
 
 import foundry.veil.api.client.render.light.data.DirectionalLightData;
 import net.minecraft.network.RegistryByteBuf;

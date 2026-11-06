@@ -1,4 +1,4 @@
-package net.scotticles.mcengine.lights.lightdatasaving;
+package net.scotticles.mcengine.lights.lightdata;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
-import net.scotticles.mcengine.lights.lightdatasaving.MCEDirectionalLightData;
+import net.scotticles.mcengine.lights.lightdata.MCEDirectionalLightData;
 
 import java.util.ArrayList;
 import java.util.List;

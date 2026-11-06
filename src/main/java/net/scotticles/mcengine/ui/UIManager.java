@@ -68,7 +68,7 @@ public class UIManager {
                     LightEditorUI.showLightEditorUI();
                 }
                 if (showLightsProfilesUI.get()) {
-                    LightProfilesUI.showLightProfilesUI();
+                    LightProfilesEditorUI.showLightProfilesUI();
                 }
             }
 
@@ -87,11 +87,7 @@ public class UIManager {
             } else {
                 showEngineUI = false;
             }
-        });
-    }
 
-    public static void welcomeWindowUIInit() {
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (MCEngineClientConfig.firstLaunch) {
                 showWelcomeWindowUI.set(true);
             }

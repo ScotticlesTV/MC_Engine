@@ -1,4 +1,4 @@
-package net.scotticles.mcengine.lights.lightdatasaving;
+package net.scotticles.mcengine.lights;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,8 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
-import net.scotticles.mcengine.lights.LightProfilesManager;
-import net.scotticles.mcengine.lights.LightsManager;
+import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
@@ -30,7 +29,6 @@ public class LightDataManager {
     private static Path getSaveFile(MinecraftServer server, String fileName) {
         // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        // return worldFolder.resolve("mcengine/lights.json");
         return worldFolder.resolve("mcengine/lights/" + fileName + ".json");
     }
 

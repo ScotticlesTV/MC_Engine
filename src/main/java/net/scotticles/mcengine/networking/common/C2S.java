@@ -7,9 +7,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
+import net.scotticles.mcengine.lights.LightDataManager;
 import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
-import net.scotticles.mcengine.lights.lightdatasaving.*;
+import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.editor.payloads.CheckEditorUIPermsPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
@@ -107,7 +108,7 @@ public class C2S {
 
                     // Update the last LP property of the config file.
                     MCEngineServerSettings.lastLPLoaded = payload.fileName();
-                    MCEngineServerSettings.save();
+                    MCEngineServerSettings.save(context.server());
 
                     // Call Sync In Light Manager
                     LightsManager.syncAllLights();
