@@ -45,7 +45,7 @@ public class MCEngineServerSettings {
 
     public static void save(MinecraftServer server) {
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        File CONFIG_FILE = worldFolder.resolve(MCEngine.MOD_ID + "_server.properties").toFile();
+        File CONFIG_FILE = worldFolder.resolve("mcengine/mcengine-server-config").toFile();
 
         Properties properties = new Properties();
 
@@ -55,7 +55,7 @@ public class MCEngineServerSettings {
         properties.setProperty("lastLPLoaded", lastLPLoaded);
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
-            properties.store(out, "MC Engine Server Settings\n WARNING - Do Not Edit These Variables In File, Please Use The In-Game Editor");
+            properties.store(out, "MC Engine Server Settings\nWARNING - Do Not Edit These Variables In File, Please Use The In-Game Editor");
         } catch (IOException e) {
             System.err.println(MCEngine.MOD_ID + " Failed to save config file.");
             e.printStackTrace();

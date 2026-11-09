@@ -48,6 +48,7 @@ public class LightsManager {
      * @param fileName, the filename of the Light Profile to get the light data from.
      */
     public static void loadLights(MinecraftServer server, String fileName) {
+        MCEngineServerSettings.lastLPLoaded = fileName;
         activeAreaLights.clear();
         activePointLights.clear();
         activeDirectionalLights.clear();
