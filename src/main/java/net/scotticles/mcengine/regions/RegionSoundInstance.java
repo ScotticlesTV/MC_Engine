@@ -19,7 +19,7 @@ public class RegionSoundInstance extends MovingSoundInstance {
         this.volume = volume;
         this.pitch = 1.0F;
 
-        this.fadeIncrement = 1.0f / (fadeDurationSeconds * 20.0f);
+        this.fadeIncrement = volume / (fadeDurationSeconds * 20.0f);
 
         // Match player coordinates immediately on creation
         // Potentially Needs To Be A Float?

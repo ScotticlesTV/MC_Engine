@@ -19,7 +19,7 @@ public class MCEngineServerSettings {
 
     public static void load(MinecraftServer server) {
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        File CONFIG_FILE = worldFolder.resolve("mcengine/mcengine-server-config").toFile();
+        File CONFIG_FILE = worldFolder.resolve("mcengine/server-settings").toFile();
 
 
         Properties properties = new Properties();
@@ -45,7 +45,7 @@ public class MCEngineServerSettings {
 
     public static void save(MinecraftServer server) {
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        File CONFIG_FILE = worldFolder.resolve("mcengine/mcengine-server-config").toFile();
+        File CONFIG_FILE = worldFolder.resolve("mcengine/server-settings").toFile();
 
         Properties properties = new Properties();
 

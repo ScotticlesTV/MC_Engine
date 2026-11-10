@@ -67,7 +67,7 @@ public class LightProfilesEditorUI {
                 ImGui.sameLine();
                 if (ImGui.button("Load")) {
                     // Send A Packet To Tell The Server To Load Loads From A LP File With The Above Specified Name
-                    ClientPlayNetworking.send(new LoadLightsDataPayload(newLPName.get()));
+                    ClientPlayNetworking.send(new LoadLightsDataPayload(newLPName.get(), "all"));
                 }
                 ImGui.setItemTooltip("Load lights from a Light Profile file with the specified name.");
 
