@@ -22,7 +22,6 @@ public class MCEngineClientSettings {
     public static float uiColorA = 0.9412f;
 
     // Config File Reference Inside Fabric Config File
-    // private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + "_client_settings.properties");
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("mcengine");
     private static final File CONFIG_FILE = CONFIG_DIR.resolve("client_settings.properties").toFile();
 
@@ -31,13 +30,13 @@ public class MCEngineClientSettings {
      * Load the client settings from the config directory.
      */
     public static void load() {
-
         try {
             if (!Files.exists(CONFIG_DIR)) {
                 Files.createDirectories(CONFIG_DIR);
+                System.out.println(MCEngine.MOD_ID + "Config folder could not be found, creating \"mcengine\" folder.");
             }
         } catch (IOException ioe) {
-
+            System.err.println(MCEngine.MOD_ID + " Config folder inaccessible, creating \"mcengine\" folder.");
         }
 
 
@@ -57,6 +56,8 @@ public class MCEngineClientSettings {
                 uiColorA = Float.parseFloat(properties.getProperty("uiColorA", "0.9412"));
 
             } catch (IOException | NumberFormatException e) {
+                // TODO (priority:medium category:Cleanup @Scott): Find out which of these is better for error printing in Minecraft.
+                // System.out.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
                 e.printStackTrace();
             }

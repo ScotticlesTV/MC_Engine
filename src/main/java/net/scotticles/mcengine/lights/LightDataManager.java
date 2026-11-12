@@ -146,8 +146,9 @@ public class LightDataManager {
         }
     }
 
+    // TODO(priority:high category:Core-Functionality @Scott): Consider splitting this out back into 4 methods that return either null or the successfully loaded light list. Each can then be used for individual loading and messaging can be separated out based on null or success.
     /**
-     *
+     * Load all light data and return the all 4 light type lists as one 2D list of lightData.
      * @param server
      * @param fileName
      * @return

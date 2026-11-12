@@ -13,8 +13,6 @@ import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
 public class LightCommands {
 
     public static void registerCommands() {
-        // TODO: Add all or self parameter to the command with a bool parameter on the packet to minimize duplicate code
-
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                 CommandManager.literal("lightprofile")
@@ -26,7 +24,7 @@ public class LightCommands {
                             return builder.buildFuture();
                         })
                             .then(CommandManager.argument("profile_name", StringArgumentType.word())                                        .executes(context -> {
-                                // Extract the argument values
+                                // Get the argument values as variables.
                                 String action = StringArgumentType.getString(context, "action");
                                 String profileName = StringArgumentType.getString(context, "profile_name");
 

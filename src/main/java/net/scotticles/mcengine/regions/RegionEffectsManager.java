@@ -30,13 +30,14 @@ public class RegionEffectsManager {
                 for  (RadialRegionData region : radialRegions) {
 
                     // TODO(priority:low category:Cleanup @Scott): Rework + simplify region effect functionality.
+                    // TODO(priority:medium category:Core-Functionality @Scott): Add dimension variable to regions and add differentiation in Region Effects
                     // For Condensing This To Less If Statements, Consider:
-                    // Checking Dimension and isInRadius in one if statement
+                    // Checking Dimension and isInRadius in one if statement -> checking dimension can be part of inRadius / inArea?
                     // Using region.regionEnabled as a wrapper/first check
 
                     // Confirm That The Player Is In The Overworld
                     // (Can Be Changed Later To Have Regions In Multiple Dimensions)
-                    // (Just Need To Add A "Select Dimension" Checkbox To Each Region)
+                    // (Just Need To Add A "Select Dimension" Dropdown To Each Region)
                     if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 
                         // Check If The Player Is In Range Of The Region

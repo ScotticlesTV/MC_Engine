@@ -85,9 +85,7 @@ public class C2S {
         // Server SaveLightsDataPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-
                 LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
-
             });
         });
 

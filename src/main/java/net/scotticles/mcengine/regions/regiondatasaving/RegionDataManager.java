@@ -29,8 +29,6 @@ public class RegionDataManager {
         return worldFolder.resolve("mcengine/regions.json");
     }
 
-    // Save Regions To A JSON File
-
     /**
      * Save all region data to the world's save file.
      * @param radialRegions, the actively tracked list of radial regions.
