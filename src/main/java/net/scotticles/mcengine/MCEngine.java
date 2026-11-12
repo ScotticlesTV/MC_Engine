@@ -2,13 +2,11 @@ package net.scotticles.mcengine;
 
 import net.fabricmc.api.ModInitializer;
 import net.scotticles.mcengine.commands.LightCommands;
-import net.scotticles.mcengine.commands.RegionCommands;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.settings.MCEngineClientConfig;
-import net.scotticles.mcengine.settings.MCEngineServerSettings;
+import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +25,7 @@ public class MCEngine implements ModInitializer {
 		// Proceed with mild caution.
 
 		// Load The Client Engine Settings Config
-		MCEngineClientConfig.load();
+		MCEngineClientSettings.load();
 
 		// Load Region Systems
 		RegionsManager.regionsInit();

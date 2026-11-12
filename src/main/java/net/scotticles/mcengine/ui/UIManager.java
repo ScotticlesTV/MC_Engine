@@ -6,7 +6,7 @@ import imgui.flag.ImGuiCol;
 import imgui.type.ImBoolean;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.scotticles.mcengine.settings.MCEngineClientConfig;
+import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import net.scotticles.mcengine.ui.windows.*;
 
 public class UIManager {
@@ -31,8 +31,8 @@ public class UIManager {
         HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
             try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
                 if (ctx == null) return;
-                if (MCEngineClientConfig.useCustomUIColors) {
-                    ImGui.getStyle().setColor(ImGuiCol.WindowBg, MCEngineClientConfig.uiColorR, MCEngineClientConfig.uiColorG, MCEngineClientConfig.uiColorB, MCEngineClientConfig.uiColorA);
+                if (MCEngineClientSettings.useCustomUIColors) {
+                    ImGui.getStyle().setColor(ImGuiCol.WindowBg, MCEngineClientSettings.uiColorR, MCEngineClientSettings.uiColorG, MCEngineClientSettings.uiColorB, MCEngineClientSettings.uiColorA);
                 }
                 else {
                     ImGui.styleColorsDark();
@@ -74,21 +74,21 @@ public class UIManager {
 
             if (showWelcomeWindowUI.get()) {
                 WelcomeWindowUI.showWelcomeWindowUI();
-                MCEngineClientConfig.firstLaunch = false;
-                MCEngineClientConfig.save();
+                MCEngineClientSettings.firstLaunch = false;
+                MCEngineClientSettings.save();
             }
         });
     }
 
     public static void engineUIWorldJoinInit() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (MCEngineClientConfig.openNavBarOnWorldJoin) {
+            if (MCEngineClientSettings.openNavBarOnWorldJoin) {
                 showEngineUI = true;
             } else {
                 showEngineUI = false;
             }
 
-            if (MCEngineClientConfig.firstLaunch) {
+            if (MCEngineClientSettings.firstLaunch) {
                 showWelcomeWindowUI.set(true);
             }
         });

@@ -2,11 +2,11 @@ package net.scotticles.mcengine.ui.windows;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import net.scotticles.mcengine.settings.MCEngineClientConfig;
+import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import net.scotticles.mcengine.ui.UIManager;
 
 public class ClientEngineSettingsUI {
-    private static final float[] uiColor = {MCEngineClientConfig.uiColorR, MCEngineClientConfig.uiColorG, MCEngineClientConfig.uiColorB, MCEngineClientConfig.uiColorA};
+    private static final float[] uiColor = {MCEngineClientSettings.uiColorR, MCEngineClientSettings.uiColorG, MCEngineClientSettings.uiColorB, MCEngineClientSettings.uiColorA};
     // UI Loop
     public static void showClientEngineSettings() {
         try (ImGuiMC.ActiveContext ctx = ImGuiMC.withImGui()) {
@@ -18,9 +18,9 @@ public class ClientEngineSettingsUI {
             ImGui.begin("Client Engine Settings", UIManager.showClientEngineSettings);
             ImGui.textWrapped("Configure MC Engine to your liking.");
             // Open Nav Bar On World Join
-            if (ImGui.checkbox("##Automatically open the Engine Nav Bar when joining a world.", MCEngineClientConfig.openNavBarOnWorldJoin)) {
-                MCEngineClientConfig.openNavBarOnWorldJoin = !MCEngineClientConfig.openNavBarOnWorldJoin;
-                MCEngineClientConfig.save();
+            if (ImGui.checkbox("##Automatically open the Engine Nav Bar when joining a world.", MCEngineClientSettings.openNavBarOnWorldJoin)) {
+                MCEngineClientSettings.openNavBarOnWorldJoin = !MCEngineClientSettings.openNavBarOnWorldJoin;
+                MCEngineClientSettings.save();
             }
             ImGui.sameLine();
             ImGui.textWrapped("Automatically open the Engine Nav Bar when joining a world.");
@@ -41,19 +41,19 @@ public class ClientEngineSettingsUI {
 //            ImGui.separator();
             // UI Colors
             ImGui.textWrapped("Change The Color Of The Engine UI");
-            if (ImGui.checkbox("##Use Custom UI Colors", MCEngineClientConfig.useCustomUIColors)) {
-                MCEngineClientConfig.useCustomUIColors = !MCEngineClientConfig.useCustomUIColors;
-                MCEngineClientConfig.save();
+            if (ImGui.checkbox("##Use Custom UI Colors", MCEngineClientSettings.useCustomUIColors)) {
+                MCEngineClientSettings.useCustomUIColors = !MCEngineClientSettings.useCustomUIColors;
+                MCEngineClientSettings.save();
             }
             ImGui.sameLine();
             ImGui.textWrapped("Use Custom UI Colors");
             ImGui.spacing();
             if (ImGui.colorEdit4("UI Color", uiColor)) {
-                MCEngineClientConfig.uiColorR = uiColor[0];
-                MCEngineClientConfig.uiColorG = uiColor[1];
-                MCEngineClientConfig.uiColorB = uiColor[2];
-                MCEngineClientConfig.uiColorA = uiColor[3];
-                MCEngineClientConfig.save();
+                MCEngineClientSettings.uiColorR = uiColor[0];
+                MCEngineClientSettings.uiColorG = uiColor[1];
+                MCEngineClientSettings.uiColorB = uiColor[2];
+                MCEngineClientSettings.uiColorA = uiColor[3];
+                MCEngineClientSettings.save();
             }
             ImGui.end();
         }

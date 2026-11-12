@@ -7,13 +7,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
-public class MCEngineClientConfig {
+public class MCEngineClientSettings {
     // Config variables
     public static boolean firstLaunch = true;
     public static boolean openNavBarOnWorldJoin = false;
-//    public static boolean reopenWindowsOnWorldJoin = false;
     public static boolean useCustomUIColors = false;
     public static float uiColorR = 0.059f;
     public static float uiColorG = 0.059f;
@@ -21,9 +22,25 @@ public class MCEngineClientConfig {
     public static float uiColorA = 0.9412f;
 
     // Config File Reference Inside Fabric Config File
-    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + "_client.properties");
+    // private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), MCEngine.MOD_ID + "_client_settings.properties");
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("mcengine");
+    private static final File CONFIG_FILE = CONFIG_DIR.resolve("client_settings.properties").toFile();
 
+
+    /**
+     * Load the client settings from the config directory.
+     */
     public static void load() {
+
+        try {
+            if (!Files.exists(CONFIG_DIR)) {
+                Files.createDirectories(CONFIG_DIR);
+            }
+        } catch (IOException ioe) {
+
+        }
+
+
         Properties properties = new Properties();
 
         if (CONFIG_FILE.exists()) {
@@ -33,7 +50,6 @@ public class MCEngineClientConfig {
                 // Assign config values from file and set them to defaults if they don't exist
                 firstLaunch = Boolean.parseBoolean(properties.getProperty("firstLaunch", "true"));
                 openNavBarOnWorldJoin = Boolean.parseBoolean(properties.getProperty("openNavBarOnWorldJoin", "false"));
-                // reopenWindowsOnWorldJoin = Boolean.parseBoolean(properties.getProperty("reopenWindowsOnWorldJoin", "false"));
                 useCustomUIColors = Boolean.parseBoolean(properties.getProperty("useCustomUIColors", "false"));
                 uiColorR = Float.parseFloat(properties.getProperty("uiColorR", "0.059"));
                 uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0.059"));
@@ -45,18 +61,19 @@ public class MCEngineClientConfig {
                 e.printStackTrace();
             }
         } else {
-            // Generate a fresh config file with defaults if it doesn't exist
-            save();
+            save(); // Make a new config file with default settings if it doesn't exist.
         }
     }
 
+    /**
+     * Save the client settings to the config directory.
+     */
     public static void save() {
         Properties properties = new Properties();
 
         // Put variables into properties object
-        properties.put("firstLaunch", String.valueOf(firstLaunch));
+        properties.setProperty("firstLaunch", String.valueOf(firstLaunch));
         properties.setProperty("openNavBarOnWorldJoin", String.valueOf(openNavBarOnWorldJoin));
-//        properties.setProperty("reopenWindowsOnWorldJoin", String.valueOf(reopenWindowsOnWorldJoin));
         properties.setProperty("useCustomUIColors", String.valueOf(useCustomUIColors));
         properties.setProperty("uiColorR", String.valueOf(uiColorR));
         properties.setProperty("uiColorG", String.valueOf(uiColorG));
@@ -64,7 +81,7 @@ public class MCEngineClientConfig {
         properties.setProperty("uiColorA", String.valueOf(uiColorA));
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
-            properties.store(out, "MC Engine Client Config");
+            properties.store(out, "MC Engine Client Settings");
         } catch (IOException e) {
             System.err.println(MCEngine.MOD_ID + " Failed to save config file.");
             e.printStackTrace();
