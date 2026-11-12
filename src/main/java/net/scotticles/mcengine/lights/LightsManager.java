@@ -27,6 +27,10 @@ public class LightsManager {
     public static final List<MCEDirectionalLightData> activeDirectionalLights = new ArrayList<>();
     public static final List<MCESpotLightData> activeSpotLights = new ArrayList<>();
 
+
+    /**
+     *
+     */
     public static void lightDataInit() {
         // Load Light Data On Server Start
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {

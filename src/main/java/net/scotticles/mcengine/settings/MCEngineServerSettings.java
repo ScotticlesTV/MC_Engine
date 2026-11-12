@@ -17,9 +17,19 @@ public class MCEngineServerSettings {
     public static boolean playCustomMusic = false;
     public static String lastLPLoaded = "lights";
 
-    public static void load(MinecraftServer server) {
+    /**
+     * Get the save file to use for the world's settings from the server.
+     * @param server, the server used to get the world save file.
+     * @return The save file as to save/load settings data from.
+     */
+    private static File getSaveFile(MinecraftServer server) {
+        // Get World Folder From Server
         Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        File CONFIG_FILE = worldFolder.resolve("mcengine/server-settings").toFile();
+        return worldFolder.resolve("mcengine/server-settings.properties").toFile();
+    }
+
+    public static void load(MinecraftServer server) {
+        File CONFIG_FILE = getSaveFile(server);
 
 
         Properties properties = new Properties();
@@ -44,8 +54,7 @@ public class MCEngineServerSettings {
     }
 
     public static void save(MinecraftServer server) {
-        Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
-        File CONFIG_FILE = worldFolder.resolve("mcengine/server-settings").toFile();
+        File CONFIG_FILE = getSaveFile(server);
 
         Properties properties = new Properties();
 
