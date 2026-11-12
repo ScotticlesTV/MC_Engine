@@ -213,6 +213,7 @@ public class LightEditorUI {
                                 new Vector3f(0, 1, 0)
                         );
                         LightsManager.addAreaLight(playerPos, playerOrientation);
+                        shouldSyncNetwork = true;
                     }
                 }
 
@@ -415,6 +416,7 @@ public class LightEditorUI {
             if (ImGui.beginTabItem("Directional Lights")) {
                 if (ImGui.button("Add Directional Light")) {
                     LightsManager.addDirectionalLight();
+                    shouldSyncNetwork = true;
                 }
 
                 for (int i = 0; i < LightsManager.activeDirectionalLights.size(); i++) {
@@ -531,6 +533,7 @@ public class LightEditorUI {
                                 new Vector3f(0, 1, 0)
                         );
                         LightsManager.addSpotLight(playerPos, playerOrientation);
+                        shouldSyncNetwork = true;
                     }
                 }
 

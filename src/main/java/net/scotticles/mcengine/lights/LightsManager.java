@@ -1,5 +1,6 @@
 package net.scotticles.mcengine.lights;
 
+import foundry.veil.api.client.render.light.data.LightData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +15,7 @@ import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,49 +30,43 @@ public class LightsManager {
     public static void lightDataInit() {
         // Load Light Data On Server Start
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            // Get the last loaded LP and load the lights from it.
-            // Load The Server Settings Config
+            // Load the server settings to get the last LP loaded.
             MCEngineServerSettings.load(server);
-            loadLights(server, MCEngineServerSettings.lastLPLoaded);
+
+            // Clear all Light lists as a safety check before loading.
+            clearLights();
+
+            // Get all LP names from the world's MC Engine / Lights folder.
             LightProfilesManager.getLPNames(server);
+
+            // Load all Lights from the last LP loaded.
+            List<List<LightData>> lights = LightDataManager.load(server, MCEngineServerSettings.lastLPLoaded);
+
+            // Separate each Light type into its corresponding tracked light list
+            for (LightData areaLight : lights.get(0)) {
+                activeAreaLights.add((MCEAreaLightData) areaLight);
+            }
+            for (LightData pointLight : lights.get(1)) {
+                activePointLights.add((MCEPointLightData) pointLight);
+            }
+            for (LightData directionalLight : lights.get(2)) {
+                activeDirectionalLights.add((MCEDirectionalLightData) directionalLight);
+            }
+            for (LightData spotLight : lights.get(3)) {
+                activeSpotLights.add((MCESpotLightData) spotLight);
+            }
         });
 
         // Save Light Data On Server Stop
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            // MCEngineServerSettings.lastLPLoaded is the definitive currently loaded LP.
-            saveLights(server, MCEngineServerSettings.lastLPLoaded);
+            // lastLPLoaded is the last light profile the server has registered when loading a light profile
+            LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, MCEngineServerSettings.lastLPLoaded);
+
+            // Clear all Light lists as a safety check for singleplayer
+            clearLights();
         });
     }
 
-    /**
-     * Load all light data from a specified file and load each light type into its corresponding tracked list.
-     * @param server, the server to get the loading directory from.
-     * @param fileName, the filename of the Light Profile to get the light data from.
-     */
-    public static void loadLights(MinecraftServer server, String fileName) {
-        MCEngineServerSettings.lastLPLoaded = fileName;
-        activeAreaLights.clear();
-        activePointLights.clear();
-        activeDirectionalLights.clear();
-        activeSpotLights.clear();
-        activeAreaLights.addAll(LightDataManager.loadAreaLights(server, fileName));
-        activePointLights.addAll(LightDataManager.loadPointLights(server, fileName));
-        activeDirectionalLights.addAll(LightDataManager.loadDirectionalLights(server, fileName));
-        activeSpotLights.addAll(LightDataManager.loadSpotLights(server, fileName));
-    }
-
-    /**
-     * Save all light data from the currently open light profile to a file with the same name.
-     * @param server, the server to get the saving directory from.
-     * @param fileName, the filename of the Light Profile file to save the light data to.
-     */
-    public static void saveLights(MinecraftServer server, String fileName) {
-        LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, fileName);
-        activeAreaLights.clear();
-        activePointLights.clear();
-        activeDirectionalLights.clear();
-        activeSpotLights.clear();
-    }
 
      /**
      * Make a new MCE Area Light Data object, track it, and sync it to the server.
@@ -83,9 +79,6 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Area Lights List
         activeAreaLights.add(mceAreaLightData);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -98,9 +91,6 @@ public class LightsManager {
 
         // Track The New Light
         activeAreaLights.add(duplicatedLight);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
 
@@ -114,9 +104,6 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Directional Lights List
         activeDirectionalLights.add(mceDirectionalLightData);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -129,9 +116,6 @@ public class LightsManager {
 
         // Track The New Light
         activeDirectionalLights.add(duplicatedLight);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -144,9 +128,6 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Point Lights List
         activePointLights.add(mcePointLightData);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -159,9 +140,6 @@ public class LightsManager {
 
         // Track The New Light
         activePointLights.add(duplicatedLight);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -175,9 +153,6 @@ public class LightsManager {
 
         // Track The New Wrapper Object In The Active Spot Lights List
         activeSpotLights.add(mceSpotLightData);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -190,9 +165,6 @@ public class LightsManager {
 
         // Track The New Light
         activeSpotLights.add(duplicatedLight);
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
@@ -204,13 +176,10 @@ public class LightsManager {
         activePointLights.clear();
         activeDirectionalLights.clear();
         activeSpotLights.clear();
-
-        // Sync All Lights
-        syncAllLights();
     }
 
     /**
-     * Send packets to sync all light lists with the server and other clients.
+     * Send packets to sync all light lists with the server and other clients. CAN ONLY BE USED FROM THE CLIENT.
      */
     public static void syncAllLights() {
         ClientPlayNetworking.send(new ClearLightRendererPayload());

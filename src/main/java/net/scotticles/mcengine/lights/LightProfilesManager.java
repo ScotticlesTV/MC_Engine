@@ -1,9 +1,14 @@
 package net.scotticles.mcengine.lights;
 
+import foundry.veil.api.client.render.light.data.LightData;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
+import net.scotticles.mcengine.lights.lightdata.MCEAreaLightData;
+import net.scotticles.mcengine.lights.lightdata.MCEDirectionalLightData;
+import net.scotticles.mcengine.lights.lightdata.MCEPointLightData;
+import net.scotticles.mcengine.lights.lightdata.MCESpotLightData;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
@@ -11,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -70,9 +76,28 @@ public class LightProfilesManager {
                     newFileName = MCEngineServerSettings.lastLPLoaded;
                     // If The Currently Active Profile Was Deleted, Load The First Profile In The List And Sync To All Clients
                     if (MCEngineServerSettings.lastLPLoaded.equals(fileName)) {
+                        // Get the name of the new LP to load.
                         newFileName = lpNames.getFirst();
-                        LightsManager.loadLights(server, newFileName);
+
+                        // Get all lights from the specified LP file.
+                        List<List<LightData>> lights = LightDataManager.load(server, newFileName);
+                        for (LightData areaLight : lights.get(0)) {
+                            LightsManager.activeAreaLights.add((MCEAreaLightData) areaLight);
+                        }
+                        for (LightData pointLight : lights.get(1)) {
+                            LightsManager.activePointLights.add((MCEPointLightData) pointLight);
+                        }
+                        for (LightData directionalLight : lights.get(2)) {
+                            LightsManager.activeDirectionalLights.add((MCEDirectionalLightData) directionalLight);
+                        }
+                        for (LightData spotLight : lights.get(3)) {
+                            LightsManager.activeSpotLights.add((MCESpotLightData) spotLight);
+                        }
+
+                        // Sync all Lights to all connected players.
                         LightsManager.syncAllLights();
+
+                        // Set last LP loaded to the newly loaded LP after loading.
                         MCEngineServerSettings.lastLPLoaded = newFileName;
                         MCEngineServerSettings.save(server);
                     }

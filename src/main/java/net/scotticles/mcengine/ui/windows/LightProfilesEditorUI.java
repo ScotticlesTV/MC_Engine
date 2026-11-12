@@ -13,6 +13,7 @@ import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLi
 import net.scotticles.mcengine.ui.UIManager;
 
 public class LightProfilesEditorUI {
+    public static boolean isDesynced = false;
     public static ImString lpName = new ImString("", 256);
     public static ImString newLPName = new ImString("", 256);
 
@@ -67,7 +68,7 @@ public class LightProfilesEditorUI {
                 ImGui.sameLine();
                 if (ImGui.button("Load")) {
                     // Send A Packet To Tell The Server To Load Loads From A LP File With The Above Specified Name
-                    ClientPlayNetworking.send(new LoadLightsDataPayload(newLPName.get(), "all"));
+                    ClientPlayNetworking.send(new LoadLightsDataPayload(newLPName.get()));
                 }
                 ImGui.setItemTooltip("Load lights from a Light Profile file with the specified name.");
 
@@ -77,6 +78,8 @@ public class LightProfilesEditorUI {
                     ClientPlayNetworking.send(new DeleteLightProfilePayload(newLPName.get()));
                 }
                 ImGui.setItemTooltip("Delete a Light Profile file with the specified name.");
+
+
                 ImGui.endTabItem();
             }
             ImGui.endTabBar();

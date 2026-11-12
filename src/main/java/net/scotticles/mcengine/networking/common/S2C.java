@@ -65,19 +65,17 @@ public class S2C {
         PayloadTypeRegistry.playS2C().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(SyncLightProfileEditorPayload.TYPE, SyncLightProfileEditorPayload.CODEC);
-
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
-
         // Client Receiver For Sync Light Profile Editor Payloads
         ClientPlayNetworking.registerGlobalReceiver(SyncLightProfileEditorPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
-                LightProfilesEditorUI.lpName.set(payload.newLPName());
-                if (UIManager.showEngineUI && !payload.message().equals("")) {
-                    context.player().sendMessage(Text.of(payload.message()), true);
-                }
+                    LightProfilesEditorUI.lpName.set(payload.newLPName());
+                    if (UIManager.showEngineUI && !payload.message().equals("")) {
+                        context.player().sendMessage(Text.of(payload.message()), true);
+                    }
             });
         });
 
@@ -252,16 +250,16 @@ public class S2C {
 
             //Sync Regions
             ServerPlayNetworking.send(player, new SyncRadialRegionsDataPayload(RegionsManager.activeRadialRegions));
+            ServerPlayNetworking.send(player, new SyncLinearRegionsDataPayload(RegionsManager.activeLinearRegions));
 
             //Sync Lights
-//            ServerPlayNetworking.send(player, new ClearLightRendererPayload());
+            ServerPlayNetworking.send(player, new ClearLightRendererPayload());
             ServerPlayNetworking.send(player, new SyncAreaLightsDataPayload(LightsManager.activeAreaLights));
             ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
             ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
             ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
 
             // Sync LP Editor
-//            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightDataManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
             ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
         });
     }

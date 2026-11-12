@@ -1,5 +1,6 @@
 package net.scotticles.mcengine.networking.common;
 
+import foundry.veil.api.client.render.light.data.LightData;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
@@ -30,7 +31,9 @@ import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
+import org.apache.logging.log4j.core.jmx.Server;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,9 +84,10 @@ public class C2S {
 
         // Server SaveLightsDataPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
-
             context.server().execute(() -> {
+
                 LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
+
             });
         });
 
@@ -91,35 +95,43 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
 
-                if (!LightProfilesManager.lpNames.contains(payload.fileName())) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, "No Light Profile Exists By Name: " + payload.fileName());
-                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                    }
-                } else if (payload.fileName().isEmpty()) {
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, "Cannot Load Light Profile With No Name" + payload.fileName());
-                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                    }
-                } else {
-
-                    // Call load lights to update the lists
-                    LightsManager.loadLights(context.server(), payload.fileName());
-
-                    // Update the last LP property of the config file.
-                    MCEngineServerSettings.lastLPLoaded = payload.fileName();
-                    MCEngineServerSettings.save(context.server());
-
-                    // Call Sync In Light Manager
-                    LightsManager.syncAllLights();
+                List<List<LightData>> lights = LightDataManager.load(context.server(), payload.fileName());
 
 
-                    LightProfilesManager.getLPNames(context.server());
+                // Load all Lights from the last LP loaded.
 
-                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, payload.fileName(), "Lights Loaded From Profile: " + payload.fileName());
-                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                        ServerPlayNetworking.send(player, syncPayload);
-                    }
+                List<MCEAreaLightData> areaLights = new ArrayList<>();
+                List<MCEPointLightData> pointLights = new ArrayList<>();
+                List<MCEDirectionalLightData> directionalLights = new ArrayList<>();
+                List<MCESpotLightData> spotLights = new ArrayList<>();
+
+
+                // Separate each Light type into its corresponding tracked light list
+                for (LightData areaLight : lights.get(0)) {
+                    areaLights.add((MCEAreaLightData) areaLight);
+                }
+                for (LightData pointLight : lights.get(1)) {
+                    pointLights.add((MCEPointLightData) pointLight);
+                }
+                for (LightData directionalLight : lights.get(2)) {
+                    directionalLights.add((MCEDirectionalLightData) directionalLight);
+                }
+                for (LightData spotLight : lights.get(3)) {
+                    spotLights.add((MCESpotLightData) spotLight);
+                }
+
+
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                    LightsManager.clearLights();
+                    LightsManager.activeAreaLights.addAll(areaLights);
+                    LightsManager.activePointLights.addAll(pointLights);
+                    LightsManager.activeDirectionalLights.addAll(directionalLights);
+                    LightsManager.activeSpotLights.addAll(spotLights);
+                    ServerPlayNetworking.send(player, new ClearLightRendererPayload());
+                    ServerPlayNetworking.send(player, new SyncAreaLightsDataPayload(LightsManager.activeAreaLights));
+                    ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
+                    ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
+                    ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
                 }
             });
         });

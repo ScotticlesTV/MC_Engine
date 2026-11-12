@@ -25,28 +25,19 @@ public class LightCommands {
                             builder.suggest("load");
                             return builder.buildFuture();
                         })
-                            .then(CommandManager.argument("profile_name", StringArgumentType.word())
-                                .then(CommandManager.argument("affected", StringArgumentType.word())
-                                        .suggests((CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) -> {
-                                            builder.suggest("all");
-                                            builder.suggest("self");
-                                            return builder.buildFuture();
-                                        })
-                                        .executes(context -> {
-                                            // Extract the argument values
-                                            String action = StringArgumentType.getString(context, "action");
-                                            String profileName = StringArgumentType.getString(context, "profile_name");
-                                            String affected = StringArgumentType.getString(context, "affected");
+                            .then(CommandManager.argument("profile_name", StringArgumentType.word())                                        .executes(context -> {
+                                // Extract the argument values
+                                String action = StringArgumentType.getString(context, "action");
+                                String profileName = StringArgumentType.getString(context, "profile_name");
 
-                                            // Run Command Logic
-                                            if (action.equals("save")) {
-                                                ClientPlayNetworking.send(new SaveLightsDataPayload(profileName));
-                                            } else if (action.equals("load")) {
-                                                ClientPlayNetworking.send(new LoadLightsDataPayload(profileName, affected));
-                                            }
-                                            return 1;
-                                        })
-                                )
+                                // Run Command Logic
+                                if (action.equals("save")) {
+                                    ClientPlayNetworking.send(new SaveLightsDataPayload(profileName));
+                                } else if (action.equals("load")) {
+                                    ClientPlayNetworking.send(new LoadLightsDataPayload(profileName));
+                                }
+                                return 1;
+                                })
                             )
                     )
             );
