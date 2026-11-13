@@ -15,7 +15,7 @@ public class ConsoleManager {
 
     /**
      * Client side method to make sure the console doesn't exceed its max length.
-     * @param newMessage
+     * @param newMessage the message to add to the console.
      */
     public static void handleConsoleMessages(String newMessage) {
         if (consoleMessages.size() > maxConsoleLength) {
@@ -26,6 +26,7 @@ public class ConsoleManager {
         }
     }
 
+    //TODO: Would it be possible to add player tags to each message? So the name of player that made the change is broadcasted as well.
     /**
      * Server-Side method to broadcast a message to all players on the server's MC Engine console.
      * @param message the message to send as a String.
