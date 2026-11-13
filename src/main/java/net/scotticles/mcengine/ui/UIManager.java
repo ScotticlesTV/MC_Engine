@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import net.scotticles.mcengine.ui.windows.*;
+import net.scotticles.mcengine.ui.windows.lights.LightEditorUI;
+import net.scotticles.mcengine.ui.windows.lights.LightProfilesEditorUI;
 
 public class UIManager {
 
@@ -23,7 +25,7 @@ public class UIManager {
     public static ImBoolean showLightEditorUI = new ImBoolean(false);
     public static ImBoolean showInteractionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightsProfilesUI = new ImBoolean(false);
-//    public static ImBoolean showDecalsEditorUI = new ImBoolean(false);
+    public static ImBoolean showConsoleUI = new ImBoolean(false);
 
 
 
@@ -69,6 +71,9 @@ public class UIManager {
                 }
                 if (showLightsProfilesUI.get()) {
                     LightProfilesEditorUI.showLightProfilesUI();
+                }
+                if (showConsoleUI.get()) {
+                    ConsoleUI.showConsoleUI();
                 }
             }
 

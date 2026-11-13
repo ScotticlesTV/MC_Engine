@@ -27,6 +27,10 @@ public class EngineNavBarUI {
                     UIManager.showWelcomeWindowUI.set(true);
                 }
                 ImGui.setItemTooltip("Reopen the Welcome Window that shows on first joining a world with MC Engine installed.");
+                if (ImGui.menuItem("Toggle Console")) {
+                    UIManager.showConsoleUI.set(!UIManager.showConsoleUI.get());
+                }
+                ImGui.setItemTooltip("Toggle the \"Console\" window to see editor messages.");
                 ImGui.endMenu();
             }
             ImGui.separator();

@@ -3,12 +3,10 @@ package net.scotticles.mcengine.lights;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import foundry.veil.api.client.render.light.data.LightData;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
+import net.scotticles.mcengine.console.ConsoleManager;
 import net.scotticles.mcengine.lights.lightdata.*;
-import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 
 import java.io.IOException;
@@ -18,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class LightDataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -33,6 +32,28 @@ public class LightDataManager {
         return worldFolder.resolve("mcengine/lights/" + fileName + ".json");
     }
 
+    /**
+     * Get all Light Profile file names from MC Engine's lights folder on the server.
+     * @param server, the server to get the Light Profile file names from.
+     */
+    public static void detectLPNames(MinecraftServer server) {
+        Path path = server.getSavePath(WorldSavePath.ROOT).resolve("mcengine/lights/");
+
+        // try-with-resources ensures the system file handles are closed properly
+        try (Stream<Path> stream = Files.list(path)) {
+            List<String> fileNames = stream
+                    .filter(Files::isRegularFile) // Exclude folders
+                    .map(p -> p.getFileName().toString().replace(".json", ""))
+                    .toList();
+
+            LightsManager.lightProfileNames.clear();
+            LightsManager.lightProfileNames.addAll(fileNames);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     /**
@@ -44,12 +65,10 @@ public class LightDataManager {
      * @param server, the server to get the directory from.
      * @param fileName, the name of the file to make at the directory.
      */
-    public static void save(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server, String fileName) {
-        // Message To Send To All Players After Action Is Completed
-        String message = "";
-
+    public static boolean saveLP(List<MCEAreaLightData> mceAreaLightDatas, List<MCEPointLightData> mcePointLightDatas, List<MCEDirectionalLightData> mceDirectionalLightDatas, List<MCESpotLightData> mceSpotLightDatas, MinecraftServer server, String fileName) {
         if (fileName.isEmpty()) {
-            message = "Cannot Save Light Profile With No Name";
+            ConsoleManager.broadcastMessage("Cannot Save Light Profile With No Name", server);
+            return false;
         } else {
             LightsDataSave save = new LightsDataSave();
 
@@ -132,54 +151,45 @@ public class LightDataManager {
                 Files.createDirectories(saveFile.getParent());
                 try (Writer writer = Files.newBufferedWriter(saveFile)) {
                     GSON.toJson(save, writer);
-                    message = String.format("Lights Saved To Profile: %s", fileName);
-                    LightProfilesManager.getLPNames(server);
+                    ConsoleManager.broadcastMessage(String.format("Lights Saved To Profile: %s", fileName), server);
+                    return true;
                 }
             } catch (IOException e) {
-                message = String.format("Lights Could Not Be Saved To Profile: %s, File Not Accessible", fileName);
+                ConsoleManager.broadcastMessage(String.format("Lights Could Not Be Saved To Profile: %s, File Not Accessible", fileName), server);
+                return false;
             }
-        }
-
-        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, message);
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            ServerPlayNetworking.send(player, syncPayload);
         }
     }
 
-    // TODO(priority:high category:Core-Functionality @Scott): Consider splitting this out back into 4 methods that return either null or the successfully loaded light list. Each can then be used for individual loading and messaging can be separated out based on null or success.
     /**
      * Load all light data and return the all 4 light type lists as one 2D list of lightData.
-     * @param server
-     * @param fileName
-     * @return
+     * @param server the server to get the light profile directory from.
+     * @param fileName the name of the light profile file to load.
+     * @return all light data from the light profile file.
      */
-    public static List<List<LightData>> load(MinecraftServer server, String fileName) {
-        List<List<LightData>> allLights = new ArrayList<>();
-        String message = "";
-        String newFileName = "";
-        if (!LightProfilesManager.lpNames.contains(fileName)) {
+    public static List<List<LightData>> loadLP(MinecraftServer server, String fileName) {
+        if (!LightsManager.lightProfileNames.contains(fileName)) {
 
-            message = "No Light Profile Exists By Name: " + fileName;
-            newFileName = MCEngineServerSettings.lastLPLoaded;
+            ConsoleManager.broadcastMessage("No Light Profile Exists By Name: " + fileName, server);
+            return null;
 
         } else if (fileName.isEmpty()) {
 
-            message = "Cannot Load Light Profile With No Name";
-            newFileName = MCEngineServerSettings.lastLPLoaded;
+            ConsoleManager.broadcastMessage("Cannot Load Light Profile With No Name", server);
+            return null;
 
         } else {
+            List<List<LightData>> allLights = new ArrayList<>();
 
             Path saveFile = getSaveFile(server, fileName);
 
-
+            //TODO: Consider moving this out of here and into the networking logic so this only happens on a sync call and not server start.
             MCEngineServerSettings.lastLPLoaded = fileName;
             MCEngineServerSettings.save(server);
 
-
-
             try (Reader reader = Files.newBufferedReader(saveFile)) {
-                message = "Light Profile Loaded From: " + fileName;
-                newFileName = fileName;
+                ConsoleManager.broadcastMessage("Light Profile Loaded From: " + fileName, server);
+
                 LightsDataSave loaded = GSON.fromJson(reader, LightsDataSave.class);
 
                 if (loaded == null || loaded.areaLightsData == null || loaded.pointLightsData == null || loaded.directionalLightsData == null || loaded.spotLightsData == null) {
@@ -196,19 +206,49 @@ public class LightDataManager {
                 allLights.add(pointLights);
                 allLights.add(directionalLights);
                 allLights.add(spotLights);
+
+                return allLights;
             }
             catch (IOException ioe) {
-                ioe.printStackTrace();
+                ConsoleManager.broadcastMessage(String.format("Light Profile %s Not Accessible.", fileName), server);
+                return null;
             }
         }
+    }
 
-        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, newFileName, message);
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            ServerPlayNetworking.send(player, syncPayload);
+    /**
+     * Delete the specified Light Profile with the given file name.
+     * @param server, the server to get the directory from.
+     * @param fileName, the file name of the Light Profile to delete.
+     */
+    public static boolean deleteLP(MinecraftServer server, String fileName) {
+        // Specify the directory and file name
+        Path fileToDelete = server.getSavePath(WorldSavePath.ROOT).resolve("mcengine/lights/" + fileName + ".json");
+
+        // Try To Delete Light Profile + Set Message To Send To Connected Players
+        if (fileName.isEmpty()) {
+            return false;
+        } else if (!MCEngineServerSettings.lastLPLoaded.equals(fileName)) {
+            try {
+                // Deletes the file, returns true if successful, false if file didn't exist
+                boolean deleted = Files.deleteIfExists(fileToDelete);
+
+                if (deleted) {
+                    ConsoleManager.broadcastMessage(String.format("Light Profile \"%s\" Deleted Successfully", fileName), server);
+                    LightsManager.lightProfileNames.remove(fileName);
+                    return true;
+                } else {
+                    ConsoleManager.broadcastMessage(String.format("Cannot Delete Light Profile By Name \"%s\". No Such Profile Exists", fileName), server);
+                    return false;
+                }
+            } catch (IOException e) {
+                ConsoleManager.broadcastMessage(String.format("Cannot Not Delete Light Profile \"%s\". File Could Not Be Accessed", fileName), server);
+                return false;
+            }
+        } else {
+            ConsoleManager.broadcastMessage("Cannot Delete Currently Opened Light Profile", server);
+            return false;
         }
-
-        return allLights;
-
     }
 
     /**
