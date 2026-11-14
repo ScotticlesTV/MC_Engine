@@ -1,19 +1,16 @@
-package net.scotticles.mcengine.ui.windows;
+package net.scotticles.mcengine.ui.windows.lights;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;
-import imgui.ImVec2;
-import imgui.flag.ImGuiCond;
 import imgui.type.ImString;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.scotticles.mcengine.lights.LightProfilesManager;
+import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.lights.payloads.LoadLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.SaveLightsDataPayload;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.ui.UIManager;
 
 public class LightProfilesEditorUI {
-    public static boolean isDesynced = false;
     public static ImString lpName = new ImString("", 256);
     public static ImString newLPName = new ImString("", 256);
 
@@ -24,10 +21,6 @@ public class LightProfilesEditorUI {
             }
 
             // ImGUI Code
-            ImVec2 screenCenter = ImGui.getMainViewport().getCenter();
-            ImGui.setNextWindowPos(screenCenter.x, screenCenter.y, ImGuiCond.Once, 0.5f, 0.5f);
-//            ImGui.setNextWindowSize(820, 520, ImGuiCond.Once);
-
             ImGui.begin("Light Profile Editor", UIManager.showLightsProfilesUI);
             ImGui.textWrapped("Edit the world's light profiles.");
             ImGui.beginTabBar("Light Profiles");
@@ -44,7 +37,7 @@ public class LightProfilesEditorUI {
                 ImGui.separator();
                 // List of All LP Names
                 ImGui.indent();
-                for (String s : LightProfilesManager.lpNames) {
+                for (String s : LightsManager.lightProfileNames) {
                     ImGui.bulletText(s);
                 }
                 ImGui.unindent();

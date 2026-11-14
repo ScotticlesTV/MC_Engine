@@ -3,19 +3,13 @@ package net.scotticles.mcengine.lights;
 import foundry.veil.api.client.render.light.data.LightData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.lightdata.*;
-import net.scotticles.mcengine.networking.lights.payloads.*;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +20,11 @@ public class LightsManager {
     public static final List<MCEPointLightData> activePointLights = new ArrayList<>();
     public static final List<MCEDirectionalLightData> activeDirectionalLights = new ArrayList<>();
     public static final List<MCESpotLightData> activeSpotLights = new ArrayList<>();
+    public static List<String> lightProfileNames = new ArrayList<>();
 
 
     /**
-     *
+     * Initialize all light data features.
      */
     public static void lightDataInit() {
         // Load Light Data On Server Start
@@ -41,30 +36,32 @@ public class LightsManager {
             clearLights();
 
             // Get all LP names from the world's MC Engine / Lights folder.
-            LightProfilesManager.getLPNames(server);
+            LightDataManager.detectLPNames(server);
 
             // Load all Lights from the last LP loaded.
-            List<List<LightData>> lights = LightDataManager.load(server, MCEngineServerSettings.lastLPLoaded);
+            List<List<LightData>> lights = LightDataManager.loadLP(server, MCEngineServerSettings.lastLPLoaded);
 
             // Separate each Light type into its corresponding tracked light list
-            for (LightData areaLight : lights.get(0)) {
-                activeAreaLights.add((MCEAreaLightData) areaLight);
-            }
-            for (LightData pointLight : lights.get(1)) {
-                activePointLights.add((MCEPointLightData) pointLight);
-            }
-            for (LightData directionalLight : lights.get(2)) {
-                activeDirectionalLights.add((MCEDirectionalLightData) directionalLight);
-            }
-            for (LightData spotLight : lights.get(3)) {
-                activeSpotLights.add((MCESpotLightData) spotLight);
+            if (lights != null) {
+                for (LightData areaLight : lights.get(0)) {
+                    activeAreaLights.add((MCEAreaLightData) areaLight);
+                }
+                for (LightData pointLight : lights.get(1)) {
+                    activePointLights.add((MCEPointLightData) pointLight);
+                }
+                for (LightData directionalLight : lights.get(2)) {
+                    activeDirectionalLights.add((MCEDirectionalLightData) directionalLight);
+                }
+                for (LightData spotLight : lights.get(3)) {
+                    activeSpotLights.add((MCESpotLightData) spotLight);
+                }
             }
         });
 
         // Save Light Data On Server Stop
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             // lastLPLoaded is the last light profile the server has registered when loading a light profile
-            LightDataManager.save(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, MCEngineServerSettings.lastLPLoaded);
+            LightDataManager.saveLP(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, MCEngineServerSettings.lastLPLoaded);
 
             // Clear all Light lists as a safety check for singleplayer
             clearLights();
@@ -172,7 +169,7 @@ public class LightsManager {
     }
 
     /**
-     * Delete all lights lists and sync to the server.
+     * Clear all light lists.
      */
     public static void clearLights() {
         // Clear Light Lists
@@ -186,10 +183,6 @@ public class LightsManager {
      * Send packets to sync all light lists with the server and other clients. CAN ONLY BE USED FROM THE CLIENT.
      */
     public static void syncAllLights() {
-        ClientPlayNetworking.send(new ClearLightRendererPayload());
-        ClientPlayNetworking.send(new SyncAreaLightsDataPayload(new ArrayList<>(activeAreaLights)));
-        ClientPlayNetworking.send(new SyncPointLightsDataPayload(new ArrayList<>(activePointLights)));
-        ClientPlayNetworking.send(new SyncDirectionalLightsDataPayload(new ArrayList<>(activeDirectionalLights)));
-        ClientPlayNetworking.send(new SyncSpotLightsDataPayload(new ArrayList<>(activeSpotLights)));
+        ClientPlayNetworking.send(new SyncLightDataPayload(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights));
     }
 }

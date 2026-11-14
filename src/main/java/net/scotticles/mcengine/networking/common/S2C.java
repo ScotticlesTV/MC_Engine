@@ -9,20 +9,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
-import net.scotticles.mcengine.lights.LightProfilesManager;
+import net.scotticles.mcengine.console.ConsoleManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
 import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.*;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
@@ -32,9 +27,10 @@ import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
 import net.scotticles.mcengine.ui.UIManager;
-import net.scotticles.mcengine.ui.windows.LightProfilesEditorUI;
+import net.scotticles.mcengine.ui.windows.lights.LightProfilesEditorUI;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,90 +50,53 @@ public class S2C {
 
         PayloadTypeRegistry.playS2C().register(RegionSoundStatePayload.TYPE, RegionSoundStatePayload.CODEC);
 
-        PayloadTypeRegistry.playS2C().register(SyncAreaLightsDataPayload.ID, SyncAreaLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playS2C().register(SyncPointLightsDataPayload.ID, SyncPointLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playS2C().register(SyncDirectionalLightsDataPayload.ID, SyncDirectionalLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playS2C().register(SyncSpotLightsDataPayload.ID, SyncSpotLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playS2C().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SyncLightDataPayload.ID, SyncLightDataPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(SyncLightProfileEditorPayload.TYPE, SyncLightProfileEditorPayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SendMessagePayload.TYPE, SendMessagePayload.CODEC);
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
-        // Client Receiver For Sync Light Profile Editor Payloads
+        // Client SendMessagePayload Receiver
+        ClientPlayNetworking.registerGlobalReceiver(SendMessagePayload.TYPE, (payload, context) -> {
+            context.client().execute(() -> {
+                ConsoleManager.handleConsoleMessages(payload.message());
+            });
+        });
+
+
+        // Client SyncLightProfileEditorPayload Receiver
         ClientPlayNetworking.registerGlobalReceiver(SyncLightProfileEditorPayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
-                    LightProfilesEditorUI.lpName.set(payload.newLPName());
-                    if (UIManager.showEngineUI && !payload.message().equals("")) {
-                        context.player().sendMessage(Text.of(payload.message()), true);
-                    }
+                LightProfilesEditorUI.lpName.set(payload.newLPName());
+                LightsManager.lightProfileNames.clear();
+                LightsManager.lightProfileNames.addAll(payload.lpNames());
             });
         });
 
-        // Client Receiver For Clear Light Renderer Payloads
-        ClientPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
+        // Client SyncLightDataPayload Receiver
+        ClientPlayNetworking.registerGlobalReceiver(SyncLightDataPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                // Clear The Light Renderer
+                LightsManager.clearLights();
                 VeilRenderSystem.renderer().getLightRenderer().free();
-            });
-        });
 
-        // Client Receiver For Sync Area Light Data Payloads
-        ClientPlayNetworking.registerGlobalReceiver(SyncAreaLightsDataPayload.ID, (payload, context) -> {
-            List<MCEAreaLightData> synchronizedSet = payload.areaLights();
+                LightsManager.activeAreaLights.addAll(payload.areaLights());
+                LightsManager.activePointLights.addAll(payload.pointLights());
+                LightsManager.activeDirectionalLights.addAll(payload.directionalLights());
+                LightsManager.activeSpotLights.addAll(payload.spotLights());
 
-            context.client().execute(() -> {
-                // Clear The Current Local Regions Set And Replace It With The One From The Server
-                LightsManager.activeAreaLights.clear();
-                LightsManager.activeAreaLights.addAll(synchronizedSet);
-                for (MCEAreaLightData mceAreaLightData : synchronizedSet) {
+                for (MCEAreaLightData mceAreaLightData : LightsManager.activeAreaLights) {
                     VeilRenderSystem.renderer().getLightRenderer().addLight(mceAreaLightData);
                 }
-            });
-        });
-
-        // Client Receiver For Sync Point Light Data Payloads
-        ClientPlayNetworking.registerGlobalReceiver(SyncPointLightsDataPayload.ID, (payload, context) -> {
-            List<MCEPointLightData> synchronizedSet = payload.pointLights();
-
-            context.client().execute(() -> {
-                // Clear The Current Local Regions Set And Replace It With The One From The Server
-                LightsManager.activePointLights.clear();
-                LightsManager.activePointLights.addAll(synchronizedSet);
-                for (MCEPointLightData mcePointLightData : synchronizedSet) {
+                for (MCEPointLightData mcePointLightData : LightsManager.activePointLights) {
                     VeilRenderSystem.renderer().getLightRenderer().addLight(mcePointLightData);
                 }
-            });
-        });
-
-        // Client Receiver For Sync Directional Light Data Payloads
-        ClientPlayNetworking.registerGlobalReceiver(SyncDirectionalLightsDataPayload.ID, (payload, context) -> {
-            List<MCEDirectionalLightData> synchronizedSet = payload.directionalLights();
-
-            context.client().execute(() -> {
-                // Clear The Current Local Regions Set And Replace It With The One From The Server
-                LightsManager.activeDirectionalLights.clear();
-                LightsManager.activeDirectionalLights.addAll(synchronizedSet);
-                for (MCEDirectionalLightData mceDirectionalLightData : synchronizedSet) {
+                for (MCEDirectionalLightData mceDirectionalLightData : LightsManager.activeDirectionalLights) {
                     VeilRenderSystem.renderer().getLightRenderer().addLight(mceDirectionalLightData);
                 }
-            });
-        });
-
-        // Client Receiver For Sync Spot Light Data Payloads
-        ClientPlayNetworking.registerGlobalReceiver(SyncSpotLightsDataPayload.ID, (payload, context) -> {
-            List<MCESpotLightData> synchronizedSet = payload.spotLights();
-
-            context.client().execute(() -> {
-                // Clear The Current Local Regions Set And Replace It With The One From The Server
-                LightsManager.activeSpotLights.clear();
-                LightsManager.activeSpotLights.addAll(synchronizedSet);
-                for (MCESpotLightData mceSpotLightData : synchronizedSet) {
+                for (MCESpotLightData mceSpotLightData : LightsManager.activeSpotLights) {
                     VeilRenderSystem.renderer().getLightRenderer().addLight(mceSpotLightData);
                 }
             });
@@ -246,21 +205,15 @@ public class S2C {
                     gameRules.get(GameRules.SHOW_DEATH_MESSAGES).get()
             ));
 
-
-
             //Sync Regions
             ServerPlayNetworking.send(player, new SyncRadialRegionsDataPayload(RegionsManager.activeRadialRegions));
             ServerPlayNetworking.send(player, new SyncLinearRegionsDataPayload(RegionsManager.activeLinearRegions));
 
             //Sync Lights
-            ServerPlayNetworking.send(player, new ClearLightRendererPayload());
-            ServerPlayNetworking.send(player, new SyncAreaLightsDataPayload(LightsManager.activeAreaLights));
-            ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
-            ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
-            ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
+            ServerPlayNetworking.send(player, new SyncLightDataPayload(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights));
 
             // Sync LP Editor
-            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(LightProfilesManager.lpNames, MCEngineServerSettings.lastLPLoaded, ""));
+            ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(new ArrayList<>(LightsManager.lightProfileNames), MCEngineServerSettings.lastLPLoaded));
         });
     }
 }

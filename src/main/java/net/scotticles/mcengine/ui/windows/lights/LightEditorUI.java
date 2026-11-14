@@ -1,4 +1,4 @@
-package net.scotticles.mcengine.ui.windows;
+package net.scotticles.mcengine.ui.windows.lights;
 
 import foundry.imgui.api.ImGuiMC;
 import imgui.ImGui;

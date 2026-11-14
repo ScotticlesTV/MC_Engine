@@ -9,7 +9,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.scotticles.mcengine.lights.LightDataManager;
-import net.scotticles.mcengine.lights.LightProfilesManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.editor.payloads.OpenEditorUIPayload;
@@ -18,10 +17,7 @@ import net.scotticles.mcengine.networking.gamerules.payloads.SyncGamerulesDataPa
 import net.scotticles.mcengine.networking.lights.payloads.*;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.DeleteLightProfilePayload;
 import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLightProfileEditorPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncAreaLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncDirectionalLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncPointLightsDataPayload;
-import net.scotticles.mcengine.networking.lights.payloads.lights.SyncSpotLightsDataPayload;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
@@ -31,7 +27,6 @@ import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +49,7 @@ public class C2S {
 
         PayloadTypeRegistry.playC2S().register(SetTimePayload.TYPE, SetTimePayload.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(SyncAreaLightsDataPayload.ID, SyncAreaLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playC2S().register(SyncPointLightsDataPayload.ID, SyncPointLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playC2S().register(SyncDirectionalLightsDataPayload.ID, SyncDirectionalLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playC2S().register(SyncSpotLightsDataPayload.ID, SyncSpotLightsDataPayload.CODEC);
-
-        PayloadTypeRegistry.playC2S().register(ClearLightRendererPayload.TYPE, ClearLightRendererPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SyncLightDataPayload.ID, SyncLightDataPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(SaveLightsDataPayload.TYPE, SaveLightsDataPayload.CODEC);
 
@@ -78,14 +65,27 @@ public class C2S {
         // Server DeleteLightProfilePayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(DeleteLightProfilePayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                LightProfilesManager.deleteLP(context.server(), payload.fileName());
+                if (LightDataManager.deleteLP(context.server(), payload.fileName())) {
+                    SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload((ArrayList<String>) LightsManager.lightProfileNames, MCEngineServerSettings.lastLPLoaded);
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        ServerPlayNetworking.send(player, syncPayload);
+                    }
+                }
             });
         });
 
         // Server SaveLightsDataPayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(SaveLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                LightDataManager.save(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName());
+                if (LightDataManager.saveLP(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights, context.server(), payload.fileName())) {
+                    if (!LightsManager.lightProfileNames.contains(payload.fileName())) {
+                        LightDataManager.detectLPNames(context.server());
+                        SyncLightProfileEditorPayload syncPayload = new SyncLightProfileEditorPayload(new ArrayList<>(LightsManager.lightProfileNames), MCEngineServerSettings.lastLPLoaded);
+                        for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                            ServerPlayNetworking.send(player, syncPayload);
+                        }
+                    }
+                }
             });
         });
 
@@ -93,120 +93,55 @@ public class C2S {
         ServerPlayNetworking.registerGlobalReceiver(LoadLightsDataPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
 
-                List<List<LightData>> lights = LightDataManager.load(context.server(), payload.fileName());
+                List<List<LightData>> lights = LightDataManager.loadLP(context.server(), payload.fileName());
 
+                if (lights != null) {
+                    List<MCEAreaLightData> areaLights = new ArrayList<>();
+                    List<MCEPointLightData> pointLights = new ArrayList<>();
+                    List<MCEDirectionalLightData> directionalLights = new ArrayList<>();
+                    List<MCESpotLightData> spotLights = new ArrayList<>();
 
-                // Load all Lights from the last LP loaded.
+                    // Separate each Light type into its corresponding tracked light list
+                    for (LightData areaLight : lights.get(0)) {
+                        areaLights.add((MCEAreaLightData) areaLight);
+                    }
+                    for (LightData pointLight : lights.get(1)) {
+                        pointLights.add((MCEPointLightData) pointLight);
+                    }
+                    for (LightData directionalLight : lights.get(2)) {
+                        directionalLights.add((MCEDirectionalLightData) directionalLight);
+                    }
+                    for (LightData spotLight : lights.get(3)) {
+                        spotLights.add((MCESpotLightData) spotLight);
+                    }
 
-                List<MCEAreaLightData> areaLights = new ArrayList<>();
-                List<MCEPointLightData> pointLights = new ArrayList<>();
-                List<MCEDirectionalLightData> directionalLights = new ArrayList<>();
-                List<MCESpotLightData> spotLights = new ArrayList<>();
-
-
-                // Separate each Light type into its corresponding tracked light list
-                for (LightData areaLight : lights.get(0)) {
-                    areaLights.add((MCEAreaLightData) areaLight);
-                }
-                for (LightData pointLight : lights.get(1)) {
-                    pointLights.add((MCEPointLightData) pointLight);
-                }
-                for (LightData directionalLight : lights.get(2)) {
-                    directionalLights.add((MCEDirectionalLightData) directionalLight);
-                }
-                for (LightData spotLight : lights.get(3)) {
-                    spotLights.add((MCESpotLightData) spotLight);
-                }
-
-
-                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     LightsManager.clearLights();
                     LightsManager.activeAreaLights.addAll(areaLights);
                     LightsManager.activePointLights.addAll(pointLights);
                     LightsManager.activeDirectionalLights.addAll(directionalLights);
                     LightsManager.activeSpotLights.addAll(spotLights);
-                    ServerPlayNetworking.send(player, new ClearLightRendererPayload());
-                    ServerPlayNetworking.send(player, new SyncAreaLightsDataPayload(LightsManager.activeAreaLights));
-                    ServerPlayNetworking.send(player, new SyncPointLightsDataPayload(LightsManager.activePointLights));
-                    ServerPlayNetworking.send(player, new SyncDirectionalLightsDataPayload(LightsManager.activeDirectionalLights));
-                    ServerPlayNetworking.send(player, new SyncSpotLightsDataPayload(LightsManager.activeSpotLights));
+
+                    SyncLightDataPayload syncLightsPayload = new SyncLightDataPayload(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights);
+                    SyncLightProfileEditorPayload syncLPEPayload = new SyncLightProfileEditorPayload((ArrayList<String>) LightsManager.lightProfileNames, payload.fileName());
+                    for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                        ServerPlayNetworking.send(player, syncLightsPayload);
+                        ServerPlayNetworking.send(player, syncLPEPayload);
+                    }
                 }
             });
         });
 
-        // Server ClearLightRendererPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(ClearLightRendererPayload.TYPE, (payload, context) -> {
+        // Server SyncLightDataPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SyncLightDataPayload.ID, (payload, context) -> {
             context.server().execute(() -> {
-                // Send A Packet To All Connected Clients To Clear Their Light Renderers
-                ClearLightRendererPayload syncPayload = new ClearLightRendererPayload();
-                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, syncPayload);
-                }
-            });
-        });
+                LightsManager.clearLights();
 
-        // Server SyncAreaLightsDataPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(SyncAreaLightsDataPayload.ID, (payload, context) -> {
-            List<MCEAreaLightData> updatedAreaLights = payload.areaLights();
+                LightsManager.activeAreaLights.addAll(payload.areaLights());
+                LightsManager.activePointLights.addAll(payload.pointLights());
+                LightsManager.activeDirectionalLights.addAll(payload.directionalLights());
+                LightsManager.activeSpotLights.addAll(payload.spotLights());
 
-            context.server().execute(() -> {
-                // Overwrite The Server's Area Light Data List With The Updated Light Data From The Client
-                LightsManager.activeAreaLights.clear();
-                LightsManager.activeAreaLights.addAll(updatedAreaLights);
-
-                // Sync The Updated Area Lights To All Players On The Server
-                SyncAreaLightsDataPayload syncPayload = new SyncAreaLightsDataPayload(updatedAreaLights);
-                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, syncPayload);
-                }
-            });
-        });
-
-        // Server SyncPointLightsDataPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(SyncPointLightsDataPayload.ID, (payload, context) -> {
-            List<MCEPointLightData> updatedPointLights = payload.pointLights();
-
-            context.server().execute(() -> {
-                // Overwrite The Server's Area Light Data List With The Updated Light Data From The Client
-                LightsManager.activePointLights.clear();
-                LightsManager.activePointLights.addAll(updatedPointLights);
-
-                // Sync The Updated Area Lights To All Players On The Server
-                SyncPointLightsDataPayload syncPayload = new SyncPointLightsDataPayload(updatedPointLights);
-                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, syncPayload);
-                }
-            });
-        });
-
-        // Server SyncDirectionalLightsDataPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(SyncDirectionalLightsDataPayload.ID, (payload, context) -> {
-            List<MCEDirectionalLightData> updatedDirectionalLights = payload.directionalLights();
-
-            context.server().execute(() -> {
-                // Overwrite The Server's Area Light Data List With The Updated Light Data From The Client
-                LightsManager.activeDirectionalLights.clear();
-                LightsManager.activeDirectionalLights.addAll(updatedDirectionalLights);
-
-                // Sync The Updated Area Lights To All Players On The Server
-                SyncDirectionalLightsDataPayload syncPayload = new SyncDirectionalLightsDataPayload(updatedDirectionalLights);
-                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, syncPayload);
-                }
-            });
-        });
-
-        // Server SyncSpotLightsDataPayload Receiver
-        ServerPlayNetworking.registerGlobalReceiver(SyncSpotLightsDataPayload.ID, (payload, context) -> {
-            List<MCESpotLightData> updatedSpotLights = payload.spotLights();
-
-            context.server().execute(() -> {
-                // Overwrite The Server's Area Light Data List With The Updated Light Data From The Client
-                LightsManager.activeSpotLights.clear();
-                LightsManager.activeSpotLights.addAll(updatedSpotLights);
-
-                // Sync The Updated Area Lights To All Players On The Server
-                SyncSpotLightsDataPayload syncPayload = new SyncSpotLightsDataPayload(updatedSpotLights);
+                SyncLightDataPayload syncPayload = new SyncLightDataPayload(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights);
                 for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
                     ServerPlayNetworking.send(player, syncPayload);
                 }

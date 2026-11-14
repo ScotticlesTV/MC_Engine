@@ -9,10 +9,6 @@
 
 // Server can handle all delegation: players make changes, tell the server to sync, all other players receive the updated lights, server handles all messaging and updates to make sure players know what's happening. Adding or removing lights is synced through the player's changes. SERVER TELLS PLAYERS WHAT LIGHTS THEY HAVE, PLAYER JUST TELLS SERVER THINGS HAVE CHANGED
 
-// Can syncing be changed to only sync certain types of lights? This would help with performance get rid of the need for the clear light renderer payload. this would mean readding all lights when each packet is received, but would mean less list changes. It would also allow only 1 packet to need to be sent for each change in the UI.
-
-// Alternatively, all light lists could be sent in one packet. This would make delegation easier.
-
 // Should the server delegate when to send an Editor Message and not each specific method? That could easily be its own packet for extra modularity, allowing all parts of the mod to use the same method.
 
 // The server should NOT call save except for:
