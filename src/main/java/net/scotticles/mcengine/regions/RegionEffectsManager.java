@@ -29,8 +29,6 @@ public class RegionEffectsManager {
                 // Loop Through All Radial Regions To Enable Effects For All Of Them
                 for  (RadialRegionData region : radialRegions) {
 
-                    // TODO(priority:low category:Cleanup @Scott): Rework + simplify region effect functionality.
-                    // TODO(priority:medium category:Core-Functionality @Scott): Add dimension variable to regions and add differentiation in Region Effects
                     // For Condensing This To Less If Statements, Consider:
                     // Checking Dimension and isInRadius in one if statement -> checking dimension can be part of inRadius / inArea?
                     // Using region.regionEnabled as a wrapper/first check

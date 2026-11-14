@@ -32,7 +32,6 @@ public class LightDataManager {
         return worldFolder.resolve("mcengine/lights/" + fileName + ".json");
     }
 
-    //TODO: Consider changing this method to return the list of LP names for further modularity and functionality abstraction, maybe helping with the desyncing later.
     /**
      * Get all Light Profile file names from MC Engine's lights folder on the server.
      * @param server, the server to get the Light Profile file names from.
@@ -182,7 +181,6 @@ public class LightDataManager {
 
             Path saveFile = getSaveFile(server, fileName);
 
-            //TODO: Consider moving this out of here and into the networking logic so this only happens on a sync call and not server start.
             MCEngineServerSettings.lastLPLoaded = fileName;
             MCEngineServerSettings.save(server);
 

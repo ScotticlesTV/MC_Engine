@@ -56,8 +56,6 @@ public class MCEngineClientSettings {
                 uiColorA = Float.parseFloat(properties.getProperty("uiColorA", "0.9412"));
 
             } catch (IOException | NumberFormatException e) {
-                // TODO (priority:medium category:Cleanup @Scott): Find out which of these is better for error printing in Minecraft.
-                // System.out.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
                 e.printStackTrace();
             }
