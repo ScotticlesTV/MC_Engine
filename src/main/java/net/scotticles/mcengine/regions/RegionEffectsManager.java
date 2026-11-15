@@ -17,8 +17,8 @@ import java.util.UUID;
 public class RegionEffectsManager {
     /**
      * Activate entry and exit commands and sound playing for all region types.
-     * @param radialRegions, the actively tracked set of Radial Region Data objects.
-     * @param linearRegions, the actively tracked set of Linear Region Data objects.
+     * @param radialRegions the actively tracked set of Radial Region Data objects.
+     * @param linearRegions the actively tracked set of Linear Region Data objects.
      */
     public static void regionEffectsInit(List<RadialRegionData> radialRegions, List<LinearRegionData> linearRegions) {
         ServerTickEvents.END_SERVER_TICK.register((server) -> {
