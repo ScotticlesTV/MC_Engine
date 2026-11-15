@@ -119,7 +119,7 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            radialRegionData.setPos((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                            radialRegionData.setPos((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                             shouldSyncNetwork = true;
                                         }
                                     }
@@ -295,7 +295,7 @@ public class RegionsEditorUI {
                                             ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                             if (player != null) {
                                                 Vec3d playerPos = player.getPos();
-                                                radialRegionData.setPos((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                                radialRegionData.setPos((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                                 shouldSyncNetwork = true;
                                             }
                                         }
@@ -481,7 +481,7 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            linearRegionData.setPos1((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                            linearRegionData.setPos1((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                             shouldSyncNetwork = true;
                                         }
                                     }
@@ -515,7 +515,7 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            linearRegionData.setPos2((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                            linearRegionData.setPos2((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                             shouldSyncNetwork = true;
                                         }
                                     }
@@ -680,7 +680,7 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            linearRegionData.setPos1((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                            linearRegionData.setPos1((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                             shouldSyncNetwork = true;
                                         }
                                     }
@@ -714,7 +714,7 @@ public class RegionsEditorUI {
                                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
                                         if (player != null) {
                                             Vec3d playerPos = player.getPos();
-                                            linearRegionData.setPos2((int) playerPos.getX(), (int) playerPos.getY(), (int) playerPos.getZ());
+                                            linearRegionData.setPos2((int) Math.floor(playerPos.getX()), (int) Math.floor(playerPos.getY()), (int) Math.floor(playerPos.getZ()));
                                             shouldSyncNetwork = true;
                                         }
                                     }

@@ -20,6 +20,10 @@ public class ConsoleUI {
                 ImGui.textWrapped(message);
                 ImGui.separator();
             }
+            if (ImGui.button("Clear")) {
+                ConsoleManager.consoleMessages.clear();
+            }
+            ImGui.setItemTooltip("Clear the console of all messages.");
             ImGui.end();
         }
     }

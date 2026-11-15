@@ -4,6 +4,7 @@ import foundry.veil.api.client.render.light.data.LightData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.util.math.Vec3d;
+import net.scotticles.mcengine.MCEngine;
 import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
@@ -31,6 +32,12 @@ public class LightsManager {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             // Load the server settings to get the last LP loaded.
             MCEngineServerSettings.load(server);
+
+            if (MCEngineServerSettings.isFirstRun) {
+                LightDataManager.saveLP(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights, server, MCEngineServerSettings.lastLPLoaded);
+                MCEngineServerSettings.isFirstRun = false;
+                MCEngineServerSettings.save(server);
+            }
 
             // Clear all Light lists as a safety check before loading.
             clearLights();
@@ -65,6 +72,8 @@ public class LightsManager {
 
             // Clear all Light lists as a safety check for singleplayer
             clearLights();
+
+            lightProfileNames.clear();
         });
     }
 

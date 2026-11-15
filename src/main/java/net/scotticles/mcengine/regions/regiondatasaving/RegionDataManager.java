@@ -20,7 +20,7 @@ public class RegionDataManager {
 
     /**
      * Get the save file to use for the world's region data from the server.
-     * @param server, the server used to get the world save file.
+     * @param server the server used to get the world save file.
      * @return The save file as to save/load region data from.
      */
     private static Path getSaveFile(MinecraftServer server) {
@@ -31,9 +31,9 @@ public class RegionDataManager {
 
     /**
      * Save all region data to the world's save file.
-     * @param radialRegions, the actively tracked list of radial regions.
-     * @param linearRegions, the actively tracked list of linear regions.
-     * @param server, the server used to get the world save file.
+     * @param radialRegions the actively tracked list of radial regions.
+     * @param linearRegions the actively tracked list of linear regions.
+     * @param server the server used to get the world save file.
      */
     public static void save(List<RadialRegionData> radialRegions, List<LinearRegionData> linearRegions , MinecraftServer server) {
         RegionsDataSave save = new RegionsDataSave();
@@ -90,8 +90,8 @@ public class RegionDataManager {
 
     /**
      * Load all Radial Region Data objects from a save file.
-     * @param server, the server used to get the world save file.
-     * @return, the set of Radial Region Data objects
+     * @param server the server used to get the world save file.
+     * @return the set of Radial Region Data objects
      */
     public static Set<RadialRegionData> loadRadialRegions(MinecraftServer server) {
         Path saveFile = getSaveFile(server);
@@ -122,8 +122,8 @@ public class RegionDataManager {
 
     /**
      * Load all Linear Region Data objects from a save file.
-     * @param server, the server used to get the world save file.
-     * @return, the set of Linear Region Data objects
+     * @param server the server used to get the world save file.
+     * @return the set of Linear Region Data objects
      */
     public static Set<LinearRegionData> loadLinearRegions(MinecraftServer server) {
         Path saveFile = getSaveFile(server);

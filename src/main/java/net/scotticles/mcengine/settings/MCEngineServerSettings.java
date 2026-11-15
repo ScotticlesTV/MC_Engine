@@ -16,6 +16,7 @@ public class MCEngineServerSettings {
     public static boolean playVanillaMusic = true;
     public static boolean playCustomMusic = false;
     public static String lastLPLoaded = "lights";
+    public static boolean isFirstRun = true;
 
     /**
      * Get the save file to use for the world's settings from the server.
@@ -46,6 +47,7 @@ public class MCEngineServerSettings {
                 playVanillaMusic = Boolean.parseBoolean(properties.getProperty("playVanillaMusic", "true"));
                 playCustomMusic = Boolean.parseBoolean(properties.getProperty("playCustomMusic", "false"));
                 lastLPLoaded = properties.getProperty("lastLPLoaded", "lights");
+                isFirstRun = Boolean.parseBoolean(properties.getProperty("isFirstRun", "true"));
 
             } catch (IOException | NumberFormatException e) {
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
@@ -70,6 +72,7 @@ public class MCEngineServerSettings {
         properties.setProperty("playVanillaMusic", String.valueOf(playVanillaMusic));
         properties.setProperty("playCustomMusic", String.valueOf(playCustomMusic));
         properties.setProperty("lastLPLoaded", lastLPLoaded);
+        properties.setProperty("isFirstRun", String.valueOf(isFirstRun));
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
             properties.store(out, "MC Engine Server Settings\nWARNING - Do Not Edit These Variables In File, Please Use The In-Game Editor");

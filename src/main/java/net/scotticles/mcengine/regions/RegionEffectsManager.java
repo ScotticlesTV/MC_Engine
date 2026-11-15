@@ -26,93 +26,63 @@ public class RegionEffectsManager {
                 // Get The Player's UUID To More Easily Track Them
                 UUID playerUuid = player.getUuid();
 
-                // Loop Through All Radial Regions To Enable Effects For All Of Them
+                // Loop through all Radial Regions to enable effects for all of them.
                 for  (RadialRegionData region : radialRegions) {
-
-                    // For Condensing This To Less If Statements, Consider:
-                    // Checking Dimension and isInRadius in one if statement -> checking dimension can be part of inRadius / inArea?
-                    // Using region.regionEnabled as a wrapper/first check
-
-                    // Confirm That The Player Is In The Overworld
-                    // (Can Be Changed Later To Have Regions In Multiple Dimensions)
-                    // (Just Need To Add A "Select Dimension" Dropdown To Each Region)
-                    if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
-
-                        // Check If The Player Is In Range Of The Region
-                        Vec3d regionPos = new Vec3d(region.getX(), region.getY(), region.getZ());
-                        boolean isInRadius = player.getPos().squaredDistanceTo(regionPos) <= region.getRadius() * region.getRadius();
-                        if (isInRadius) {
-                            // If The Player Isn't Tracked In The Region, Add Their UUID To Track
-                            if (region.getPlayersInside().add(playerUuid)) {
-                                // Check If The Region Is Enabled
-                                if (region.isEnabled()) {
-                                    // Run All Enter Commands
-                                    for (String command : region.getEnterCommands()) {
-                                        server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
-                                    }
-                                    // Send A Packet To Have The Player's Client Play The Sound
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
-                                }
+                    Vec3d regionPos = new Vec3d(region.getX(), region.getY(), region.getZ());
+                    // Player is in the Region if they are within its radius and in the correct dimension (currently just overworld).
+                    boolean isInRegion = player.getPos().squaredDistanceTo(regionPos) <= region.getRadius() * region.getRadius() && player.getWorld().getRegistryKey() == World.OVERWORLD;
+                    // Check if the player is in the region.
+                    if (isInRegion) {
+                        // If the player wasn't in the Region, but now is, mark them as now within it and run commands only if the Region is enabled.
+                        if (region.getPlayersInside().add(playerUuid) && region.isEnabled()) {
+                            // Run All Enter Commands
+                            for (String command : region.getEnterCommands()) {
+                                server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                             }
+                            // Send A Packet To Have The Player's Client Play The Sound
+                            ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
                         }
-                        // Check If The Player Isn't In Range Of The Region
-                        else {
-                            // If They Were In The Radius, Remove Their UUID To Stop Tracking
-                            if (region.getPlayersInside().remove(playerUuid)) {
-                                // Check If The Region Is Enabled
-                                if  (region.isEnabled()) {
-                                    // Run All Exit Commands
-                                    for (String command : region.getExitCommands()) {
-                                        server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
-                                    }
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
-                                }
+                    } else {
+                        // If the player was in the Region, but now isn't, mark them as no longer within it and run commands only if the Region is enabled.
+                        if (region.getPlayersInside().remove(playerUuid) && region.isEnabled()) {
+                            // Run All Exit Commands
+                            for (String command : region.getExitCommands()) {
+                                server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                             }
+                            ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
                         }
-                    }
-                    // If The Player Isn't In The Overworld, Remove Them From The Region
-                    else {
-                        region.getPlayersInside().remove(playerUuid);
                     }
                 }
 
-                // Loop Through All Linear Regions To Enable Effects For All Of Them
+                // Loop through all Linear Region to enable effects for all of them.
                 for (LinearRegionData region : linearRegions) {
-                    if (player.getWorld().getRegistryKey() == World.OVERWORLD) {
 
-                        BlockBox box = BlockBox.create(
-                                new Vec3i(region.getPos1X(), region.getPos1Y(), region.getPos1Z()), new Vec3i(region.getPos2X(), region.getPos2Y(), region.getPos2Z())
-                        );
+                    BlockBox box = BlockBox.create(
+                            new Vec3i(region.getPos1X(), region.getPos1Y(), region.getPos1Z()), new Vec3i(region.getPos2X(), region.getPos2Y(), region.getPos2Z())
+                    );
 
-                        boolean isInRadius = box.contains(player.getBlockPos());
-                        if (isInRadius) {
-                            if (region.getPlayersInside().add(playerUuid)) {
-                                // Check If The Region Is Enabled
-                                if (region.isEnabled()) {
-                                    // Run All Enter Commands
-                                    for (String command : region.getEnterCommands()) {
-                                        server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
-                                    }
-                                    // Send A Packet To Have The Player's Client Play The Sound
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
-                                }
+                    boolean isInRegion = box.contains(player.getBlockPos()) && player.getWorld().getRegistryKey() == World.OVERWORLD;
+                    if (isInRegion) {
+                        // If the player wasn't in the Region, but now is, mark them as now within it and run commands only if the Region is enabled.
+                        if (region.getPlayersInside().add(playerUuid) && region.isEnabled()) {
+                            // Run All Enter Commands
+                            for (String command : region.getEnterCommands()) {
+                                server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
                             }
-                        } else {
-                            // If They Were In The Radius, Remove Their UUID To Stop Tracking
-                            if (region.getPlayersInside().remove(playerUuid)) {
-                                // Check If The Region Is Enabled
-                                if  (region.isEnabled()) {
-                                    // Run All Exit Commands
-                                    for (String command : region.getExitCommands()) {
-                                        server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
-                                    }
-                                    ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
-                                }
-                            }
+                            // Send A Packet To Have The Player's Client Play The Sound
+                            ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), true, region.getSoundVolume(), region.getSoundFadeDuration()));
                         }
                     } else {
-                        region.getPlayersInside().remove(playerUuid);
+                        // If the player was in the Region, but now isn't, mark them as no longer within it and run commands only if the Region is enabled.
+                        if (region.getPlayersInside().remove(playerUuid) && region.isEnabled()) {
+                            // Run All Exit Commands
+                            for (String command : region.getExitCommands()) {
+                                server.getCommandManager().executeWithPrefix(server.getCommandSource().withPosition(player.getPos()), command);
+                            }
+                            ServerPlayNetworking.send(player, new RegionSoundStatePayload(region.getSound(), false, region.getSoundVolume(), region.getSoundFadeDuration()));
+                        }
                     }
+
                 }
             }
         });

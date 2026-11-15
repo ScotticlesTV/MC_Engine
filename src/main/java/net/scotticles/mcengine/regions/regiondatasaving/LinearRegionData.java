@@ -86,21 +86,21 @@ public class LinearRegionData {
 
     /**
      * Workhorse Constructor: Construct a new Linear Region Data object with all parameters specified.
-     * @param uuid, the unique ID of the Linear Region.
-     * @param name, the name of the Linear Region.
-     * @param pos1X, the Linear Regions 1st position's x-value.
-     * @param pos1Y, the Linear Regions 1st position's y-value.
-     * @param pos1Z, the Linear Regions 1st position's z-value.
-     * @param pos2X, the Linear Regions 2nd position's x-value.
-     * @param pos2Y, the Linear Regions 2nd position's y-value.
-     * @param pos2Z, the Linear Regions 2nd position's z-value.
-     * @param enterCommands, the enter commands of the Linear Region.
-     * @param exitCommands, the exit commands of the Linear Region.
-     * @param playersInside, the player's currently inside the Linear Region's bounds.
-     * @param enabled, whether or not the Linear Region is currently enabled.
-     * @param sound, the sound to play when a player enters the Linear Region.
-     * @param soundVolume, the volume to play the Linear Region's sound at.
-     * @param soundFadeDuration, the time it should take for the Linear Region's sound to fade when a player exits the region.
+     * @param uuid the unique ID of the Linear Region.
+     * @param name the name of the Linear Region.
+     * @param pos1X the Linear Regions 1st position's x-value.
+     * @param pos1Y the Linear Regions 1st position's y-value.
+     * @param pos1Z the Linear Regions 1st position's z-value.
+     * @param pos2X the Linear Regions 2nd position's x-value.
+     * @param pos2Y the Linear Regions 2nd position's y-value.
+     * @param pos2Z the Linear Regions 2nd position's z-value.
+     * @param enterCommands the enter commands of the Linear Region.
+     * @param exitCommands the exit commands of the Linear Region.
+     * @param playersInside the player's currently inside the Linear Region's bounds.
+     * @param enabled whether or not the Linear Region is currently enabled.
+     * @param sound the sound to play when a player enters the Linear Region.
+     * @param soundVolume the volume to play the Linear Region's sound at.
+     * @param soundFadeDuration the time it should take for the Linear Region's sound to fade when a player exits the region.
      */
     public LinearRegionData(UUID uuid, String name, int pos1X, int pos1Y, int pos1Z, int pos2X, int pos2Y, int pos2Z, List<String> enterCommands, List<String> exitCommands, Set<UUID> playersInside, boolean enabled, String sound, float soundVolume, float soundFadeDuration) {
         this.setUuid(uuid);
@@ -128,7 +128,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's uuid property.
-     * @param uuid, the uuid to set the Linear Region Data's uuid property to.
+     * @param uuid the uuid to set the Linear Region Data's uuid property to.
      */
     private void setUuid(UUID uuid) {
         this.uuid = uuid;
@@ -144,7 +144,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's name property.
-     * @param name, the Linear Region Data's name.
+     * @param name the Linear Region Data's name.
      */
     public void setName(String name) {
         this.name = name;
@@ -160,7 +160,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's first position's x-value.
-     * @param pos1X, the x-value to set the Linear Region Data's first position's x-value to.
+     * @param pos1X the x-value to set the Linear Region Data's first position's x-value to.
      */
     public void setPos1X(int pos1X) {
         this.pos1X = pos1X;
@@ -176,7 +176,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's first position's y-value.
-     * @param pos1Y, the y-value to set the Linear Region Data's first position's y-value to.
+     * @param pos1Y the y-value to set the Linear Region Data's first position's y-value to.
      */
     public void setPos1Y(int pos1Y) {
         this.pos1Y = pos1Y;
@@ -192,7 +192,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's first position's z-value.
-     * @param pos1Z, the z-value to set the Linear Region Data's first position's z-value to.
+     * @param pos1Z the z-value to set the Linear Region Data's first position's z-value to.
      */
     public void setPos1Z(int pos1Z) {
         this.pos1Z = pos1Z;
@@ -208,7 +208,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's second position's x-value.
-     * @param pos2X, the x-value to set the Linear Region Data's second position's x-value to.
+     * @param pos2X the x-value to set the Linear Region Data's second position's x-value to.
      */
     public void setPos2X(int pos2X) {
         this.pos2X = pos2X;
@@ -224,7 +224,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's second position's y-value.
-     * @param pos2Y, the y-value to set the Linear Region Data's second position's y-value to.
+     * @param pos2Y the y-value to set the Linear Region Data's second position's y-value to.
      */
     public void setPos2Y(int pos2Y) {
         this.pos2Y = pos2Y;
@@ -240,7 +240,7 @@ public class LinearRegionData {
 
     /**
      * Assign the Linear Region Data's second position's z-value.
-     * @param pos2Z, the z-value to set the Linear Region Data's second position's z-value to.
+     * @param pos2Z the z-value to set the Linear Region Data's second position's z-value to.
      */
     public void setPos2Z(int pos2Z) {
         this.pos2Z = pos2Z;
@@ -248,9 +248,9 @@ public class LinearRegionData {
 
     /**
      * Assign the full first position of the Linear Region Data.
-     * @param pos1X, the x-value to assign the Linear Region Data's first position to.
-     * @param pos1Y, the y-value to assign the Linear Region Data's first position to.
-     * @param pos1Z, the z-value to assign the Linear Region Data's first position to.
+     * @param pos1X the x-value to assign the Linear Region Data's first position to.
+     * @param pos1Y the y-value to assign the Linear Region Data's first position to.
+     * @param pos1Z the z-value to assign the Linear Region Data's first position to.
      */
     public void setPos1(int pos1X, int pos1Y, int pos1Z) {
         this.pos1X = pos1X;
@@ -260,9 +260,9 @@ public class LinearRegionData {
 
     /**
      * Assign the full second position of the Linear Region Data.
-     * @param pos2X, the x-value to assign the Linear Region Data's second position to.
-     * @param pos2Y, the y-value to assign the Linear Region Data's second position to.
-     * @param pos2Z, the z-value to assign the Linear Region Data's second position to.
+     * @param pos2X the x-value to assign the Linear Region Data's second position to.
+     * @param pos2Y the y-value to assign the Linear Region Data's second position to.
+     * @param pos2Z the z-value to assign the Linear Region Data's second position to.
      */
     public void setPos2(int pos2X, int pos2Y, int pos2Z) {
         this.pos2X = pos2X;
@@ -280,7 +280,7 @@ public class LinearRegionData {
 
     /**
      * Assign the playersInside property of the Linear Region Data.
-     * @param playersInside, the set of players currently inside the Linear Region Data's bounds to set the playersInside property to.
+     * @param playersInside the set of players currently inside the Linear Region Data's bounds to set the playersInside property to.
      */
     public void setPlayersInside(Set<UUID> playersInside) {
         this.playersInside = playersInside;
@@ -296,7 +296,7 @@ public class LinearRegionData {
 
     /**
      * Assign whether or not the Linear Region Data is currently enabled.
-     * @param enabled, the enabled value to set the Linear Region Data's enabled property to.
+     * @param enabled the enabled value to set the Linear Region Data's enabled property to.
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -312,7 +312,7 @@ public class LinearRegionData {
 
     /**
      * Assign the enter commands list property of the Linear Region Data.
-     * @param enterCommands, the list of enter commands to set the Linear Region Data's enterCommands property to.
+     * @param enterCommands the list of enter commands to set the Linear Region Data's enterCommands property to.
      */
     public void setEnterCommands(List<String> enterCommands) {
         this.enterCommands = enterCommands;
@@ -328,7 +328,7 @@ public class LinearRegionData {
 
     /**
      * Assign the exit commands list property of the Linear Region Data.
-     * @param exitCommands, the list of exit commands to set the Linear Region Data's exitCommands property to.
+     * @param exitCommands the list of exit commands to set the Linear Region Data's exitCommands property to.
      */
     public void setExitCommands(List<String> exitCommands) {
         this.exitCommands = exitCommands;
@@ -344,7 +344,7 @@ public class LinearRegionData {
 
     /**
      * Assign the sound property of the Linear Region Data.
-     * @param sound, the sound to set the sound property of the Linear Region Data to.
+     * @param sound the sound to set the sound property of the Linear Region Data to.
      */
     public void setSound(String sound) {
         this.sound = sound;
@@ -360,7 +360,7 @@ public class LinearRegionData {
 
     /**
      * Assign the sound volume property of the Linear Region Data.
-     * @param soundVolume, the sound volume to set the Linear Region Data's sound property to.
+     * @param soundVolume the sound volume to set the Linear Region Data's sound property to.
      */
     public void setSoundVolume(float soundVolume) {
         this.soundVolume = soundVolume;
@@ -376,7 +376,7 @@ public class LinearRegionData {
 
     /**
      * Assign the sound fade duration property of the Linear Region Data.
-     * @param soundFadeDuration, the sound fade duration value to set the Linear Region Data's sound fade duration property to.
+     * @param soundFadeDuration the sound fade duration value to set the Linear Region Data's sound fade duration property to.
      */
     public void setSoundFadeDuration(float soundFadeDuration) {
         this.soundFadeDuration = soundFadeDuration;

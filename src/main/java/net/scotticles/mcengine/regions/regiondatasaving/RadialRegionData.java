@@ -80,19 +80,19 @@ public class RadialRegionData {
 
     /**
      * Workhorse Constructor: Construct a new Radial Region Data object with all parameters specified.
-     * @param uuid, the unique ID of the Radial Region.
-     * @param name, the name of the Radial Region.
-     * @param x, the x-value of the Radial Region's location.
-     * @param y, the y-value of the Radial Region's location.
-     * @param z, the z-value of the Radial Region's location.
-     * @param radius, the radius of the Radial Region.
-     * @param enterCommands, the Radial Region's enter commands.
-     * @param exitCommands, the Radial Region's exit commands.
-     * @param playersInside, the player's currently inside the Radial Region's bounds.
-     * @param enabled, whether or not the Radial Region is currently enabled.
-     * @param sound, the sound to play when a player enters the Radial Region.
-     * @param soundVolume, the volume to play the Radial Region's sound at.
-     * @param soundFadeDuration, the time it should take for the Radial Region's sound to fade when a player exits the region.
+     * @param uuid the unique ID of the Radial Region.
+     * @param name the name of the Radial Region.
+     * @param x the x-value of the Radial Region's location.
+     * @param y the y-value of the Radial Region's location.
+     * @param z the z-value of the Radial Region's location.
+     * @param radius the radius of the Radial Region.
+     * @param enterCommands the Radial Region's enter commands.
+     * @param exitCommands the Radial Region's exit commands.
+     * @param playersInside the player's currently inside the Radial Region's bounds.
+     * @param enabled whether or not the Radial Region is currently enabled.
+     * @param sound the sound to play when a player enters the Radial Region.
+     * @param soundVolume the volume to play the Radial Region's sound at.
+     * @param soundFadeDuration the time it should take for the Radial Region's sound to fade when a player exits the region.
      */
     public RadialRegionData(UUID uuid, String name, int x, int y, int z, int radius, List<String> enterCommands, List<String> exitCommands, Set<UUID> playersInside, boolean enabled, String sound, float soundVolume, float soundFadeDuration) {
         this.setUuid(uuid);
@@ -228,7 +228,7 @@ public class RadialRegionData {
 
     /**
      * Assign the playersInside property of the Radial Region Data.
-     * @param playersInside, the set of players currently inside the Radial Region Data's bounds to set the playersInside property to.
+     * @param playersInside the set of players currently inside the Radial Region Data's bounds to set the playersInside property to.
      */
     public void setPlayersInside(Set<UUID> playersInside) {
         this.playersInside = playersInside;
@@ -244,7 +244,7 @@ public class RadialRegionData {
 
     /**
      * Assign whether or not the Radial Region Data is currently enabled.
-     * @param enabled, the enabled value to set the Radial Region Data's enabled property to.
+     * @param enabled the enabled value to set the Radial Region Data's enabled property to.
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -260,7 +260,7 @@ public class RadialRegionData {
 
     /**
      * Assign the enter commands list property of the Radial Region Data.
-     * @param enterCommands, the list of enter commands to set the Radial Region Data's enterCommands property to.
+     * @param enterCommands the list of enter commands to set the Radial Region Data's enterCommands property to.
      */
     public void setEnterCommands(List<String> enterCommands) {
         this.enterCommands = enterCommands;
@@ -276,7 +276,7 @@ public class RadialRegionData {
 
     /**
      * Assign the exit commands list property of the Radial Region Data.
-     * @param exitCommands, the list of exit commands to set the Radial Region Data's exitCommands property to.
+     * @param exitCommands the list of exit commands to set the Radial Region Data's exitCommands property to.
      */
     public void setExitCommands(List<String> exitCommands) {
         this.exitCommands = exitCommands;
@@ -292,7 +292,7 @@ public class RadialRegionData {
 
     /**
      * Assign the sound property of the Radial Region Data.
-     * @param sound, the sound to set the sound property of the Radial Region Data to.
+     * @param sound the sound to set the sound property of the Radial Region Data to.
      */
     public void setSound(String sound) {
         this.sound = sound;
@@ -308,7 +308,7 @@ public class RadialRegionData {
 
     /**
      * Assign the sound volume property of the Radial Region Data.
-     * @param soundVolume, the sound volume to set the Radial Region Data's sound property to.
+     * @param soundVolume the sound volume to set the Radial Region Data's sound property to.
      */
     public void setSoundVolume(float soundVolume) {
         this.soundVolume = soundVolume;
@@ -324,7 +324,7 @@ public class RadialRegionData {
 
     /**
      * Assign the sound fade duration property of the Radial Region Data.
-     * @param soundFadeDuration, the sound fade duration value to set the Radial Region Data's sound fade duration property to.
+     * @param soundFadeDuration the sound fade duration value to set the Radial Region Data's sound fade duration property to.
      */
     public void setSoundFadeDuration(float soundFadeDuration) {
         this.soundFadeDuration = soundFadeDuration;
