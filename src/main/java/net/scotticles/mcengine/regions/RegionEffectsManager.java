@@ -28,7 +28,7 @@ public class RegionEffectsManager {
 
                 // Loop through all Radial Regions to enable effects for all of them.
                 for  (RadialRegionData region : radialRegions) {
-                    Vec3d regionPos = new Vec3d(region.getX(), region.getY(), region.getZ());
+                    Vec3d regionPos = new Vec3d(region.getX() + 0.5, region.getY(), region.getZ() + 0.5);
                     // Player is in the Region if they are within its radius and in the correct dimension (currently just overworld).
                     boolean isInRegion = player.getPos().squaredDistanceTo(regionPos) <= region.getRadius() * region.getRadius() && player.getWorld().getRegistryKey() == World.OVERWORLD;
                     // Check if the player is in the region.
