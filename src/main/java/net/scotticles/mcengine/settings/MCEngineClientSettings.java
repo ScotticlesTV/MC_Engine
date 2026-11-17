@@ -20,6 +20,7 @@ public class MCEngineClientSettings {
     public static float uiColorG = 0.059f;
     public static float uiColorB = 0.059f;
     public static float uiColorA = 0.9412f;
+    public static boolean shouldPlayVanillaMenuMusic = true;
 
     // Config File Reference Inside Fabric Config File
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("mcengine");
@@ -54,6 +55,7 @@ public class MCEngineClientSettings {
                 uiColorG = Float.parseFloat(properties.getProperty("uiColorG", "0.059"));
                 uiColorB = Float.parseFloat(properties.getProperty("uiColorB", "0.059"));
                 uiColorA = Float.parseFloat(properties.getProperty("uiColorA", "0.9412"));
+                shouldPlayVanillaMenuMusic = Boolean.parseBoolean(properties.getProperty("shouldPlayVanillaMenuMusic", "true"));
 
             } catch (IOException | NumberFormatException e) {
                 System.err.println(MCEngine.MOD_ID + " Failed to load config file, using defaults.");
@@ -78,6 +80,7 @@ public class MCEngineClientSettings {
         properties.setProperty("uiColorG", String.valueOf(uiColorG));
         properties.setProperty("uiColorB", String.valueOf(uiColorB));
         properties.setProperty("uiColorA", String.valueOf(uiColorA));
+        properties.setProperty("shouldPlayVanillaMenuMusic", String.valueOf(shouldPlayVanillaMenuMusic));
 
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
             properties.store(out, "MC Engine Client Settings");

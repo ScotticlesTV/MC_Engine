@@ -1,9 +1,11 @@
 package net.scotticles.mcengine.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundSystem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import net.scotticles.mcengine.sound.SoundManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +26,10 @@ public class SoundSystemMixin {
         Identifier id = sound.getId();
         SoundCategory category = sound.getCategory();
 
-        if (category == SoundCategory.MUSIC && id.getNamespace().equals("minecraft") && !SoundManager.shouldPlayVanillaMusic) {
-             ci.cancel();
+        if (category == SoundCategory.MUSIC && id.getNamespace().equals("minecraft")) {
+            if ((MinecraftClient.getInstance().player == null && !MCEngineClientSettings.shouldPlayVanillaMenuMusic) || (MinecraftClient.getInstance().player != null && !SoundManager.shouldPlayVanillaMusic)) {
+                ci.cancel();
+            }
         }
     }
 }

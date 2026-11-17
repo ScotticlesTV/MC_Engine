@@ -20,12 +20,12 @@ public class UIManager {
     public static ImBoolean showWorldTimeUI = new ImBoolean(false);
     public static ImBoolean showWorldWeatherUI = new ImBoolean(false);
     public static ImBoolean showWorldGamerulesUI = new ImBoolean(false);
-    public static ImBoolean showWorldMusicUI = new ImBoolean(false);
     public static ImBoolean showRegionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightEditorUI = new ImBoolean(false);
     public static ImBoolean showInteractionEditorUI = new ImBoolean(false);
     public static ImBoolean showLightsProfilesUI = new ImBoolean(false);
     public static ImBoolean showConsoleUI = new ImBoolean(false);
+    public static ImBoolean showAudioUI = new ImBoolean(false);
 
 
 
@@ -57,9 +57,6 @@ public class UIManager {
                 if (showWorldGamerulesUI.get()) {
                     WorldGamerulesUI.showWorldGamerulesUI();
                 }
-                if (showWorldMusicUI.get()) {
-                    WorldMusicUI.showWorldWeatherUI();
-                }
                 if (showRegionEditorUI.get()) {
                     RegionsEditorUI.showRegionsEditorUI();
                 }
@@ -74,6 +71,9 @@ public class UIManager {
                 }
                 if (showConsoleUI.get()) {
                     ConsoleUI.showConsoleUI();
+                }
+                if (showAudioUI.get()) {
+                    AudioUI.showSoundUI();
                 }
             }
 

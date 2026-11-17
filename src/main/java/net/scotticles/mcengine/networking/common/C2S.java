@@ -8,6 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.level.ServerWorldProperties;
+import net.scotticles.mcengine.console.ConsoleManager;
 import net.scotticles.mcengine.lights.LightDataManager;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.lights.lightdata.*;
@@ -20,6 +21,7 @@ import net.scotticles.mcengine.networking.lights.payloads.lightprofiles.SyncLigh
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
+import net.scotticles.mcengine.networking.sound.SyncSoundSettingsPayload;
 import net.scotticles.mcengine.networking.time.payloads.SetTimePayload;
 import net.scotticles.mcengine.networking.weather.payloads.ChangeWeatherPayload;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
@@ -27,6 +29,7 @@ import net.scotticles.mcengine.regions.regiondatasaving.RegionDataManager;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
+import net.scotticles.mcengine.sound.SoundManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +59,32 @@ public class C2S {
         PayloadTypeRegistry.playC2S().register(LoadLightsDataPayload.TYPE, LoadLightsDataPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(DeleteLightProfilePayload.TYPE, DeleteLightProfilePayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(SyncSoundSettingsPayload.TYPE, SyncSoundSettingsPayload.CODEC);
     }
 
 
     // Register Receivers That Handle Actions When The Server Receives A Packet
     public static void registerServerRecievers() {
+
+        // Server SyncSoundSettingsPayload Receiver
+        ServerPlayNetworking.registerGlobalReceiver(SyncSoundSettingsPayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+                MCEngineServerSettings.playVanillaMusic = payload.shouldPlayVanillaMusic();
+                MCEngineServerSettings.save(context.server());
+
+                SyncSoundSettingsPayload syncPayload = new SyncSoundSettingsPayload(SoundManager.shouldPlayVanillaMusic);
+                for (ServerPlayerEntity player : context.server().getPlayerManager().getPlayerList()) {
+                    ServerPlayNetworking.send(player, syncPayload);
+                }
+
+                if (MCEngineServerSettings.playVanillaMusic) {
+                    ConsoleManager.broadcastMessage("Vanilla music enabled.", context.server());
+                } else {
+                    ConsoleManager.broadcastMessage("Vanilla music disabled.", context.server());
+                }
+            });
+        });
 
         // Server DeleteLightProfilePayload Receiver
         ServerPlayNetworking.registerGlobalReceiver(DeleteLightProfilePayload.TYPE, (payload, context) -> {

@@ -21,11 +21,13 @@ import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPa
 import net.scotticles.mcengine.networking.regions.payloads.RegionSoundStatePayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncLinearRegionsDataPayload;
 import net.scotticles.mcengine.networking.regions.payloads.SyncRadialRegionsDataPayload;
+import net.scotticles.mcengine.networking.sound.SyncSoundSettingsPayload;
 import net.scotticles.mcengine.regions.RegionSoundInstance;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.regions.regiondatasaving.LinearRegionData;
 import net.scotticles.mcengine.regions.regiondatasaving.RadialRegionData;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
+import net.scotticles.mcengine.sound.SoundManager;
 import net.scotticles.mcengine.ui.UIManager;
 import net.scotticles.mcengine.ui.windows.lights.LightProfilesEditorUI;
 import net.scotticles.mcengine.ui.windows.WorldGamerulesUI;
@@ -55,10 +57,19 @@ public class S2C {
         PayloadTypeRegistry.playS2C().register(SyncLightProfileEditorPayload.TYPE, SyncLightProfileEditorPayload.CODEC);
 
         PayloadTypeRegistry.playS2C().register(SendMessagePayload.TYPE, SendMessagePayload.CODEC);
+
+        PayloadTypeRegistry.playS2C().register(SyncSoundSettingsPayload.TYPE, SyncSoundSettingsPayload.CODEC);
     }
 
     // Register Receivers That Handle Actions When The Client Receives A Packet
     public static void registerClientReceivers() {
+        // Client SyncSoundSettingsPayload Receiver
+        ClientPlayNetworking.registerGlobalReceiver(SyncSoundSettingsPayload.TYPE, (payload, context) -> {
+            context.client().execute(() -> {
+                SoundManager.shouldPlayVanillaMusic = payload.shouldPlayVanillaMusic();
+            });
+        });
+
         // Client SendMessagePayload Receiver
         ClientPlayNetworking.registerGlobalReceiver(SendMessagePayload.TYPE, (payload, context) -> {
             context.client().execute(() -> {
@@ -214,6 +225,9 @@ public class S2C {
 
             // Sync LP Editor
             ServerPlayNetworking.send(player, new SyncLightProfileEditorPayload(new ArrayList<>(LightsManager.lightProfileNames), MCEngineServerSettings.lastLPLoaded));
+
+            // Sync Sound Settings
+            ServerPlayNetworking.send(player, new SyncSoundSettingsPayload(MCEngineServerSettings.playVanillaMusic));
         });
     }
 }

@@ -45,11 +45,6 @@ public class EngineNavBarUI {
                 if (ImGui.menuItem("Gamerules")) {
                     UIManager.showWorldGamerulesUI.set(!UIManager.showWorldGamerulesUI.get());
                 }
-                ImGui.beginDisabled();
-                if (ImGui.menuItem("Music")) {
-                    UIManager.showWorldMusicUI.set(!UIManager.showWorldMusicUI.get());
-                }
-                ImGui.endDisabled();
                 ImGui.endMenu();
             }
             // Regions Tab
@@ -71,6 +66,18 @@ public class EngineNavBarUI {
                 ImGui.endMenu();
             }
 
+            // Audio Tab
+            if (ImGui.beginMenu("Audio")) {
+                if (ImGui.menuItem("Audio Settings")) {
+                    UIManager.showAudioUI.set(!UIManager.showAudioUI.get());
+                }
+                ImGui.beginDisabled();
+                ImGui.menuItem("Audio Sources");
+                ImGui.menuItem("Ambience");
+                ImGui.endDisabled();
+                ImGui.endMenu();
+            }
+
             // Interactions Tab
             ImGui.beginDisabled();
             if (ImGui.beginMenu("Interactions")) {
@@ -81,16 +88,7 @@ public class EngineNavBarUI {
             }
             ImGui.endDisabled();
 
-            // Audio Tab
-            ImGui.beginDisabled();
-            if (ImGui.beginMenu("Audio")) {
-                ImGui.menuItem("Audio Sources");
-                ImGui.endDisabled();
-                ImGui.beginDisabled();
-                ImGui.menuItem("Ambience");
-                ImGui.endMenu();
-            }
-            ImGui.endDisabled();
+
 
             // Sequences Tab
             ImGui.beginDisabled();
