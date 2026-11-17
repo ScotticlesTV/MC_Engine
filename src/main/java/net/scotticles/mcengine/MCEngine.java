@@ -5,6 +5,7 @@ import net.scotticles.mcengine.commands.LightCommands;
 import net.scotticles.mcengine.lights.LightsManager;
 import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
+import net.scotticles.mcengine.networking.common.ServerReceiving;
 import net.scotticles.mcengine.regions.RegionsManager;
 import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import org.slf4j.Logger;
@@ -24,9 +25,6 @@ public class MCEngine implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		// Load The Client Engine Settings Config
-		MCEngineClientSettings.load();
-
 		// Load Region Systems
 		RegionsManager.regionsInit();
 
@@ -38,7 +36,7 @@ public class MCEngine implements ModInitializer {
 		S2C.registerPacketChannels();
 
 		//Register Server Side Packet Recievers
-		C2S.registerServerRecievers();
+		ServerReceiving.registerServerRecievers();
 
 		//Register Data Syncing Events For When A Player Joins The Server
 		S2C.registerServerJoinSyncingEvents();
@@ -50,6 +48,5 @@ public class MCEngine implements ModInitializer {
 //		RegionCommands.registerCommands();
 
 		LOGGER.info("Welcome MC Engine users!");
-		// LOGGER.info("MC Engine is initializing. Welcome!");
 	}
 }

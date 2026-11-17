@@ -3,7 +3,7 @@ package net.scotticles.mcengine.console;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.scotticles.mcengine.networking.common.SendMessagePayload;
+import net.scotticles.mcengine.networking.console.SendMessagePayload;
 
 import java.util.ArrayList;
 import java.util.List;

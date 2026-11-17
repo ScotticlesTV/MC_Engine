@@ -1,10 +1,9 @@
 package net.scotticles.mcengine.lights;
 
 import foundry.veil.api.client.render.light.data.LightData;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+//import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.util.math.Vec3d;
-import net.scotticles.mcengine.MCEngine;
 import net.scotticles.mcengine.lights.lightdata.*;
 import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.settings.MCEngineServerSettings;
@@ -186,12 +185,5 @@ public class LightsManager {
         activePointLights.clear();
         activeDirectionalLights.clear();
         activeSpotLights.clear();
-    }
-
-    /**
-     * Send packets to sync all light lists with the server and other clients. CAN ONLY BE USED FROM THE CLIENT.
-     */
-    public static void syncAllLights() {
-        ClientPlayNetworking.send(new SyncLightDataPayload(activeAreaLights, activePointLights, activeDirectionalLights, activeSpotLights));
     }
 }

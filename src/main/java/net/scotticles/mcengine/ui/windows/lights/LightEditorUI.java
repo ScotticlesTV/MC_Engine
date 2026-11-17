@@ -5,10 +5,12 @@ import imgui.ImGui;
 import imgui.type.ImDouble;
 import imgui.type.ImFloat;
 import imgui.type.ImString;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.scotticles.mcengine.lights.LightsManager;
+import net.scotticles.mcengine.networking.lights.payloads.lights.SyncLightDataPayload;
 import net.scotticles.mcengine.ui.UIManager;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -726,7 +728,7 @@ public class LightEditorUI {
             ImGui.end();
 
             if (shouldSyncNetwork) {
-                LightsManager.syncAllLights();
+                ClientPlayNetworking.send(new SyncLightDataPayload(LightsManager.activeAreaLights, LightsManager.activePointLights, LightsManager.activeDirectionalLights, LightsManager.activeSpotLights));
             }
         }
     }

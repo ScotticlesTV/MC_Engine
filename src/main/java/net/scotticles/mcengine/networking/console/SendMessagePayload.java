@@ -1,4 +1,4 @@
-package net.scotticles.mcengine.networking.common;
+package net.scotticles.mcengine.networking.console;
 
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
