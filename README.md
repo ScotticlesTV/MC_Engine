@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/discord/1091956645740953652?logo=Discord&label=The%20Scotticles%20Studio&color=%235865F2)](https://discord.gg/kGasSAsP4R)
 [![Trello](https://img.shields.io/badge/ToDo%20%2F%20Roadmap-%230052CC?logo=Trello&label=Trello&labelColor=%230052CC&color=%23565656)](https://trello.com/b/8V6BhEYJ/mc-engine)
 
-MC Engine is a game engine-like interface that aims to help with the creation of games and experiences within Minecraft. It adds visual interfaces to various vanilla features like gamerules, weather, time, etc… It also adds custom features to facilitate the easier management and making of custom game systems with features like Regions, Interactions, Custom Music, and more.
+MC Engine is a game engine-like interface that aims to help with the creation of games and experiences within Minecraft. It adds visual interfaces to various vanilla features like gamerules, weather, time, etc… It also adds custom features to facilitate the easier management and making of custom game systems with features like Regions, Lights, Audio Management, and more.
 
 ## Getting Started
 ### [Wiki Documentation](https://github.com/ScotticlesTV/MC_Engine/wiki)
