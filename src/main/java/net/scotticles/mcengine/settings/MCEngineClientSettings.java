@@ -34,10 +34,10 @@ public class MCEngineClientSettings {
         try {
             if (!Files.exists(CONFIG_DIR)) {
                 Files.createDirectories(CONFIG_DIR);
-                System.out.println(MCEngine.MOD_ID + "Config folder could not be found, creating \"mcengine\" folder.");
+                MCEngine.LOGGER.info("Config folder could not be found, creating \"mcengine\" folder.");
             }
         } catch (IOException ioe) {
-            System.err.println(MCEngine.MOD_ID + " Config folder inaccessible, creating \"mcengine\" folder.");
+            MCEngine.LOGGER.info("Config folder inaccessible, creating new \"mcengine\" folder.");
         }
 
 

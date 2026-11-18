@@ -7,7 +7,6 @@ import net.scotticles.mcengine.networking.common.C2S;
 import net.scotticles.mcengine.networking.common.S2C;
 import net.scotticles.mcengine.networking.common.ServerReceiving;
 import net.scotticles.mcengine.regions.RegionsManager;
-import net.scotticles.mcengine.settings.MCEngineClientSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
